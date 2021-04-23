@@ -1,0 +1,8 @@
+{
+  "api_base_url": "https://nofipay.net/api/v1/",
+  "logos_base_url": "https://nofipay.net/api/thumb.php?t=l&w=200&h=180&src=",
+  "logos_base_url_150": "https://nofipay.net/api/thumb.php?t=l&w=150&h=150&src=",
+  "logos_base_url_112": "https://nofipay.net/api/thumb.php?t=l&w=112&h=112&src=",
+  "logos_base_url_50": "https://nofipay.net/api/thumb.php?t=l&w=50&h=50&src=",
+  "logos_base_url_48": "https://nofipay.net/api/thumb.php?t=l&w=48&h=48&src="
+}
