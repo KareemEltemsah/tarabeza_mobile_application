@@ -20,7 +20,7 @@ import 'src/pages/login.dart';
 import 'src/pages/pages.dart';
 // import 'src/pages/payment_methods.dart';
 // import 'src/pages/paypal_payment.dart';
-// import 'src/pages/profile.dart';
+import 'src/pages/profile.dart';
 // import 'src/pages/razorpay_payment.dart';
 // import 'src/pages/reviews.dart';
 // import 'src/pages/settings.dart';
@@ -45,8 +45,8 @@ class RouteGenerator {
       //   return MaterialPageRoute(builder: (_) => SignUpWidget());
       case '/Login':
         return MaterialPageRoute(builder: (_) => LoginWidget());
-      // case '/Profile':
-      //   return MaterialPageRoute(builder: (_) => ProfileWidget());
+      case '/Profile':
+        return MaterialPageRoute(builder: (_) => ProfileWidget());
       case '/ForgetPassword':
         return MaterialPageRoute(builder: (_) => ForgetPasswordWidget());
       case '/Pages':
