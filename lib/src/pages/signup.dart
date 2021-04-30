@@ -363,7 +363,7 @@ class _SignUpWidgetState extends StateMVC<SignUpWidget> {
               ),
               FlatButton(
                 onPressed: () {
-                  Navigator.of(context).pushNamed('/Login');
+                  Navigator.of(context).pushReplacementNamed('/Login');
                 },
                 textColor: Theme.of(context).hintColor,
                 child: Text(S.of(context).i_have_account_back_to_login),

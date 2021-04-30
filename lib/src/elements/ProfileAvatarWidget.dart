@@ -23,7 +23,7 @@ class ProfileAvatarWidget extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Container(
-            height: 160,
+            height: 80,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -60,7 +60,7 @@ class ProfileAvatarWidget extends StatelessWidget {
                 .merge(TextStyle(color: Theme.of(context).primaryColor)),
           ),
           Text(
-            user.email,
+            user.role,
             style: Theme.of(context)
                 .textTheme
                 .caption

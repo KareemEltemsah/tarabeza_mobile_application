@@ -1,4 +1,3 @@
-
 enum UserRole { customer }
 
 class User {
@@ -46,11 +45,12 @@ class User {
     }
   }
 
-  Map toMap({bool login: false, bool signUp: false}) {
+  Map toMap({bool login: false, bool signUp: false, bool update: false}) {
+    bool none = !login && !signUp && !update;
     var map = new Map<String, dynamic>();
     map["email"] = email;
-    if (signUp || login) map["password"] = password;
-    if (signUp || (!login && !signUp)) {
+    if (signUp || login || update) map["password"] = password;
+    if (signUp || update || none) {
       map["phone_number"] = phone;
       map["role"] = role;
       map["first_name"] = first_name;
@@ -58,8 +58,8 @@ class User {
       map["gender"] = gender;
       map["date_of_birth"] = DOB;
     }
-    if (!login && !signUp) {
-      map["id"] = id;
+    if (update || none) map["id"] = id;
+    if (none) {
       map["is_active"] = is_active;
       map["is_banned"] = is_banned;
       map["confirmation_code"] = confirmation_code;

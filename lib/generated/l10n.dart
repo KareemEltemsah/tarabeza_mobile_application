@@ -2664,6 +2664,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Gender`
+  String get gender {
+    return Intl.message(
+      'Gender',
+      name: 'gender',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `DOB`
+  String get DOB {
+    return Intl.message(
+      'DOB',
+      name: 'DOB',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

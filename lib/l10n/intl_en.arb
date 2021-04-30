@@ -261,5 +261,7 @@
   "my_reservations": "My Reservations",
   "recent_restaurants": "Recent Restaurants",
   "recent_Items": "Recent Items",
-  "recommended_restaurants": "Recommended Restaurants"
+  "recommended_restaurants": "Recommended Restaurants",
+  "gender": "Gender",
+  "DOB": "DOB"
 }

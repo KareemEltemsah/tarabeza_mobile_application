@@ -25,6 +25,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
+    "DOB" : MessageLookupByLibrary.simpleMessage("DOB"),
     "about" : MessageLookupByLibrary.simpleMessage("About"),
     "add" : MessageLookupByLibrary.simpleMessage("Add"),
     "add_delivery_address" : MessageLookupByLibrary.simpleMessage("Add Delivery Address"),
@@ -112,6 +113,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "full_address" : MessageLookupByLibrary.simpleMessage("Full Address"),
     "full_name" : MessageLookupByLibrary.simpleMessage("Full name"),
     "g" : MessageLookupByLibrary.simpleMessage("g"),
+    "gender" : MessageLookupByLibrary.simpleMessage("Gender"),
     "guest" : MessageLookupByLibrary.simpleMessage("Guest"),
     "haveCouponCode" : MessageLookupByLibrary.simpleMessage("Have Coupon Code?"),
     "help__support" : MessageLookupByLibrary.simpleMessage("Help & Support"),
