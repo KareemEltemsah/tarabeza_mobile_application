@@ -6,7 +6,8 @@ import '../controllers/restaurant_controller.dart';
 import '../elements/CircularLoadingWidget.dart';
 import '../elements/DrawerWidget.dart';
 
-// import '../elements/PermissionDeniedWidget.dart';
+import '../elements/PermissionDeniedWidget.dart';
+import '../elements/ReviewsListWidget.dart';
 import 'restaurant.dart';
 import '../models/route_argument.dart';
 import '../repository/user_repository.dart';
@@ -78,16 +79,16 @@ class _DetailsWidgetState extends StateMVC<DetailsWidget> {
             });
           });
           break;
-        // case 1:
-        //   if (currentUser.value.apiToken == null) {
-        //     widget.currentPage = PermissionDeniedWidget();
-        //   }
-        //   break;
+        case 1:
+          widget.currentPage = ReviewsListWidget();
+          break;
         // case 2:
         //   widget.currentPage = MapWidget(parentScaffoldKey: widget.scaffoldKey, routeArgument: RouteArgument(param: _con.restaurant));
         //   break;
         case 3:
-          widget.currentPage = MenuWidget(parentScaffoldKey: widget.scaffoldKey, routeArgument: RouteArgument(param: _con.restaurant));
+          widget.currentPage = MenuWidget(
+              parentScaffoldKey: widget.scaffoldKey,
+              routeArgument: RouteArgument(param: _con.restaurant));
           break;
       }
     });
