@@ -158,16 +158,21 @@ class _MenuWidgetState extends StateMVC<MenuWidget> {
                             //           )),
                             onSelected: (bool value) {
                               setState(() {
-                                // if (_category.id == '0') {
-                                //   this.selectedCategories = ['0'];
-                                // } else {
-                                //   this.selectedCategories.removeWhere((element) => element == '0');
-                                // }
                                 if (value) {
-                                  this.selectedCategories.add(_category.id);
+                                  if (_category.id == '0')
+                                    this.selectedCategories = ['0'];
+                                  else {
+                                    this.selectedCategories.add(_category.id);
+                                    if (selectedCategories.contains('0'))
+                                      this.selectedCategories.removeWhere(
+                                          (element) => element == '0');
+                                  }
                                 } else {
-                                  this.selectedCategories.removeWhere(
-                                      (element) => element == _category.id);
+                                  if (_category.id != '0')
+                                    this.selectedCategories.removeWhere(
+                                        (element) => element == _category.id);
+                                  if (selectedCategories.length == 0)
+                                    this.selectedCategories = ['0'];
                                 }
                                 _con.selectCategory(this.selectedCategories);
                               });
@@ -183,18 +188,14 @@ class _MenuWidgetState extends StateMVC<MenuWidget> {
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     primary: false,
-                    itemCount: selectedCategories.isEmpty
-                        ? _con.items.length
-                        : _con.selectedItems.length,
+                    itemCount: _con.selectedItems.length,
                     separatorBuilder: (context, index) {
                       return SizedBox(height: 10);
                     },
                     itemBuilder: (context, index) {
                       return ItemWidget(
                         heroTag: 'menu_list',
-                        item: selectedCategories.isEmpty
-                            ? _con.items.elementAt(index)
-                            : _con.selectedItems.elementAt(index),
+                        item: _con.selectedItems.elementAt(index),
                       );
                     },
                   ),

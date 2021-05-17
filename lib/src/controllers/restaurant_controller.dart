@@ -46,12 +46,57 @@ class RestaurantController extends ControllerMVC {
           .map((i) => Item.fromJSON(i))
           .toList();
     });
+    items.add(Item.fromJSON({
+      "id": "1",
+      "restaurant_id": "1",
+      "category_id": "1",
+      "name": "test 1",
+      "description": "",
+      "price": "1",
+      "discount": "0",
+      "image": "",
+      "is_available": "1",
+      "created_at": "2021-03-20 20:29:53",
+      "updated_at": "2021-03-20 20:29:53",
+      "category_name": "Beverages"
+    }));
+    items.add(Item.fromJSON({
+      "id": "1",
+      "restaurant_id": "1",
+      "category_id": "2",
+      "name": "test 2",
+      "description": "",
+      "price": "1",
+      "discount": "0",
+      "image": "",
+      "is_available": "1",
+      "created_at": "2021-03-20 20:29:53",
+      "updated_at": "2021-03-20 20:29:53",
+      "category_name": "Beverages"
+    }));
+    items.add(Item.fromJSON({
+      "id": "1",
+      "restaurant_id": "1",
+      "category_id": "3",
+      "name": "test 3",
+      "description": "",
+      "price": "1",
+      "discount": "0",
+      "image": "",
+      "is_available": "1",
+      "created_at": "2021-03-20 20:29:53",
+      "updated_at": "2021-03-20 20:29:53",
+      "category_name": "Beverages"
+    }));
+    selectedItems = items;
     getRestaurantCategories();
   }
 
   Future<void> getRestaurantCategories() async {
     List<String> categoriesIDs = new List<String>();
-    categoriesIDs = items.map((e) => e.category_id).toList();
+    categoriesIDs.add('0');
+    items.forEach((e) => categoriesIDs.add(e.category_id));
+    print(categoriesIDs);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.containsKey('categories')) {
       List prefsCat =
@@ -73,15 +118,21 @@ class RestaurantController extends ControllerMVC {
   }
 
   Future<void> selectCategory(List<String> categoriesId) async {
-    if (!categoriesId.isEmpty)
-      selectedItems =
-          items.where((element) => categoriesId.contains(element.category_id));
+    if (!categoriesId.isEmpty) {
+      if (categoriesId.length == 1 && categoriesId.contains('0'))
+        selectedItems = items;
+      else
+        selectedItems = items
+            .where((element) => categoriesId.contains(element.category_id))
+            .toList();
+    }
   }
 
   Future<void> refreshRestaurant() async {
     var _id = restaurant.id;
     restaurant = new Restaurant();
     getRestaurant(
-        id: _id, message: S.of(context).restaurant_refreshed_successfuly);
+      id: _id, /*message: S.of(context).restaurant_refreshed_successfuly*/
+    );
   }
 }

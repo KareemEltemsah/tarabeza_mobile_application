@@ -39,7 +39,7 @@ class ItemWidget extends StatelessWidget {
               tag: heroTag + item.id,
               child: ClipRRect(
                 borderRadius: BorderRadius.all(Radius.circular(5)),
-                child: Icon(Icons.fastfood),
+                child: Icon(Icons.fastfood, size: 30,),
               ),
             ),
             SizedBox(width: 15),
