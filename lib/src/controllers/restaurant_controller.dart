@@ -50,7 +50,7 @@ class RestaurantController extends ControllerMVC {
       "id": "1",
       "restaurant_id": "1",
       "category_id": "1",
-      "name": "test 1",
+      "name": "test 1 a",
       "description": "",
       "price": "1",
       "discount": "0",
@@ -64,7 +64,7 @@ class RestaurantController extends ControllerMVC {
       "id": "1",
       "restaurant_id": "1",
       "category_id": "2",
-      "name": "test 2",
+      "name": "test 2 b",
       "description": "",
       "price": "1",
       "discount": "0",
@@ -78,7 +78,7 @@ class RestaurantController extends ControllerMVC {
       "id": "1",
       "restaurant_id": "1",
       "category_id": "3",
-      "name": "test 3",
+      "name": "test 3 c",
       "description": "",
       "price": "1",
       "discount": "0",
@@ -126,6 +126,12 @@ class RestaurantController extends ControllerMVC {
             .where((element) => categoriesId.contains(element.category_id))
             .toList();
     }
+  }
+
+  Future<void> selectByName(String searchWord) async {
+    selectedItems = selectedItems
+        .where((element) => element.name.contains(searchWord))
+        .toList();
   }
 
   Future<void> refreshRestaurant() async {

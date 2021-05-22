@@ -27,6 +27,7 @@ class MenuWidget extends StatefulWidget {
 class _MenuWidgetState extends StateMVC<MenuWidget> {
   RestaurantController _con;
   List<String> selectedCategories;
+  String searchWord = "";
 
   _MenuWidgetState() : super(RestaurantController()) {
     _con = controller;
@@ -113,7 +114,7 @@ class _MenuWidgetState extends StateMVC<MenuWidget> {
             _con.categories.isEmpty
                 ? SizedBox(height: 90)
                 : Container(
-                    height: 90,
+                    height: 60,
                     child: ListView(
                       primary: false,
                       shrinkWrap: true,
@@ -140,22 +141,6 @@ class _MenuWidgetState extends StateMVC<MenuWidget> {
                             selected: _selected,
                             //shape: StadiumBorder(side: BorderSide(color: Theme.of(context).focusColor.withOpacity(0.05))),
                             showCheckmark: false,
-                            // avatar: (_category.id == '0')
-                            //     ? null
-                            //     : (_category.image.url.toLowerCase().endsWith('.svg')
-                            //         ? SvgPicture.network(
-                            //             _category.image.url,
-                            //             color: _selected ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
-                            //           )
-                            //         : CachedNetworkImage(
-                            //             fit: BoxFit.cover,
-                            //             imageUrl: _category.image.icon,
-                            //             placeholder: (context, url) => Image.asset(
-                            //               'assets/img/loading.gif',
-                            //               fit: BoxFit.cover,
-                            //             ),
-                            //             errorWidget: (context, url, error) => Icon(Icons.error),
-                            //           )),
                             onSelected: (bool value) {
                               setState(() {
                                 if (value) {
@@ -175,6 +160,7 @@ class _MenuWidgetState extends StateMVC<MenuWidget> {
                                     this.selectedCategories = ['0'];
                                 }
                                 _con.selectCategory(this.selectedCategories);
+                                _con.selectByName(searchWord);
                               });
                             },
                           ),
@@ -182,8 +168,51 @@ class _MenuWidgetState extends StateMVC<MenuWidget> {
                       }),
                     ),
                   ),
-            _con.items.isEmpty
-                ? CircularLoadingWidget(height: 250)
+            Stack(alignment: Alignment.centerRight, children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: TextField(
+                  onChanged: (text) {
+                    setState(()  {
+                      searchWord = text;
+                      _con.selectCategory(this.selectedCategories);
+                      _con.selectByName(searchWord);
+                    });
+                  },
+                  autofocus: false,
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.fromLTRB(12, 12, 48, 12),
+                    hintText: S.of(context).search_by_name,
+                    hintStyle: Theme.of(context)
+                        .textTheme
+                        .caption
+                        .merge(TextStyle(fontSize: 14)),
+                    prefixIcon: Icon(Icons.search,
+                        color: Theme.of(context).accentColor),
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color:
+                                Theme.of(context).focusColor.withOpacity(0.1))),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color:
+                                Theme.of(context).focusColor.withOpacity(0.3))),
+                    enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color:
+                                Theme.of(context).focusColor.withOpacity(0.1))),
+                  ),
+                ),
+              ),
+            ]),
+            _con.selectedItems.isEmpty
+                ? /*CircularLoadingWidget(height: 250)*/
+                Center(
+                    child: Text(
+                      "No Results",
+                      style: Theme.of(context).textTheme.subtitle1,
+                    ),
+                  )
                 : ListView.separated(
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,

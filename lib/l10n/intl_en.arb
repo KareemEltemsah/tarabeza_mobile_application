@@ -263,5 +263,6 @@
   "recent_Items": "Recent Items",
   "recommended_restaurants": "Recommended Restaurants",
   "gender": "Gender",
-  "DOB": "DOB"
+  "DOB": "DOB",
+  "search_by_name": "search by name"
 }

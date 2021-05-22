@@ -224,6 +224,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "reviews_refreshed_successfully" : MessageLookupByLibrary.simpleMessage("Reviews refreshed successfully!"),
     "save" : MessageLookupByLibrary.simpleMessage("Save"),
     "search" : MessageLookupByLibrary.simpleMessage("Search"),
+    "search_by_name" : MessageLookupByLibrary.simpleMessage("search by name"),
     "search_for_restaurants" : MessageLookupByLibrary.simpleMessage("Search for restaurants"),
     "select_extras_to_add_them_on_the_food" : MessageLookupByLibrary.simpleMessage("Select extras to add them on the food"),
     "select_your_preferred_languages" : MessageLookupByLibrary.simpleMessage("Select your preferred languages"),

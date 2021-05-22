@@ -62,8 +62,8 @@ class _SearchResultWidgetState extends StateMVC<SearchResultWidget> {
             Padding(
               padding: const EdgeInsets.all(20),
               child: TextField(
-                onSubmitted: (text) async {
-                  await _con.refreshSearch(text);
+                onChanged: (text) {
+                  _con.refreshSearch(text);
                   _con.saveSearch(text);
                 },
                 autofocus: false,
@@ -141,9 +141,8 @@ class _SearchResultWidgetState extends StateMVC<SearchResultWidget> {
                                   ));
                             },
                             child: CardWidget(
-                                    restaurant:
-                                        _con.restaurants.elementAt(index),
-                                    heroTag: widget.heroTag),
+                                restaurant: _con.restaurants.elementAt(index),
+                                heroTag: widget.heroTag),
                           );
                         },
                       ),
