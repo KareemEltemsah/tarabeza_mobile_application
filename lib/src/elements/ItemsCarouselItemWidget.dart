@@ -63,7 +63,7 @@ class ItemsCarouselItemWidget extends StatelessWidget {
                 ),
                 alignment: AlignmentDirectional.topEnd,
                 child: Helper.getPrice(
-                  item.price,
+                  item.getPrice(),
                   context,
                   style: Theme.of(context).textTheme.bodyText1.merge(TextStyle(color: Theme.of(context).primaryColor)),
                 ),

@@ -1,25 +1,183 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../helpers/helper.dart';
 import '../models/item.dart';
+import '../../generated/l10n.dart';
 import '../models/route_argument.dart';
 
-class ItemWidget extends StatelessWidget {
+class ItemWidget extends StatefulWidget {
   final String heroTag;
   final Item item;
 
   const ItemWidget({Key key, this.item, this.heroTag}) : super(key: key);
 
   @override
+  _ItemWidgetState createState() {
+    return _ItemWidgetState();
+  }
+}
+
+class _ItemWidgetState extends State<ItemWidget> {
+  int quantity = 1;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  _itemBottomSheet() {
+    showModalBottomSheet(
+        context: context,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),),
+        builder: (context) {
+          quantity = 1;
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setModalState) {
+            return Container(
+              height: 230,
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(
+                        width: MediaQuery.of(context).size.width - 110,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Expanded(
+                              flex: 3,
+                              child: Text(
+                                widget.item?.name ?? '',
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 2,
+                                style: Theme.of(context).textTheme.headline3,
+                              ),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: <Widget>[
+                                  Helper.getPrice(
+                                    widget.item.getPrice(),
+                                    context,
+                                    style:
+                                        Theme.of(context).textTheme.headline2,
+                                  ),
+                                  widget.item.discount > 0
+                                      ? Helper.getPrice(
+                                          widget.item.price, context,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText2
+                                              .merge(TextStyle(
+                                                  decoration: TextDecoration
+                                                      .lineThrough)))
+                                      : SizedBox(height: 0),
+                                ],
+                              ),
+                            ),
+                          ],
+                        )),
+                    SizedBox(height: 10),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width - 110,
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: Text(
+                              S.of(context).quantity,
+                              style: Theme.of(context).textTheme.subtitle1,
+                            ),
+                          ),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              IconButton(
+                                onPressed: () {
+                                  setModalState(() {
+                                    if (quantity > 1) quantity--;
+                                  });
+                                },
+                                iconSize: 30,
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 5, vertical: 10),
+                                icon: Icon(Icons.remove_circle_outline),
+                                color: Theme.of(context).hintColor,
+                              ),
+                              Text(quantity.toString(),
+                                  style: Theme.of(context).textTheme.subtitle1),
+                              IconButton(
+                                onPressed: () {
+                                  setModalState(() {
+                                    quantity++;
+                                  });
+                                },
+                                iconSize: 30,
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 5, vertical: 10),
+                                icon: Icon(Icons.add_circle_outline),
+                                color: Theme.of(context).hintColor,
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width - 110,
+                      child: FlatButton(
+                        onPressed: () {},
+                        padding: EdgeInsets.symmetric(vertical: 14),
+                        color: Theme.of(context).accentColor,
+                        shape: StadiumBorder(),
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  S.of(context).add_to_order,
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                      color: Theme.of(context).primaryColor),
+                                ),
+                              ),
+                              Helper.getPrice(
+                                (widget.item.getPrice() * quantity),
+                                context,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline4
+                                    .merge(TextStyle(
+                                        color: Theme.of(context).primaryColor)),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                  ],
+                ),
+              ),
+            );
+          });
+        });
+  }
+
   Widget build(BuildContext context) {
     return InkWell(
       splashColor: Theme.of(context).accentColor,
       focusColor: Theme.of(context).accentColor,
       highlightColor: Theme.of(context).primaryColor,
       onTap: () {
-        // Navigator.of(context).pushNamed('/Item',
-        //     arguments: RouteArgument(id: item.id, heroTag: this.heroTag));
+        _itemBottomSheet();
       },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
@@ -36,10 +194,13 @@ class ItemWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Hero(
-              tag: heroTag + item.id,
+              tag: widget.heroTag + widget.item.id + '${DateTime.now()}',
               child: ClipRRect(
                 borderRadius: BorderRadius.all(Radius.circular(5)),
-                child: Icon(Icons.fastfood, size: 30,),
+                child: Icon(
+                  Icons.fastfood,
+                  size: 30,
+                ),
               ),
             ),
             SizedBox(width: 15),
@@ -52,7 +213,7 @@ class ItemWidget extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          item.name,
+                          widget.item.name,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
                           style: Theme.of(context).textTheme.subtitle1,
@@ -65,12 +226,12 @@ class ItemWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: <Widget>[
                       Helper.getPrice(
-                        item.price,
+                        widget.item.getPrice(),
                         context,
                         style: Theme.of(context).textTheme.headline4,
                       ),
-                      item.discount > 0
-                          ? Helper.getPrice(item.getDiscountedPrice(), context,
+                      widget.item.discount > 0
+                          ? Helper.getPrice(widget.item.price, context,
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyText2

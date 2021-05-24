@@ -2694,6 +2694,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Add to Order`
+  String get add_to_order {
+    return Intl.message(
+      'Add to Order',
+      name: 'add_to_order',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -72,7 +72,6 @@ class _ProfileWidgetState extends StateMVC<ProfileWidget> {
                       primary: false,
                       children: <Widget>[
                         ListTile(
-                          leading: Icon(Icons.person),
                           title: Text(
                             S.of(context).profile_settings,
                             style: Theme.of(context).textTheme.bodyText1,

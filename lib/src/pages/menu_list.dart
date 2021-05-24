@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
@@ -52,10 +53,11 @@ class _MenuWidgetState extends StateMVC<MenuWidget> {
         centerTitle: true,
         automaticallyImplyLeading: false,
         leading: new IconButton(
-          icon: new Icon(Icons.arrow_back, color: Theme.of(context).hintColor),
-          onPressed: () => Navigator.of(context).pushNamed('/Details',
-              arguments: RouteArgument(
-                  id: '0', param: _con.restaurant.id, heroTag: 'menu_tab')),
+          icon: Icon(Icons.close),
+          color: Theme.of(context).hintColor,
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
         title: Text(
           _con.restaurant?.name ?? '',
@@ -112,7 +114,7 @@ class _MenuWidgetState extends StateMVC<MenuWidget> {
               ),
             ),
             _con.categories.isEmpty
-                ? SizedBox(height: 90)
+                ? SizedBox(height: 0)
                 : Container(
                     height: 60,
                     child: ListView(
@@ -168,43 +170,41 @@ class _MenuWidgetState extends StateMVC<MenuWidget> {
                       }),
                     ),
                   ),
-            Stack(alignment: Alignment.centerRight, children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: TextField(
-                  onChanged: (text) {
-                    setState(()  {
-                      searchWord = text;
-                      _con.selectCategory(this.selectedCategories);
-                      _con.selectByName(searchWord);
-                    });
-                  },
-                  autofocus: false,
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.fromLTRB(12, 12, 48, 12),
-                    hintText: S.of(context).search_by_name,
-                    hintStyle: Theme.of(context)
-                        .textTheme
-                        .caption
-                        .merge(TextStyle(fontSize: 14)),
-                    prefixIcon: Icon(Icons.search,
-                        color: Theme.of(context).accentColor),
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            color:
-                                Theme.of(context).focusColor.withOpacity(0.1))),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            color:
-                                Theme.of(context).focusColor.withOpacity(0.3))),
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            color:
-                                Theme.of(context).focusColor.withOpacity(0.1))),
-                  ),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: TextField(
+                onChanged: (text) {
+                  setState(() {
+                    searchWord = text;
+                    _con.selectCategory(this.selectedCategories);
+                    _con.selectByName(searchWord);
+                  });
+                },
+                autofocus: false,
+                decoration: InputDecoration(
+                  contentPadding: EdgeInsets.fromLTRB(12, 12, 48, 12),
+                  hintText: S.of(context).search_by_name,
+                  hintStyle: Theme.of(context)
+                      .textTheme
+                      .caption
+                      .merge(TextStyle(fontSize: 14)),
+                  prefixIcon:
+                      Icon(Icons.search, color: Theme.of(context).accentColor),
+                  border: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color:
+                              Theme.of(context).focusColor.withOpacity(0.1))),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color:
+                              Theme.of(context).focusColor.withOpacity(0.3))),
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color:
+                              Theme.of(context).focusColor.withOpacity(0.1))),
                 ),
               ),
-            ]),
+            ),
             _con.selectedItems.isEmpty
                 ? /*CircularLoadingWidget(height: 250)*/
                 Center(
@@ -222,9 +222,12 @@ class _MenuWidgetState extends StateMVC<MenuWidget> {
                       return SizedBox(height: 10);
                     },
                     itemBuilder: (context, index) {
-                      return ItemWidget(
-                        heroTag: 'menu_list',
-                        item: _con.selectedItems.elementAt(index),
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: ItemWidget(
+                          heroTag: 'menu_list',
+                          item: _con.selectedItems.elementAt(index),
+                        ),
                       );
                     },
                   ),

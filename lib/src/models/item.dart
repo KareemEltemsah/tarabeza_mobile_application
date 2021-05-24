@@ -22,7 +22,6 @@ class Item {
       price = jsonMap['price'] != null ? double.parse(jsonMap['price']) : 0.0;
       discount =
           jsonMap['discount'] != null ? double.parse(jsonMap['discount']) : 0.0;
-      price = discount != 0 ? price - price * discount : price;
       image = jsonMap['media'] ?? '';
       is_available = jsonMap['is_available'] == '1' ? true : false;
       category_name = jsonMap['category_name'] ?? '';
@@ -56,7 +55,7 @@ class Item {
     };
   }
 
-  double getDiscountedPrice() {
+  double getPrice() {
     return discount > 0 ? (price - price * discount) : price;
   }
 

@@ -264,5 +264,6 @@
   "recommended_restaurants": "Recommended Restaurants",
   "gender": "Gender",
   "DOB": "DOB",
-  "search_by_name": "search by name"
+  "search_by_name": "search by name",
+  "add_to_order": "Add to Order"
 }

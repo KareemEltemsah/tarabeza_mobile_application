@@ -81,7 +81,7 @@ class RestaurantController extends ControllerMVC {
       "name": "test 3 c",
       "description": "",
       "price": "1",
-      "discount": "0",
+      "discount": "0.3",
       "image": "",
       "is_available": "1",
       "created_at": "2021-03-20 20:29:53",

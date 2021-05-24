@@ -79,9 +79,9 @@ class _DetailsWidgetState extends StateMVC<DetailsWidget> {
             });
           });
           break;
-        case 1:
-          widget.currentPage = ReviewsListWidget();
-          break;
+        // case 1:
+        //   widget.currentPage = ReviewsListWidget();
+        //   break;
         // case 2:
         //   widget.currentPage = MapWidget(parentScaffoldKey: widget.scaffoldKey, routeArgument: RouteArgument(param: _con.restaurant));
         //   break;
