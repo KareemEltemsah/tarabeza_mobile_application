@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../helpers/helper.dart';
 import '../models/item.dart';
+import '../models/order_item.dart';
+import '../repository/order_repository.dart' as orderRepo;
 import '../../generated/l10n.dart';
 import '../models/route_argument.dart';
 
@@ -131,7 +133,13 @@ class _ItemWidgetState extends State<ItemWidget> {
                     SizedBox(
                       width: MediaQuery.of(context).size.width - 110,
                       child: FlatButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          setState(() {
+                            OrderItem oi = new OrderItem(widget.item, quantity);
+                            orderRepo.addOrderItem(oi);
+                          });
+
+                        },
                         padding: EdgeInsets.symmetric(vertical: 14),
                         color: Theme.of(context).accentColor,
                         shape: StadiumBorder(),

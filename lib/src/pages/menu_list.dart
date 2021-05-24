@@ -6,6 +6,7 @@ import 'package:mvc_pattern/mvc_pattern.dart';
 
 import '../../generated/l10n.dart';
 import '../controllers/restaurant_controller.dart';
+import '../elements/OrderButtonWidget.dart';
 import '../elements/CircularLoadingWidget.dart';
 import '../elements/DrawerWidget.dart';
 import '../elements/ItemWidget.dart';
@@ -68,6 +69,11 @@ class _MenuWidgetState extends StateMVC<MenuWidget> {
               .headline6
               .merge(TextStyle(letterSpacing: 0)),
         ),
+        actions: <Widget>[
+          new OrderButtonWidget(
+              iconColor: Theme.of(context).hintColor,
+              labelColor: Theme.of(context).accentColor),
+        ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: SingleChildScrollView(

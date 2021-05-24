@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
-import 'package:tarabeza_mobile_application/src/elements/SearchWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../generated/l10n.dart';
+import '../repository/order_repository.dart' as orderRepo;
+import '../elements/OrderFloatButtonWidget.dart';
 import '../controllers/restaurant_controller.dart';
 import '../elements/CircularLoadingWidget.dart';
 import '../helpers/helper.dart';
@@ -38,6 +39,8 @@ class _RestaurantWidgetState extends StateMVC<RestaurantWidget> {
   @override
   void initState() {
     _con.restaurant = widget.routeArgument.param as Restaurant;
+    if (!orderRepo.isSameRestaurant(_con.restaurant.id))
+      orderRepo.clearOrderItems();
     super.initState();
   }
 
@@ -187,19 +190,19 @@ class _RestaurantWidgetState extends StateMVC<RestaurantWidget> {
                                           horizontal: 12, vertical: 3),
                                       decoration: BoxDecoration(
                                           color:
-                                          _con.restaurant.reservation_active
-                                              ? Colors.green
-                                              : Colors.red,
+                                              _con.restaurant.reservation_active
+                                                  ? Colors.green
+                                                  : Colors.red,
                                           borderRadius:
-                                          BorderRadius.circular(24)),
+                                              BorderRadius.circular(24)),
                                       child: Text(
                                         S.of(context).reservation,
                                         style: Theme.of(context)
                                             .textTheme
                                             .caption
                                             .merge(TextStyle(
-                                            color: Theme.of(context)
-                                                .primaryColor)),
+                                                color: Theme.of(context)
+                                                    .primaryColor)),
                                       )),
                                   Expanded(child: SizedBox(height: 0)),
                                   Container(
@@ -353,12 +356,13 @@ class _RestaurantWidgetState extends StateMVC<RestaurantWidget> {
                     Positioned(
                       top: 32,
                       right: 20,
-                      child: new IconButton(
-                        icon: new Icon(Icons.search,
-                            color: Theme.of(context).hintColor),
-                        onPressed: () =>
-                            Navigator.of(context).push(SearchModal()),
-                      ),
+                      child: OrderFloatButtonWidget(
+                          iconColor: Theme.of(context).primaryColor,
+                          labelColor: Theme.of(context).hintColor,
+                          routeArgument: RouteArgument(
+                              id: '0',
+                              param: _con.restaurant.id,
+                              heroTag: 'home_slide')),
                     ),
                   ],
                 ),
