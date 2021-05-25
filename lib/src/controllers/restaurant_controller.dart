@@ -61,7 +61,7 @@ class RestaurantController extends ControllerMVC {
       "category_name": "Beverages"
     }));
     items.add(Item.fromJSON({
-      "id": "1",
+      "id": "2",
       "restaurant_id": "4795",
       "category_id": "2",
       "name": "test 2 b",
@@ -75,7 +75,7 @@ class RestaurantController extends ControllerMVC {
       "category_name": "Beverages"
     }));
     items.add(Item.fromJSON({
-      "id": "1",
+      "id": "3",
       "restaurant_id": "4795",
       "category_id": "3",
       "name": "test 3 c",

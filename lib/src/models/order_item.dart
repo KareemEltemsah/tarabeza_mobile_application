@@ -1,13 +1,13 @@
 import '../models/item.dart';
 
 class OrderItem {
+  String id;
   Item item;
   int quantity;
-  double totalPrice;
-  OrderItem(Item i, int q) {
+
+  OrderItem(Item i, int q, this.id) {
     item = i;
     quantity = q;
-    totalPrice = item.getPrice() * quantity;
   }
 
   OrderItem.fromJSON(Map<String, dynamic> jsonMap) {
@@ -19,6 +19,14 @@ class OrderItem {
       quantity = 0.0;
       item = item.fromJSON({});*/
     }
+  }
+
+  double getTotalPrice() {
+    return item.getPrice() * quantity;
+  }
+
+  bool operator ==(dynamic other) {
+    return other.item == this.item;
   }
 
   Map toMap() {

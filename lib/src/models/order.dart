@@ -24,7 +24,9 @@ class Order {
       active = jsonMap['active'] ?? false;
       orderStatus = jsonMap['order_status'] ?? "";
       dateTime = DateTime.parse(jsonMap['updated_at']);
-      user = jsonMap['user'] != null ? User.fromJSON(jsonMap['user']) : User.fromJSON({});
+      user = jsonMap['user'] != null
+          ? User.fromJSON(jsonMap['user'])
+          : User.fromJSON({});
     } catch (e) {
       id = '';
       tax = 0.0;
@@ -45,5 +47,13 @@ class Order {
     map['hint'] = hint;
     map["foods"] = orderItems?.map((element) => element.toMap())?.toList();
     return map;
+  }
+
+  double getTotalPrice() {
+    double price = 0;
+    orderItems.forEach((element) {
+      price += element.getTotalPrice();
+    });
+    return price;
   }
 }

@@ -2,25 +2,31 @@ import 'package:flutter/material.dart';
 
 import 'src/models/route_argument.dart';
 
-// import 'src/pages/cart.dart';
+import 'src/pages/order.dart';
+
 // import 'src/pages/category.dart';
 // import 'src/pages/chat.dart';
 // import 'src/pages/checkout.dart';
 // import 'src/pages/debug.dart';
 // import 'src/pages/delivery_pickup.dart';
 import 'src/pages/details.dart';
+
 // import 'src/pages/favorites.dart';
 // import 'src/pages/item.dart';
 import 'src/pages/forget_password.dart';
+
 // import 'src/pages/help.dart';
 // import 'src/pages/languages.dart';
 import 'src/pages/login.dart';
+
 // import 'src/pages/menu_list.dart';
 // import 'src/pages/order_success.dart';
 import 'src/pages/pages.dart';
+
 // import 'src/pages/payment_methods.dart';
 // import 'src/pages/paypal_payment.dart';
 import 'src/pages/profile.dart';
+
 // import 'src/pages/razorpay_payment.dart';
 // import 'src/pages/reviews.dart';
 // import 'src/pages/settings.dart';
@@ -56,15 +62,17 @@ class RouteGenerator {
       // case '/Chat':
       //   return MaterialPageRoute(builder: (_) => ChatWidget(routeArgument: args as RouteArgument));
       case '/Details':
-        return MaterialPageRoute(builder: (_) => DetailsWidget(currentTab: args));
+        return MaterialPageRoute(
+            builder: (_) => DetailsWidget(currentTab: args));
       // case '/Menu':
       //   return MaterialPageRoute(builder: (_) => MenuWidget(routeArgument: args as RouteArgument));
       // case '/Item':
       //   return MaterialPageRoute(builder: (_) => ItemWidget(routeArgument: args as RouteArgument));
       // case '/Category':
       //   return MaterialPageRoute(builder: (_) => CategoryWidget(routeArgument: args as RouteArgument));
-      // case '/Cart':
-      //   return MaterialPageRoute(builder: (_) => CartWidget(routeArgument: args as RouteArgument));
+      case '/Order':
+        return MaterialPageRoute(
+            builder: (_) => OrderWidget(routeArgument: args as RouteArgument));
       // case '/Tracking':
       //   return MaterialPageRoute(builder: (_) => TrackingWidget(routeArgument: args as RouteArgument));
       // case '/Reviews':

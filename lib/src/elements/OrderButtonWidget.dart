@@ -20,9 +20,7 @@ class OrderButtonWidget extends StatefulWidget {
 }
 
 class _OrderButtonWidgetState extends State<OrderButtonWidget> {
-
-  _OrderButtonWidgetState() : super() {
-  }
+  _OrderButtonWidgetState() : super() {}
 
   @override
   void initState() {
@@ -36,17 +34,17 @@ class _OrderButtonWidgetState extends State<OrderButtonWidget> {
       builder: (context, value, child) {
         return FlatButton(
           onPressed: () {
-            /*if (currentUser.value.apiToken != null) {
-            Navigator.of(context).pushNamed('/Cart', arguments: RouteArgument(param: '/Pages', id: '2'));
-          } else {
-            Navigator.of(context).pushNamed('/Login');
-          }*/
+            if (currentUser.value.apiToken != null) {
+              Navigator.of(context).pushNamed('/Order');
+            } else {
+              Navigator.of(context).pushNamed('/Login');
+            }
           },
           child: Stack(
             alignment: AlignmentDirectional.bottomEnd,
             children: <Widget>[
               Icon(
-                Icons.fastfood_rounded,
+                Icons.local_mall_rounded,
                 color: this.widget.iconColor,
                 size: 28,
               ),
@@ -55,12 +53,16 @@ class _OrderButtonWidgetState extends State<OrderButtonWidget> {
                   orderRepo.currentOrder.value.orderItems.length.toString(),
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.caption.merge(
-                    TextStyle(color: Theme.of(context).primaryColor, fontSize: 9),
-                  ),
+                        TextStyle(
+                            color: Theme.of(context).primaryColor, fontSize: 9),
+                      ),
                 ),
                 padding: EdgeInsets.all(0),
-                decoration: BoxDecoration(color: this.widget.labelColor, borderRadius: BorderRadius.all(Radius.circular(10))),
-                constraints: BoxConstraints(minWidth: 15, maxWidth: 15, minHeight: 15, maxHeight: 15),
+                decoration: BoxDecoration(
+                    color: this.widget.labelColor,
+                    borderRadius: BorderRadius.all(Radius.circular(10))),
+                constraints: BoxConstraints(
+                    minWidth: 15, maxWidth: 15, minHeight: 15, maxHeight: 15),
               ),
             ],
           ),

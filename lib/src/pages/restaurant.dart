@@ -358,11 +358,7 @@ class _RestaurantWidgetState extends StateMVC<RestaurantWidget> {
                       right: 20,
                       child: OrderFloatButtonWidget(
                           iconColor: Theme.of(context).primaryColor,
-                          labelColor: Theme.of(context).hintColor,
-                          routeArgument: RouteArgument(
-                              id: '0',
-                              param: _con.restaurant.id,
-                              heroTag: 'home_slide')),
+                          labelColor: Theme.of(context).hintColor),
                     ),
                   ],
                 ),

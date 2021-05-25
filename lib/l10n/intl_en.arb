@@ -265,5 +265,6 @@
   "gender": "Gender",
   "DOB": "DOB",
   "search_by_name": "search by name",
-  "add_to_order": "Add to Order"
+  "add_to_order": "Add to Order",
+  "no_items_in_your_order": "No items in your order"
 }

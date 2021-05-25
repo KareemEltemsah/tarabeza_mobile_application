@@ -5,13 +5,18 @@ import '../models/item.dart';
 import '../models/order_item.dart';
 import '../repository/order_repository.dart' as orderRepo;
 import '../../generated/l10n.dart';
-import '../models/route_argument.dart';
 
 class ItemWidget extends StatefulWidget {
   final String heroTag;
   final Item item;
+  final bool clickable;
 
-  const ItemWidget({Key key, this.item, this.heroTag}) : super(key: key);
+  const ItemWidget({
+    Key key,
+    this.item,
+    this.heroTag,
+    this.clickable,
+  }) : super(key: key);
 
   @override
   _ItemWidgetState createState() {
@@ -30,10 +35,12 @@ class _ItemWidgetState extends State<ItemWidget> {
   _itemBottomSheet() {
     showModalBottomSheet(
         context: context,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
-        ),),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+        ),
         builder: (context) {
           quantity = 1;
           return StatefulBuilder(
@@ -135,10 +142,13 @@ class _ItemWidgetState extends State<ItemWidget> {
                       child: FlatButton(
                         onPressed: () {
                           setState(() {
-                            OrderItem oi = new OrderItem(widget.item, quantity);
+                            OrderItem oi = new OrderItem(
+                              widget.item,
+                              quantity,
+                              DateTime.now().microsecond.toString(),
+                            );
                             orderRepo.addOrderItem(oi);
                           });
-
                         },
                         padding: EdgeInsets.symmetric(vertical: 14),
                         color: Theme.of(context).accentColor,
@@ -185,7 +195,7 @@ class _ItemWidgetState extends State<ItemWidget> {
       focusColor: Theme.of(context).accentColor,
       highlightColor: Theme.of(context).primaryColor,
       onTap: () {
-        _itemBottomSheet();
+        widget.clickable ? _itemBottomSheet() : null;
       },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),

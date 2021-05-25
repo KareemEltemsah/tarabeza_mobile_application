@@ -233,6 +233,7 @@ class _MenuWidgetState extends StateMVC<MenuWidget> {
                         child: ItemWidget(
                           heroTag: 'menu_list',
                           item: _con.selectedItems.elementAt(index),
+                          clickable: true,
                         ),
                       );
                     },

@@ -160,6 +160,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "newMessageFrom" : MessageLookupByLibrary.simpleMessage("New message from"),
     "new_address_added_successfully" : MessageLookupByLibrary.simpleMessage("New Address added successfully"),
     "new_order_from_client" : MessageLookupByLibrary.simpleMessage("New order from client"),
+    "no_items_in_your_order" : MessageLookupByLibrary.simpleMessage("No items in your order"),
     "notValidAddress" : MessageLookupByLibrary.simpleMessage("Not valid address"),
     "not_a_valid_address" : MessageLookupByLibrary.simpleMessage("Not a valid address"),
     "not_a_valid_biography" : MessageLookupByLibrary.simpleMessage("Not a valid biography"),

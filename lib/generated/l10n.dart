@@ -2704,6 +2704,16 @@ class S {
       args: [],
     );
   }
+
+  /// `No items in your order`
+  String get no_items_in_your_order {
+    return Intl.message(
+      'No items in your order',
+      name: 'no_items_in_your_order',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
