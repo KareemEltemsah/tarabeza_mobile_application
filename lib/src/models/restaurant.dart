@@ -27,14 +27,14 @@ class Restaurant {
       logo_url = jsonMap['logo_url'] ?? '';
       contact_number = jsonMap['contact_number'] ?? '';
       address = jsonMap['address'] ?? '';
-      longitude = jsonMap['longitude'] ?? '';
-      latitude = jsonMap['latitude'] ?? '';
-      rating = jsonMap['rating'];
-      number_of_ratings = jsonMap['number_of_ratings'];
-      reservation_active = jsonMap['reservation_active'] == '1' ? true : false;
+      longitude = jsonMap['longitude'].toString() ?? '';
+      latitude = jsonMap['latitude'].toString() ?? '';
+      rating = jsonMap['rating'].toString();
+      number_of_ratings = jsonMap['number_of_ratings'].toString();
+      reservation_active = jsonMap['reservation_active'].toString() == '1' ? true : false;
       opening_time = jsonMap['opening_time'];
       closing_time = jsonMap['closing_time'];
-      review_count = jsonMap['review_count'];
+      review_count = jsonMap['review_count'].toString();
       distance = jsonMap['distance'] ?? null;
     } catch (e) {}
   }
@@ -54,7 +54,7 @@ class Restaurant {
       "opening_time": opening_time,
       "closing_time": closing_time,
       "review_count": review_count,
-      "distance" : distance
+      "distance": distance
     };
   }
 

@@ -117,8 +117,10 @@ class _ItemWidgetState extends State<ItemWidget> {
                                 icon: Icon(Icons.remove_circle_outline),
                                 color: Theme.of(context).hintColor,
                               ),
-                              Text(quantity.toString(),
-                                  style: Theme.of(context).textTheme.subtitle1),
+                              Text(
+                                quantity.toString(),
+                                style: Theme.of(context).textTheme.subtitle1,
+                              ),
                               IconButton(
                                 onPressed: () {
                                   setModalState(() {

@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../models/setting.dart';
 
 ValueNotifier<Setting> setting = new ValueNotifier(new Setting());
+ValueNotifier<bool> useCaching = new ValueNotifier(false);
 final navigatorKey = GlobalKey<NavigatorState>();
 
 Future<Setting> initSettings() async {
@@ -19,6 +20,18 @@ Future<Setting> initSettings() async {
   // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
   setting.notifyListeners();
   return setting.value;
+}
+
+Future<void> setCachingOption() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  if (prefs.containsKey('cachingDate')) {
+    DateTime cachingDate = DateTime.parse(prefs.getString('cachingDate'));
+    useCaching.value =
+    DateTime.now().difference(cachingDate).inHours < 6 ? true : false;
+  } else
+    useCaching.value = false;
+  // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
+  useCaching.notifyListeners();
 }
 
 void setBrightness(Brightness brightness) async {

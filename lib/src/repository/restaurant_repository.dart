@@ -80,6 +80,7 @@ Future<Stream<Restaurant>> getPopularRestaurants(Address myLocation) async {
   }
 }*/
 
+// ignore: missing_return
 Future<Stream<Restaurant>> searchRestaurants(String search) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   Filter filter =
@@ -105,6 +106,5 @@ Future<Stream<Restaurant>> searchRestaurants(String search) async {
     });
   } catch (e) {
     print(uri.toString());
-    return new Stream.value(new Restaurant.fromJSON({}));
   }
 }

@@ -83,24 +83,6 @@ class _MenuWidgetState extends StateMVC<MenuWidget> {
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
-            // ListTile(
-            //   dense: true,
-            //   contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            //   leading: Icon(
-            //     Icons.bookmark,
-            //     color: Theme.of(context).hintColor,
-            //   ),
-            //   title: Text(
-            //     S.of(context).featured_foods,
-            //     style: Theme.of(context).textTheme.headline4,
-            //   ),
-            //   subtitle: Text(
-            //     S.of(context).clickOnTheFoodToGetMoreDetailsAboutIt,
-            //     maxLines: 2,
-            //     style: Theme.of(context).textTheme.caption,
-            //   ),
-            // ),
-            // FoodsCarouselWidget(heroTag: 'menu_trending_food', foodsList: _con.trendingFoods),
             ListTile(
               dense: true,
               contentPadding:

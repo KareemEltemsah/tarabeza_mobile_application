@@ -137,7 +137,7 @@ class _PagesWidgetState extends State<PagesWidget> {
               label: '',
             ),
             BottomNavigationBarItem(
-              icon: new Icon(Icons.fastfood),
+              icon: new Icon(Icons.local_mall_rounded),
               label: '',
             ),
           ],

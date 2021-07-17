@@ -11,16 +11,18 @@ import 'package:http/http.dart' as http;
 import '../models/item.dart';
 import '../models/restaurant.dart';
 import '../repository/user_repository.dart' as userRepo;
+import '../repository/settings_repository.dart' as settingsRepo;
 
 class HomeController extends ControllerMVC {
   List<Restaurant> recentRestaurants = <Restaurant>[];
   List<Item> recentItems = <Item>[];
   List<Restaurant> recommendedRestaurants = <Restaurant>[];
-  bool useCaching = false;
 
   HomeController() {
-    setCachingOption().whenComplete(() {
-      print(useCaching ? 'caching enabled' : 'caching disabled');
+    settingsRepo.setCachingOption().whenComplete(() {
+      print(settingsRepo.useCaching.value
+          ? 'caching enabled'
+          : 'caching disabled');
       userRepo.currentUser.value.apiToken != null
           ? getFeedsForUser(userRepo.currentUser.value.id)
           : getFeeds();
@@ -29,38 +31,42 @@ class HomeController extends ControllerMVC {
 
   Future<void> getFeeds() async {
     final String url = '${GlobalConfiguration().getValue('api_base_url')}feeds';
+    print(url);
     final client = new http.Client();
-    final feedsResponse = await client.get(url);
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      if (prefs.containsKey('recentRestaurants') && useCaching) {
-        print('recentRestaurants from prefs');
-        recentRestaurants =
-            (json.decode(prefs.getString('recentRestaurants')) as List)
-                .map((e) => Restaurant.fromJSON(e))
-                .toList();
-      } else {
-        recentRestaurants = (json.decode(feedsResponse.body)['data']
-                ['recent_restaurants'] as List)
-            .map((e) => Restaurant.fromJSON(e))
-            .toList();
-        saveRecentRestaurants();
-      }
-    });
-    setState(() {
-      if (prefs.containsKey('recentItems') && useCaching) {
-        print('recentItems from prefs');
-        recentItems = (json.decode(prefs.getString('recentItems')) as List)
-            .map((e) => Item.fromJSON(e))
-            .toList();
-      } else {
-        recentItems =
-            (json.decode(feedsResponse.body)['data']['recent_items'] as List)
-                .map((e) => Item.fromJSON(e))
-                .toList();
-        saveRecentItems();
-      }
-    });
+    try {
+      final feedsResponse = await client.get(url);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      setState(() {
+        if (prefs.containsKey('recentRestaurants') &&
+            settingsRepo.useCaching.value) {
+          print('recentRestaurants from prefs');
+          recentRestaurants =
+              (json.decode(prefs.getString('recentRestaurants')) as List)
+                  .map((e) => Restaurant.fromJSON(e))
+                  .toList();
+        } else {
+          recentRestaurants = (json.decode(feedsResponse.body)['data']
+                  ['recent_restaurants'] as List)
+              .map((e) => Restaurant.fromJSON(e))
+              .toList();
+          saveRecentRestaurants();
+        }
+      });
+      setState(() {
+        if (prefs.containsKey('recentItems') && settingsRepo.useCaching.value) {
+          print('recentItems from prefs');
+          recentItems = (json.decode(prefs.getString('recentItems')) as List)
+              .map((e) => Item.fromJSON(e))
+              .toList();
+        } else {
+          recentItems =
+              (json.decode(feedsResponse.body)['data']['recent_items'] as List)
+                  .map((e) => Item.fromJSON(e))
+                  .toList();
+          saveRecentItems();
+        }
+      });
+    } catch (e) {print (e);}
   }
 
   Future<void> getFeedsForUser(String id) async {
@@ -70,7 +76,8 @@ class HomeController extends ControllerMVC {
     final feedsResponse = await client.get(url);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      if (prefs.containsKey('recentRestaurants') && useCaching) {
+      if (prefs.containsKey('recentRestaurants') &&
+          settingsRepo.useCaching.value) {
         print('recentRestaurants from prefs');
         recentRestaurants =
             (json.decode(prefs.getString('recentRestaurants')) as List)
@@ -85,7 +92,7 @@ class HomeController extends ControllerMVC {
       }
     });
     setState(() {
-      if (prefs.containsKey('recentItems') && useCaching) {
+      if (prefs.containsKey('recentItems') && settingsRepo.useCaching.value) {
         print('recentItems from prefs');
         recentItems = (json.decode(prefs.getString('recentItems')) as List)
             .map((e) => Item.fromJSON(e))
@@ -98,7 +105,8 @@ class HomeController extends ControllerMVC {
         saveRecentItems();
       }
     });
-    if (prefs.containsKey('recommendedRestaurants') && useCaching) {
+    if (prefs.containsKey('recommendedRestaurants') &&
+        settingsRepo.useCaching.value) {
       print('recommendedRestaurants from prefs');
       setState(() {
         recommendedRestaurants =
@@ -120,7 +128,6 @@ class HomeController extends ControllerMVC {
           Restaurant _r = Restaurant.fromJSON(
               (json.decode(response.body)['data']['restaurant_data'] as List)
                   .elementAt(0));
-          _r.id = element['id'].toString();
           _r.distance = element['distance'];
           setState(() {
             recommendedRestaurants.add(_r);
@@ -133,7 +140,6 @@ class HomeController extends ControllerMVC {
   }
 
   saveRecentRestaurants() async {
-    print(recentRestaurants.length);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (recentRestaurants.length > 0) {
       print('recentRestaurants saved');
@@ -144,7 +150,6 @@ class HomeController extends ControllerMVC {
   }
 
   saveRecentItems() async {
-    print(recentItems.length);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (recentItems.length > 0) {
       print('recentItems saved');
@@ -155,7 +160,6 @@ class HomeController extends ControllerMVC {
   }
 
   saveRecommendedRestaurants() async {
-    print(recommendedRestaurants.length);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (recommendedRestaurants.length > 0) {
       print('recommendedRestaurants saved');
@@ -165,23 +169,13 @@ class HomeController extends ControllerMVC {
     prefs.setString('cachingDate', "${DateTime.now()}");
   }
 
-  Future<void> setCachingOption() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.containsKey('cachingDate')) {
-      DateTime cachingDate = DateTime.parse(prefs.getString('cachingDate'));
-      useCaching =
-          DateTime.now().difference(cachingDate).inMinutes < 30 ? true : false;
-    } else
-      useCaching = false;
-  }
-
   Future<void> refreshHome() async {
     setState(() {
       recentRestaurants = <Restaurant>[];
       recentItems = <Item>[];
       recommendedRestaurants = <Restaurant>[];
     });
-    setCachingOption().whenComplete(() async {
+    settingsRepo.setCachingOption().whenComplete(() async {
       await userRepo.currentUser.value.apiToken != null
           ? getFeedsForUser(userRepo.currentUser.value.id)
           : getFeeds();

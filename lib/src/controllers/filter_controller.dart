@@ -9,6 +9,7 @@ import '../../generated/l10n.dart';
 import '../models/category.dart';
 import '../models/filter.dart';
 import '../repository/category_repository.dart';
+import '../repository/settings_repository.dart' as settingsRepo;
 
 class FilterController extends ControllerMVC {
   GlobalKey<ScaffoldState> scaffoldKey;
@@ -40,7 +41,7 @@ class FilterController extends ControllerMVC {
 
   void listenForCategories({String message}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.containsKey('categories') && prefs.containsKey('allCategories')) {
+    if (prefs.containsKey('categories') && prefs.containsKey('allCategories') && settingsRepo.useCaching.value) {
       print('category from prefs');
       List _categories = json.decode(await prefs.getString('categories'));
       _categories.forEach((element) {
@@ -78,6 +79,7 @@ class FilterController extends ControllerMVC {
         prefs.setString('categories',
             json.encode(categories.map((e) => e.toMap()).toList()));
         prefs.setString('allCategories', allCategories);
+        print("categories saved");
       });
     }
   }
@@ -112,6 +114,9 @@ class FilterController extends ControllerMVC {
         categories.elementAt(index).selected =
             !categories.elementAt(index).selected;
         categories.elementAt(0).selected = false;
+        bool empty = true;
+        categories.forEach((element) {if (element.selected) empty = false;});
+        empty ? categories.elementAt(0).selected = true : null;
       });
     }
   }

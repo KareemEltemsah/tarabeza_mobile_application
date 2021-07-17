@@ -1,5 +1,5 @@
 {
-  "api_base_url": "https://nofipay.net/api/v1/",
+  "api_base_url": "http://10.0.2.2:80/api/v1/",
   "logos_base_url": "https://nofipay.net/api/thumb.php?t=l&w=200&h=180&src=",
   "logos_base_url_150": "https://nofipay.net/api/thumb.php?t=l&w=150&h=150&src=",
   "logos_base_url_112": "https://nofipay.net/api/thumb.php?t=l&w=112&h=112&src=",

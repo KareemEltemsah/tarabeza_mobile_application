@@ -22,14 +22,17 @@ class SearchController extends ControllerMVC {
     if (search != "") {
       final Stream<Restaurant> stream = await searchRestaurants(search);
       stream.listen((Restaurant _restaurant) {
-        setState(() => restaurants.add(_restaurant));
+        setState(() {
+          if (_restaurant.id != null) restaurants.add(_restaurant);
+        });
         print(_restaurant.toMap());
       }, onError: (e) {
         print(e);
       }, onDone: () async {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setString('recent_search_result',
-          json.encode(restaurants.map((r) => r.toMap()).toList()));});
+            json.encode(restaurants.map((r) => r.toMap()).toList()));
+      });
     }
   }
 

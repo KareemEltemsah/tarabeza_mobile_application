@@ -15,15 +15,15 @@ class Item {
   Item.fromJSON(Map<String, dynamic> jsonMap) {
     try {
       id = jsonMap['id'].toString();
-      restaurant_id = jsonMap['restaurant_id'];
-      category_id = jsonMap['category_id'];
+      restaurant_id = jsonMap['restaurant_id'].toString();
+      category_id = jsonMap['category_id'].toString();
       name = jsonMap['name'];
-      description = jsonMap['description'] ?? '';
-      price = jsonMap['price'] != null ? double.parse(jsonMap['price']) : 0.0;
+      description = jsonMap['description'].toString() ?? '';
+      price = jsonMap['price'] != null ? double.parse(jsonMap['price'].toString()) : 0.0;
       discount =
-          jsonMap['discount'] != null ? double.parse(jsonMap['discount']) : 0.0;
-      image = jsonMap['media'] ?? '';
-      is_available = jsonMap['is_available'] == '1' ? true : false;
+          jsonMap['discount'] != null ? double.parse(jsonMap['discount'].toString()) : 0.0;
+      image = jsonMap['image'].toString() ?? '';
+      is_available = jsonMap['is_available'].toString() == '1' ? true : false;
       category_name = jsonMap['category_name'] ?? '';
     } catch (e) {
       id = '';

@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/user.dart';
+import 'order_repository.dart' as orderRepo;
 
 ValueNotifier<User> currentUser = new ValueNotifier(User());
 
@@ -37,6 +38,7 @@ Future<User> login(User user) async {
     print(loginResponse.body);
     throw new Exception(loginResponse.body);
   }
+  orderRepo.clearOrderItems();
   return currentUser.value;
 }
 
@@ -89,6 +91,7 @@ Future<bool> resetPassword(User user) async {
 
 Future<void> logout() async {
   currentUser.value = new User();
+  orderRepo.clearOrderItems();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   await prefs.remove('current_user');
   if (prefs.containsKey('cachingDate')) prefs.remove('cachingDate');

@@ -22,8 +22,6 @@ class RestaurantController extends ControllerMVC {
   List<Item> selectedItems = <Item>[];
   List<Category> categories = <Category>[];
 
-  // List<Item> trendingItems = <Item>[];
-  // List<Item> featuredItems = <Item>[];
   GlobalKey<ScaffoldState> scaffoldKey;
 
   RestaurantController() {
@@ -31,72 +29,35 @@ class RestaurantController extends ControllerMVC {
   }
 
   Future<void> getRestaurant({String id, String message}) async {
-    final String url =
-        '${GlobalConfiguration().getValue('api_base_url')}restaurants/${id}';
+    final String url = '${GlobalConfiguration().getValue('api_base_url')}';
     final client = new http.Client();
-    final restaurantResponse = await client.get(url);
+    final restaurantResponse = await client.get(
+      url + 'restaurants/${id}',
+    );
     setState(() {
       restaurant = Restaurant.fromJSON(
           (json.decode(restaurantResponse.body)['data']['restaurant_data']
                   as List)
               .elementAt(0));
     });
+    final menuResponse = await client.get(
+      url + 'menu/${id}',
+    );
     setState(() {
-      items = (json.decode(restaurantResponse.body)['data']['items'] as List)
+      items = (json.decode(menuResponse.body)['data']['items'] as List)
           .map((i) => Item.fromJSON(i))
+          .where((element) => element.id != null)
           .toList();
     });
-    items.add(Item.fromJSON({
-      "id": "1",
-      "restaurant_id": "4795",
-      "category_id": "1",
-      "name": "test 1 a",
-      "description": "",
-      "price": "1",
-      "discount": "0",
-      "image": "",
-      "is_available": "1",
-      "created_at": "2021-03-20 20:29:53",
-      "updated_at": "2021-03-20 20:29:53",
-      "category_name": "Beverages"
-    }));
-    items.add(Item.fromJSON({
-      "id": "2",
-      "restaurant_id": "4795",
-      "category_id": "2",
-      "name": "test 2 b",
-      "description": "",
-      "price": "1",
-      "discount": "0",
-      "image": "",
-      "is_available": "1",
-      "created_at": "2021-03-20 20:29:53",
-      "updated_at": "2021-03-20 20:29:53",
-      "category_name": "Beverages"
-    }));
-    items.add(Item.fromJSON({
-      "id": "3",
-      "restaurant_id": "4795",
-      "category_id": "3",
-      "name": "test 3 c",
-      "description": "",
-      "price": "1",
-      "discount": "0.3",
-      "image": "",
-      "is_available": "1",
-      "created_at": "2021-03-20 20:29:53",
-      "updated_at": "2021-03-20 20:29:53",
-      "category_name": "Beverages"
-    }));
     selectedItems = items;
-    getRestaurantCategories();
+    await getRestaurantCategories();
   }
 
   Future<void> getRestaurantCategories() async {
     List<String> categoriesIDs = new List<String>();
     categoriesIDs.add('0');
     items.forEach((e) => categoriesIDs.add(e.category_id));
-    print(categoriesIDs);
+    // print(categoriesIDs);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.containsKey('categories')) {
       List prefsCat =
@@ -130,7 +91,7 @@ class RestaurantController extends ControllerMVC {
 
   Future<void> selectByName(String searchWord) async {
     selectedItems = selectedItems
-        .where((element) => element.name.contains(searchWord))
+        .where((element) => element.name.toLowerCase().contains(searchWord.toLowerCase()))
         .toList();
   }
 

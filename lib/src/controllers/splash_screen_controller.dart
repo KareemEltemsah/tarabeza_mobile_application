@@ -29,8 +29,7 @@ class SplashScreenController extends ControllerMVC {
     configureFirebase(firebaseMessaging);
     settingRepo.setting.addListener(() {
       if (settingRepo.setting.value.appName != null &&
-          settingRepo.setting.value.appName != '' &&
-          settingRepo.setting.value.mainColor != null) {
+          settingRepo.setting.value.appName != '') {
         progress.value["Setting"] = 41;
         // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
         progress?.notifyListeners();

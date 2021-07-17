@@ -12,7 +12,6 @@ addOrderItem(OrderItem orderItem) {
     currentOrder.value.restaurant_id = orderItem.item.restaurant_id;
   //update quantity if the item already exist
   if (currentOrder.value.orderItems.contains(orderItem)) {
-    print("yes");
     int index = currentOrder.value.orderItems
         .indexWhere((element) => element == orderItem);
     currentOrder.value.orderItems.elementAt(index).quantity +=
