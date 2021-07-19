@@ -15,7 +15,7 @@ class ReviewsListWidget extends StatelessWidget {
     return reviewsList.isEmpty
         ? CircularLoadingWidget(height: 200)
         : ListView.separated(
-            padding: EdgeInsets.all(0),
+            padding: EdgeInsets.all(10),
             itemBuilder: (context, index) {
               return ReviewItemWidget(review: reviewsList.elementAt(index));
             },

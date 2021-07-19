@@ -7,13 +7,13 @@ import '../elements/CircularLoadingWidget.dart';
 import '../elements/DrawerWidget.dart';
 
 import '../elements/PermissionDeniedWidget.dart';
-import '../elements/ReviewsListWidget.dart';
 import 'restaurant.dart';
 import '../models/route_argument.dart';
 import '../repository/user_repository.dart';
 
 // import 'map.dart';
 import 'menu_list.dart';
+import 'reviews.dart';
 import '../models/restaurant.dart';
 
 class DetailsWidget extends StatefulWidget {
@@ -65,7 +65,7 @@ class _DetailsWidgetState extends StateMVC<DetailsWidget> {
       widget.currentTab = tabItem;
       switch (tabItem) {
         case 0:
-          _con.getRestaurant(widget.routeArgument.param).then((value) {
+          _con.getRestaurant("27" /*widget.routeArgument.param*/).then((value) {
             print("rest map");
             print(_con.restaurant.toMap());
             print("items map ${_con.items.length}");
@@ -76,12 +76,11 @@ class _DetailsWidgetState extends StateMVC<DetailsWidget> {
                 routeArgument: RouteArgument(param: _con.restaurant));
           });
           break;
-        // case 1:
-        //   widget.currentPage = ReviewsListWidget();
-        //   break;
-        // case 2:
-        //   widget.currentPage = MapWidget(parentScaffoldKey: widget.scaffoldKey, routeArgument: RouteArgument(param: _con.restaurant));
-        //   break;
+        case 1:
+          widget.currentPage = ReviewsWidget(
+              parentScaffoldKey: widget.scaffoldKey,
+              routeArgument: RouteArgument(param: _con.restaurant));
+          break;
         case 2:
           widget.currentPage = MenuWidget(
               parentScaffoldKey: widget.scaffoldKey,

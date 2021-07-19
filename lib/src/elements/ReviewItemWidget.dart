@@ -23,15 +23,6 @@ class ReviewItemWidget extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(100)),
-                child: Icon(
-                  Icons.rate_review_rounded,
-                  size: 32,
-                  color: Theme.of(context).accentColor.withOpacity(1),
-                ),
-              ),
-              SizedBox(width: 15),
               Flexible(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

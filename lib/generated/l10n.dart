@@ -2714,6 +2714,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Add Review`
+  String get add_review {
+    return Intl.message(
+      'Add Review',
+      name: 'add_review',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

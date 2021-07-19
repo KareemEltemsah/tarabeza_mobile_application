@@ -30,6 +30,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "add" : MessageLookupByLibrary.simpleMessage("Add"),
     "add_delivery_address" : MessageLookupByLibrary.simpleMessage("Add Delivery Address"),
     "add_new_delivery_address" : MessageLookupByLibrary.simpleMessage("Add new delivery address"),
+    "add_review" : MessageLookupByLibrary.simpleMessage("Add Review"),
     "add_to_cart" : MessageLookupByLibrary.simpleMessage("Add to Cart"),
     "add_to_order" : MessageLookupByLibrary.simpleMessage("Add to Order"),
     "address" : MessageLookupByLibrary.simpleMessage("Address"),

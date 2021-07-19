@@ -52,10 +52,6 @@ class _SearchResultWidgetState extends StateMVC<SearchResultWidget> {
                 S.of(context).search,
                 style: Theme.of(context).textTheme.headline4,
               ),
-              /*subtitle: Text(
-                    S.of(context).ordered_by_nearby_first,
-                    style: Theme.of(context).textTheme.caption,
-                  ),*/
             ),
           ),
           Stack(alignment: Alignment.centerRight, children: <Widget>[

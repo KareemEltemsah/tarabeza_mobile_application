@@ -10,6 +10,7 @@ import '../../generated/l10n.dart';
 import '../models/category.dart';
 import '../models/item.dart';
 import '../models/restaurant.dart';
+import '../models/review.dart';
 import 'filter_controller.dart';
 import 'package:http/http.dart' as http;
 import '../repository/category_repository.dart';
@@ -19,9 +20,10 @@ import '../repository/settings_repository.dart';
 class RestaurantController extends ControllerMVC {
   Restaurant restaurant;
   List<Item> items = <Item>[];
-  List<Item> selectedItems = <Item>[];
   List<Category> categories = <Category>[];
+  List<Review> reviews = <Review>[];
 
+  List<Item> selectedItems = <Item>[];
   GlobalKey<ScaffoldState> scaffoldKey;
 
   RestaurantController() {
@@ -79,6 +81,23 @@ class RestaurantController extends ControllerMVC {
             .toList();
       });
     }
+  }
+
+  Future<void> getRestaurantReviews() async {
+    final String url =
+        '${GlobalConfiguration().getValue('api_base_url')}reviews/${restaurant.id}';
+    final client = new http.Client();
+    final reviewsResponse = await client.get(url);
+    setState(() {
+      reviews = (json.decode(reviewsResponse.body)['data']['restaurant_reviews'] as List)
+          .map((i) => Review.fromJSON(i))
+          .where((element) => element.id != null)
+          .toList();
+    });
+  }
+
+  Future<void> addReview(String comment, int rate) async {
+
   }
 
   Future<void> selectCategory(List<String> categoriesId) async {
