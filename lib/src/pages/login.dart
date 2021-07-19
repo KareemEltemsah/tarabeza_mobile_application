@@ -24,7 +24,7 @@ class _LoginWidgetState extends StateMVC<LoginWidget> {
   void initState() {
     super.initState();
     if (userRepo.currentUser.value.auth == true) {
-      Navigator.of(context).pushReplacementNamed('/Pages', arguments: 2);
+      Navigator.of(context).pushReplacementNamed('/Pages', arguments: 1);
     }
   }
 

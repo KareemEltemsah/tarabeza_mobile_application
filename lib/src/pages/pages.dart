@@ -26,7 +26,7 @@ class PagesWidget extends StatefulWidget {
         currentTab = int.parse(currentTab.id);
       }
     } else {
-      currentTab = 2;
+      currentTab = 1;
     }
   }
 
@@ -100,12 +100,16 @@ class _PagesWidgetState extends State<PagesWidget> {
           },
           // this will be set when a new tab is tapped
           items: [
-            BottomNavigationBarItem(
+            /*BottomNavigationBarItem(
               icon: Icon(Icons.person),
               label: '',
-            ),
-            BottomNavigationBarItem(
+            ),*/
+            /*BottomNavigationBarItem(
               icon: Icon(Icons.notifications),
+              label: '',
+            ),*/
+            BottomNavigationBarItem(
+              icon: new Icon(Icons.today_rounded),
               label: '',
             ),
             BottomNavigationBarItem(
@@ -132,10 +136,6 @@ class _PagesWidgetState extends State<PagesWidget> {
                   child: new Icon(Icons.home,
                       color: Theme.of(context).primaryColor),
                 )),
-            BottomNavigationBarItem(
-              icon: new Icon(Icons.today_rounded),
-              label: '',
-            ),
             BottomNavigationBarItem(
               icon: new Icon(Icons.local_mall_rounded),
               label: '',

@@ -65,18 +65,15 @@ class _DetailsWidgetState extends StateMVC<DetailsWidget> {
       widget.currentTab = tabItem;
       switch (tabItem) {
         case 0:
-          _con.getRestaurant(id: widget.routeArgument.param).then((value) {
-            setState(() {
-              print("rest map");
-              print(_con.restaurant.toMap());
-              print("items map ${_con.items.length}");
-              print(_con.items.map((e) => e.toMap()));
-              print("categories map ${_con.categories.length}");
-              print(_con.categories.map((e) => e.toMap()));
-              widget.currentPage = RestaurantWidget(
-                  parentScaffoldKey: widget.scaffoldKey,
-                  routeArgument: RouteArgument(param: _con.restaurant));
-            });
+          _con.getRestaurant(widget.routeArgument.param).then((value) {
+            print("rest map");
+            print(_con.restaurant.toMap());
+            print("items map ${_con.items.length}");
+            print("categories map ${_con.categories.length}");
+
+            widget.currentPage = RestaurantWidget(
+                parentScaffoldKey: widget.scaffoldKey,
+                routeArgument: RouteArgument(param: _con.restaurant));
           });
           break;
         // case 1:
@@ -85,7 +82,7 @@ class _DetailsWidgetState extends StateMVC<DetailsWidget> {
         // case 2:
         //   widget.currentPage = MapWidget(parentScaffoldKey: widget.scaffoldKey, routeArgument: RouteArgument(param: _con.restaurant));
         //   break;
-        case 3:
+        case 2:
           widget.currentPage = MenuWidget(
               parentScaffoldKey: widget.scaffoldKey,
               routeArgument: RouteArgument(param: _con.restaurant));
@@ -137,21 +134,9 @@ class _DetailsWidgetState extends StateMVC<DetailsWidget> {
                   this._selectTab(1);
                 },
               ),
-              IconButton(
-                icon: Icon(
-                  Icons.directions,
-                  size: widget.currentTab == 2 ? 28 : 24,
-                  color: widget.currentTab == 2
-                      ? Theme.of(context).accentColor
-                      : Theme.of(context).focusColor,
-                ),
-                onPressed: () {
-                  this._selectTab(2);
-                },
-              ),
               FlatButton(
                 onPressed: () {
-                  this._selectTab(3);
+                  this._selectTab(2);
                 },
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 shape: StadiumBorder(),

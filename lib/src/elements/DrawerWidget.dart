@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 
 import '../../generated/l10n.dart';
+import '../helpers/app_config.dart' as config;
 import '../repository/settings_repository.dart';
 import '../repository/user_repository.dart';
 
@@ -25,25 +26,40 @@ class _DrawerWidgetState extends StateMVC<DrawerWidget> {
                   : Navigator.of(context).pushNamed('/Login');
             },
             child: currentUser.value.apiToken != null
-                ? UserAccountsDrawerHeader(
+                ? Container(
+              padding: EdgeInsets.symmetric(vertical: 30, horizontal: 15),
+                    height: config.App(context).appHeight(15),
                     decoration: BoxDecoration(
                       color: Theme.of(context).hintColor.withOpacity(0.1),
                     ),
-                    accountName: Text(
-                      currentUser.value.fullName(),
-                      style: Theme.of(context).textTheme.headline6,
-                    ),
-                    accountEmail: Text(
-                      currentUser.value.email,
-                      style: Theme.of(context).textTheme.caption,
-                    ),
-                    currentAccountPicture: CircleAvatar(
-                      backgroundColor: Theme.of(context).accentColor,
-                      // backgroundImage: NetworkImage(currentUser.value.image.thumb),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.person,
+                          size: 32,
+                          color: Theme.of(context).accentColor.withOpacity(1),
+                        ),
+                        SizedBox(width: 30),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              currentUser.value.fullName(),
+                              style: Theme.of(context).textTheme.headline6,
+                            ),
+                            Text(
+                              currentUser.value.email,
+                              style: Theme.of(context).textTheme.caption,
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   )
                 : Container(
                     padding: EdgeInsets.symmetric(vertical: 30, horizontal: 15),
+              height: config.App(context).appHeight(15),
                     decoration: BoxDecoration(
                       color: Theme.of(context).hintColor.withOpacity(0.1),
                     ),
@@ -65,7 +81,7 @@ class _DrawerWidgetState extends StateMVC<DrawerWidget> {
           ),
           ListTile(
             onTap: () {
-              Navigator.of(context).pushNamed('/Pages', arguments: 2);
+              Navigator.of(context).pushNamed('/Pages', arguments: 1);
             },
             leading: Icon(
               Icons.home,
@@ -76,7 +92,7 @@ class _DrawerWidgetState extends StateMVC<DrawerWidget> {
               style: Theme.of(context).textTheme.subtitle1,
             ),
           ),
-          ListTile(
+          /*ListTile(
             onTap: () {
               Navigator.of(context).pushNamed('/Pages', arguments: 1);
             },
@@ -88,10 +104,10 @@ class _DrawerWidgetState extends StateMVC<DrawerWidget> {
               S.of(context).notifications,
               style: Theme.of(context).textTheme.subtitle1,
             ),
-          ),
+          ),*/
           ListTile(
             onTap: () {
-              Navigator.of(context).pushNamed('/Pages', arguments: 3);
+              Navigator.of(context).pushNamed('/Pages', arguments: 0);
             },
             leading: Icon(
               Icons.today_rounded,
@@ -104,7 +120,7 @@ class _DrawerWidgetState extends StateMVC<DrawerWidget> {
           ),
           ListTile(
             onTap: () {
-              Navigator.of(context).pushNamed('/Pages', arguments: 4);
+              Navigator.of(context).pushNamed('/Pages', arguments: 2);
             },
             leading: Icon(
               Icons.local_mall_rounded,
@@ -153,9 +169,7 @@ class _DrawerWidgetState extends StateMVC<DrawerWidget> {
             onTap: () {
               if (currentUser.value.apiToken != null) {
                 logout().then((value) {
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                      '/Pages', (Route<dynamic> route) => false,
-                      arguments: 2);
+                  Navigator.of(context).pushNamed('/Pages', arguments: 1);
                 });
               } else {
                 Navigator.of(context).pushNamed('/Login');

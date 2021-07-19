@@ -31,7 +31,6 @@ class HomeController extends ControllerMVC {
 
   Future<void> getFeeds() async {
     final String url = '${GlobalConfiguration().getValue('api_base_url')}feeds';
-    print(url);
     final client = new http.Client();
     try {
       final feedsResponse = await client.get(url);

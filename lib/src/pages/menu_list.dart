@@ -38,7 +38,7 @@ class _MenuWidgetState extends StateMVC<MenuWidget> {
   @override
   void initState() {
     _con.restaurant = widget.routeArgument.param as Restaurant;
-    _con.refreshRestaurant();
+    _con.getRestaurantMenu();
     selectedCategories = ['0'];
     super.initState();
   }

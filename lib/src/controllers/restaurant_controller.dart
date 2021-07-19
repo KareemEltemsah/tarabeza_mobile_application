@@ -28,21 +28,24 @@ class RestaurantController extends ControllerMVC {
     this.scaffoldKey = new GlobalKey<ScaffoldState>();
   }
 
-  Future<void> getRestaurant({String id, String message}) async {
-    final String url = '${GlobalConfiguration().getValue('api_base_url')}';
+  Future<void> getRestaurant(String id) async {
+    final String url =
+        '${GlobalConfiguration().getValue('api_base_url')}restaurants/${id}';
     final client = new http.Client();
-    final restaurantResponse = await client.get(
-      url + 'restaurants/${id}',
-    );
+    final restaurantResponse = await client.get(url);
     setState(() {
       restaurant = Restaurant.fromJSON(
           (json.decode(restaurantResponse.body)['data']['restaurant_data']
                   as List)
               .elementAt(0));
     });
-    final menuResponse = await client.get(
-      url + 'menu/${id}',
-    );
+  }
+
+  Future<void> getRestaurantMenu() async {
+    final String url =
+        '${GlobalConfiguration().getValue('api_base_url')}menu/${restaurant.id}';
+    final client = new http.Client();
+    final menuResponse = await client.get(url);
     setState(() {
       items = (json.decode(menuResponse.body)['data']['items'] as List)
           .map((i) => Item.fromJSON(i))
@@ -91,15 +94,14 @@ class RestaurantController extends ControllerMVC {
 
   Future<void> selectByName(String searchWord) async {
     selectedItems = selectedItems
-        .where((element) => element.name.toLowerCase().contains(searchWord.toLowerCase()))
+        .where((element) =>
+            element.name.toLowerCase().contains(searchWord.toLowerCase()))
         .toList();
   }
 
   Future<void> refreshRestaurant() async {
     var _id = restaurant.id;
     restaurant = new Restaurant();
-    getRestaurant(
-      id: _id, /*message: S.of(context).restaurant_refreshed_successfuly*/
-    );
+    getRestaurant(_id);
   }
 }

@@ -41,7 +41,7 @@ class Setting {
     appVersion = 'Demo';
     distanceUnit = 'km';
     enableVersion = true;
-    defaultCurrency = "\$";
+    defaultCurrency = "E£";
     currencyDecimalDigits = 2;
     currencyRight = false;
 

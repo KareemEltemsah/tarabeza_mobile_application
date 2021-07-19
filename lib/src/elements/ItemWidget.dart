@@ -57,7 +57,6 @@ class _ItemWidgetState extends State<ItemWidget> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Expanded(
-                              flex: 3,
                               child: Text(
                                 widget.item?.name ?? '',
                                 overflow: TextOverflow.ellipsis,
@@ -66,7 +65,6 @@ class _ItemWidgetState extends State<ItemWidget> {
                               ),
                             ),
                             Expanded(
-                              flex: 1,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: <Widget>[
@@ -74,7 +72,7 @@ class _ItemWidgetState extends State<ItemWidget> {
                                     widget.item.getPrice(),
                                     context,
                                     style:
-                                        Theme.of(context).textTheme.headline2,
+                                        Theme.of(context).textTheme.headline3,
                                   ),
                                   widget.item.discount > 0
                                       ? Helper.getPrice(

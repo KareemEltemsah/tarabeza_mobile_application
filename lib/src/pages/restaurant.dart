@@ -287,11 +287,8 @@ class _RestaurantWidgetState extends StateMVC<RestaurantWidget> {
                                       child: FlatButton(
                                         padding: EdgeInsets.all(0),
                                         onPressed: () {
-                                          /*Navigator.of(context).pushNamed(
-                                              '/Pages',
-                                              arguments: new RouteArgument(
-                                                  id: '1',
-                                                  param: _con.restaurant));*/
+                                          launch(
+                                              "geo:${_con.restaurant.latitude},${_con.restaurant.longitude}");
                                         },
                                         child: Icon(
                                           Icons.directions,

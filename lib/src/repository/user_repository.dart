@@ -12,7 +12,7 @@ import 'order_repository.dart' as orderRepo;
 ValueNotifier<User> currentUser = new ValueNotifier(User());
 
 Future<User> login(User user) async {
-  final String url = '${GlobalConfiguration().getValue('api_base_url')}';
+  final String url = '${GlobalConfiguration().getValue('api_base_urlX')}';
   final client = new http.Client();
   final loginResponse = await client.post(
     url + 'auth/me',
@@ -38,7 +38,6 @@ Future<User> login(User user) async {
     print(loginResponse.body);
     throw new Exception(loginResponse.body);
   }
-  orderRepo.clearOrderItems();
   return currentUser.value;
 }
 
@@ -101,6 +100,7 @@ void setCurrentUser(userMap) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   prefs.setString('current_user', json.encode(userMap));
   if (prefs.containsKey('cachingDate')) prefs.remove('cachingDate');
+  orderRepo.clearOrderItems();
 }
 
 Future<User> getCurrentUser() async {

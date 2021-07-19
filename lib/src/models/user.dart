@@ -27,16 +27,16 @@ class User {
   User.fromJSON(Map<String, dynamic> jsonMap) {
     try {
       id = jsonMap['id'].toString();
-      email = jsonMap['email'] != null ? jsonMap['email'] : '';
-      phone = jsonMap['phone_number'] != null ? jsonMap['phone_number'] : '';
-      role = jsonMap['role'] != null ? jsonMap['role'] : '';
-      first_name = jsonMap['first_name'] != null ? jsonMap['first_name'] : '';
-      last_name = jsonMap['last_name'] != null ? jsonMap['last_name'] : '';
-      gender = jsonMap['gender'] != null ? jsonMap['gender'] : '';
-      DOB = jsonMap['date_of_birth'] != null ? jsonMap['date_of_birth'] : '';
-      is_active = jsonMap['is_active'] == '1' ? true : false;
-      is_banned = jsonMap['is_banned'] == '1' ? true : false;
-      confirmation_code = jsonMap['confirmation_code'];
+      email = jsonMap['email'] ?? '';
+      phone = jsonMap['phone_number'] ?? '';
+      role = jsonMap['role'] ?? '';
+      first_name = jsonMap['first_name'] ?? '';
+      last_name = jsonMap['last_name'] ?? '';
+      gender = jsonMap['gender'] ?? '';
+      DOB = jsonMap['date_of_birth'] ?? '';
+      is_active = jsonMap['is_active'].toString() == '1' ? true : false;
+      is_banned = jsonMap['is_banned'].toString() == '1' ? true : false;
+      confirmation_code = jsonMap['confirmation_code'] ?? '';
       if (jsonMap.containsKey('api_token')) apiToken = jsonMap['api_token'];
       // deviceToken = jsonMap['device_token'];
       // address = jsonMap['address'];
