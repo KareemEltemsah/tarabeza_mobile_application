@@ -5,7 +5,6 @@ import '../../generated/l10n.dart';
 import '../controllers/user_controller.dart';
 import '../elements/BlockButtonWidget.dart';
 import '../helpers/app_config.dart' as config;
-import '../helpers/helper.dart';
 
 class ForgetPasswordWidget extends StatefulWidget {
   @override
@@ -63,9 +62,8 @@ class _ForgetPasswordWidgetState extends StateMVC<ForgetPasswordWidget> {
                   ),
                   padding: EdgeInsets.symmetric(vertical: 50, horizontal: 27),
                   width: config.App(context).appWidth(88),
-//              height: config.App(context).appHeight(55),
                   child: Form(
-                    key: _con.loginFormKey,
+                    key: _con.formKey,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       mainAxisAlignment: MainAxisAlignment.center,

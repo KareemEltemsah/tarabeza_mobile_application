@@ -106,19 +106,22 @@ class _MenuWidgetState extends StateMVC<MenuWidget> {
                         primary: false,
                         shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
-                        children: List.generate(_con.categories.length, (index) {
+                        children:
+                            List.generate(_con.categories.length, (index) {
                           var _category = _con.categories.elementAt(index);
                           var _selected =
                               this.selectedCategories.contains(_category.id);
                           return Padding(
-                            padding: const EdgeInsetsDirectional.only(start: 20),
+                            padding:
+                                const EdgeInsetsDirectional.only(start: 20),
                             child: RawChip(
                               elevation: 0,
                               label: Text(_category.name),
                               labelStyle: _selected
                                   ? Theme.of(context).textTheme.bodyText2.merge(
                                       TextStyle(
-                                          color: Theme.of(context).primaryColor))
+                                          color:
+                                              Theme.of(context).primaryColor))
                                   : Theme.of(context).textTheme.bodyText2,
                               padding: EdgeInsets.symmetric(
                                   horizontal: 12, vertical: 15),
@@ -173,8 +176,8 @@ class _MenuWidgetState extends StateMVC<MenuWidget> {
                         .textTheme
                         .caption
                         .merge(TextStyle(fontSize: 14)),
-                    prefixIcon:
-                        Icon(Icons.search, color: Theme.of(context).accentColor),
+                    prefixIcon: Icon(Icons.search,
+                        color: Theme.of(context).accentColor),
                     border: OutlineInputBorder(
                         borderSide: BorderSide(
                             color:
@@ -191,8 +194,7 @@ class _MenuWidgetState extends StateMVC<MenuWidget> {
                 ),
               ),
               _con.selectedItems.isEmpty
-                  ? /*CircularLoadingWidget(height: 250)*/
-                  Center(
+                  ? Center(
                       child: Text(
                         "No Results",
                         style: Theme.of(context).textTheme.subtitle1,

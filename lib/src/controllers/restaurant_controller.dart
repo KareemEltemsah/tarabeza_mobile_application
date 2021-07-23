@@ -6,22 +6,21 @@ import 'package:global_configuration/global_configuration.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../generated/l10n.dart';
 import '../models/category.dart';
 import '../models/item.dart';
+import '../models/table.dart';
 import '../models/restaurant.dart';
 import '../models/review.dart';
 import 'filter_controller.dart';
 import 'package:http/http.dart' as http;
-import '../repository/category_repository.dart';
-import '../repository/restaurant_repository.dart';
-import '../repository/settings_repository.dart';
+import '../repository/user_repository.dart' as userRepo;
 
 class RestaurantController extends ControllerMVC {
   Restaurant restaurant;
   List<Item> items = <Item>[];
   List<Category> categories = <Category>[];
   List<Review> reviews = <Review>[];
+  List<RestaurantTable> tables = <RestaurantTable>[];
 
   List<Item> selectedItems = <Item>[];
   GlobalKey<ScaffoldState> scaffoldKey;
@@ -49,10 +48,11 @@ class RestaurantController extends ControllerMVC {
     final client = new http.Client();
     final menuResponse = await client.get(url);
     setState(() {
-      items = (json.decode(menuResponse.body)['data']['items'] as List)
-          .map((i) => Item.fromJSON(i))
-          .where((element) => element.id != null)
-          .toList();
+      items =
+          (json.decode(menuResponse.body)['data']['items'] as List)
+              .map((i) => Item.fromJSON(i))
+              .where((element) => element.id != null)
+              .toList();
     });
     selectedItems = items;
     await getRestaurantCategories();
@@ -89,15 +89,41 @@ class RestaurantController extends ControllerMVC {
     final client = new http.Client();
     final reviewsResponse = await client.get(url);
     setState(() {
-      reviews = (json.decode(reviewsResponse.body)['data']['restaurant_reviews'] as List)
+      reviews = (json.decode(reviewsResponse.body)['data']
+              ['restaurant_reviews'] as List)
           .map((i) => Review.fromJSON(i))
           .where((element) => element.id != null)
           .toList();
     });
   }
 
-  Future<void> addReview(String comment, int rate) async {
+  Future<void> getRestaurantTables(String id) async {
+    final String url =
+        '${GlobalConfiguration().getValue('api_base_url')}tables/${id}';
+    final client = new http.Client();
+    final tablesResponse = await client.get(url);
+    setState(() {
+      tables = (json.decode(tablesResponse.body)['data'] as List)
+          .map((i) => RestaurantTable.fromJSON(i))
+          .where((element) => element.id != null)
+          .toList();
+    });
+  }
 
+  Future<bool> addReview(String comment, int rate) async {
+    final String url =
+        '${GlobalConfiguration().getValue('api_base_url')}reviews/add';
+    final client = new http.Client();
+    final response = await client.post(
+      url,
+      body: json.encode({
+        "customer_name": "${userRepo.currentUser.value.fullName()}",
+        "restaurant_id": "${restaurant.id ?? ""}",
+        "comment": "${comment}",
+        "rate": "${rate}"
+      }),
+    );
+    return (response.statusCode == 201) ? true : false;
   }
 
   Future<void> selectCategory(List<String> categoriesId) async {

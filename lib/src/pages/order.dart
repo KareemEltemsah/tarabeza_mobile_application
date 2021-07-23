@@ -5,13 +5,10 @@ import 'package:mvc_pattern/mvc_pattern.dart';
 import '../../generated/l10n.dart';
 import '../controllers/order_controller.dart';
 
-// import '../elements/OrderBottomDetailsWidget.dart';
 import '../elements/OrderItemWidget.dart';
 import '../elements/EmptyOrderWidget.dart';
 import '../repository/order_repository.dart' as orderRepo;
-import '../helpers/helper.dart';
 import '../models/route_argument.dart';
-import '../repository/settings_repository.dart';
 
 class OrderWidget extends StatefulWidget {
   final RouteArgument routeArgument;
@@ -87,7 +84,7 @@ class _OrderWidgetState extends StateMVC<OrderWidget> {
                               subtitle: Text(
                                 S
                                     .of(context)
-                                    .verify_your_quantity_and_click_checkout,
+                                    .verify_quantity_and_click_submit,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: Theme.of(context).textTheme.caption,
@@ -132,15 +129,17 @@ class _OrderWidgetState extends StateMVC<OrderWidget> {
                               );
                             },
                           ),
-                          Text(
-                            orderRepo.currentOrder.value
-                                .getTotalPrice()
-                                .toStringAsFixed(2),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.headline4,
-                          ),
                         ],
+                      ),
+                      Center(
+                        child: Text(
+                          orderRepo.currentOrder.value
+                              .getTotalPrice()
+                              .toStringAsFixed(2),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.headline4,
+                        ),
                       ),
                     ],
                   ),

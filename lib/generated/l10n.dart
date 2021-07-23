@@ -2724,6 +2724,46 @@ class S {
       args: [],
     );
   }
+
+  /// `Should be at least 3 letters`
+  String get should_be_at_least_3_letters {
+    return Intl.message(
+      'Should be at least 3 letters',
+      name: 'should_be_at_least_3_letters',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Should be at least 8 characters`
+  String get should_be_at_least_8_characters {
+    return Intl.message(
+      'Should be at least 8 characters',
+      name: 'should_be_at_least_8_characters',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Verify quantity and click submit`
+  String get verify_quantity_and_click_submit {
+    return Intl.message(
+      'Verify quantity and click submit',
+      name: 'verify_quantity_and_click_submit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Restaurant code`
+  String get restaurant_code {
+    return Intl.message(
+      'Restaurant code',
+      name: 'restaurant_code',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

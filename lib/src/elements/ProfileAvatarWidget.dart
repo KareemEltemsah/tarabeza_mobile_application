@@ -35,19 +35,6 @@ class ProfileAvatarWidget extends StatelessWidget {
                     color: Theme.of(context).scaffoldBackgroundColor,
                     size: 70,
                   ),
-                  /*child: CachedNetworkImage(
-                    height: 135,
-                    width: 135,
-                    fit: BoxFit.cover,
-                    imageUrl: user.image?.url,
-                    placeholder: (context, url) => Image.asset(
-                      'assets/img/loading.gif',
-                      fit: BoxFit.cover,
-                      height: 135,
-                      width: 135,
-                    ),
-                    errorWidget: (context, url, error) => Icon(Icons.error),
-                  ),*/
                 ),
               ],
             ),

@@ -17,7 +17,14 @@ class User {
   String apiToken;
   String deviceToken;
 
-  // String address;
+  //customer data
+  String customer_id;
+  String address;
+  String longitude;
+  String latitude;
+
+  //staff data
+  String restaurant_id;
 
   // used for indicate if client logged in or not
   bool auth;
@@ -37,9 +44,16 @@ class User {
       is_active = jsonMap['is_active'].toString() == '1' ? true : false;
       is_banned = jsonMap['is_banned'].toString() == '1' ? true : false;
       confirmation_code = jsonMap['confirmation_code'] ?? '';
+
       if (jsonMap.containsKey('api_token')) apiToken = jsonMap['api_token'];
-      // deviceToken = jsonMap['device_token'];
-      // address = jsonMap['address'];
+      if (jsonMap.containsKey('customer_id'))
+        customer_id = jsonMap['customer_id'].toString();
+      if (jsonMap.containsKey('address')) address = jsonMap['address'];
+      if (jsonMap.containsKey('longitude')) longitude = jsonMap['longitude'];
+      if (jsonMap.containsKey('latitude')) latitude = jsonMap['latitude'];
+
+      if (jsonMap.containsKey('restaurant_id'))
+        restaurant_id = jsonMap['restaurant_id'].toString();
     } catch (e) {
       print(e);
     }
@@ -57,6 +71,8 @@ class User {
       map["last_name"] = last_name;
       map["gender"] = gender;
       map["date_of_birth"] = DOB;
+      if (role == "staff" && (signUp || none))
+        map[restaurant_id] = restaurant_id;
     }
     if (update || none) map["id"] = id;
     if (none) {
@@ -67,9 +83,29 @@ class User {
       if (deviceToken != null) {
         map["device_token"] = deviceToken;
       }
+
+      if (role == "customer") {
+        map["customer_id"] = customer_id;
+        map["address"] = address;
+        map["longitude"] = longitude;
+        map["latitude"] = latitude;
+      }
     }
-    // map["address"] = address;
     return map;
+  }
+
+  addCustomerData(Map<String, dynamic> jsonMap) {
+    try {
+      if (role == "customer") {
+        customer_id = jsonMap['customer_id'].toString();
+        address = jsonMap['address'].toString();
+        longitude = jsonMap['longitude'].toString();
+        latitude = jsonMap['latitude'].toString();
+      } else if (role == "staff")
+        restaurant_id = jsonMap[restaurant_id].toString();
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override

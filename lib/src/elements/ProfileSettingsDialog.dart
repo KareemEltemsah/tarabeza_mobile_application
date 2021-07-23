@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:intl/intl.dart';
-import 'package:tarabeza_mobile_application/src/repository/user_repository.dart';
+import '../repository/user_repository.dart';
 
 import '../../generated/l10n.dart';
 import '../models/user.dart';
@@ -19,7 +19,6 @@ class ProfileSettingsDialog extends StatefulWidget {
 class _ProfileSettingsDialogState extends State<ProfileSettingsDialog> {
   GlobalKey<FormState> _profileSettingsFormKey = new GlobalKey<FormState>();
   TextEditingController _DOBController = TextEditingController();
-
 
   @override
   Widget build(BuildContext context) {
@@ -52,11 +51,10 @@ class _ProfileSettingsDialogState extends State<ProfileSettingsDialog> {
                           style: TextStyle(color: Theme.of(context).hintColor),
                           keyboardType: TextInputType.text,
                           decoration: getInputDecoration(
-                              hintText: S.of(context).john_doe,
                               labelText: S.of(context).first_name),
                           initialValue: currentUser.value.first_name,
                           validator: (input) => input.length < 3
-                              ? S.of(context).should_be_more_than_3_letters
+                              ? S.of(context).should_be_at_least_3_letters
                               : null,
                           onSaved: (input) => widget.user.first_name = input,
                         ),
@@ -64,11 +62,10 @@ class _ProfileSettingsDialogState extends State<ProfileSettingsDialog> {
                           style: TextStyle(color: Theme.of(context).hintColor),
                           keyboardType: TextInputType.text,
                           decoration: getInputDecoration(
-                              hintText: S.of(context).john_doe,
                               labelText: S.of(context).last_name),
                           initialValue: currentUser.value.last_name,
                           validator: (input) => input.length < 3
-                              ? S.of(context).should_be_more_than_3_letters
+                              ? S.of(context).should_be_at_least_3_letters
                               : null,
                           onSaved: (input) => widget.user.last_name = input,
                         ),
@@ -76,7 +73,6 @@ class _ProfileSettingsDialogState extends State<ProfileSettingsDialog> {
                           style: TextStyle(color: Theme.of(context).hintColor),
                           keyboardType: TextInputType.emailAddress,
                           decoration: getInputDecoration(
-                              hintText: 'johndo@gmail.com',
                               labelText: S.of(context).email_address),
                           initialValue: currentUser.value.email,
                           validator: (input) => !input.contains('@')
@@ -88,13 +84,12 @@ class _ProfileSettingsDialogState extends State<ProfileSettingsDialog> {
                           style: TextStyle(color: Theme.of(context).hintColor),
                           keyboardType: TextInputType.phone,
                           decoration: getInputDecoration(
-                              hintText: '+136 269 9765',
                               labelText: S.of(context).phone),
                           initialValue: currentUser.value.phone,
                           validator: (input) =>
-                          input.length < 11 || input.substring(0, 2) != "01"
-                              ? S.of(context).not_a_valid_phone
-                              : null,
+                              input.length < 11 || input.substring(0, 2) != "01"
+                                  ? S.of(context).not_a_valid_phone
+                                  : null,
                           onSaved: (input) => widget.user.phone = input,
                         ),
                         new TextFormField(
@@ -103,9 +98,11 @@ class _ProfileSettingsDialogState extends State<ProfileSettingsDialog> {
                               ? S.of(context).not_a_valid_date
                               : null,
                           controller: _DOBController,
+                          initialValue: currentUser.value.DOB,
                           onTap: () async {
                             // Below line stops keyboard from appearing
-                            FocusScope.of(context).requestFocus(new FocusNode());
+                            FocusScope.of(context)
+                                .requestFocus(new FocusNode());
                             // Show Date Picker Here
                             await showDatePicker(
                               context: context,
@@ -117,23 +114,34 @@ class _ProfileSettingsDialogState extends State<ProfileSettingsDialog> {
                           },
                           decoration: InputDecoration(
                             labelText: "Date of birth",
-                            hintText: 'yyyy-MM-dd',
                           ),
                         ),
                         FormBuilderRadioGroup(
                           name: null,
                           onSaved: (value) => widget.user.gender = value,
-                          validator: (value) => value==null ? 'you must choose gender' : null,
+                          validator: (value) =>
+                              value == null ? 'you must choose gender' : null,
                           initialValue: currentUser.value.gender,
                           options: ["male", "female"]
                               .map((gender) => FormBuilderFieldOption(
-                            value: gender,
-                            child: Text('${gender}'),
-                          ))
+                                    value: gender,
+                                    child: Text('${gender}'),
+                                  ))
                               .toList(growable: false),
                           decoration: InputDecoration(
                             labelText: "Gender",
                           ),
+                        ),
+                        SizedBox(height: 20),
+                        new TextFormField(
+                          style: TextStyle(color: Theme.of(context).hintColor),
+                          keyboardType: TextInputType.text,
+                          decoration: getInputDecoration(
+                              labelText: "${S.of(context).password} to Confirm"),
+                          validator: (input) => input.length < 8
+                              ? S.of(context).should_be_at_least_8_characters
+                              : null,
+                          onSaved: (input) => widget.user.password = input,
                         ),
                       ],
                     ),
@@ -195,7 +203,7 @@ class _ProfileSettingsDialogState extends State<ProfileSettingsDialog> {
       widget.onChanged();
       Navigator.pop(context);
     }
-    print (currentUser.value.toMap());
-    print (widget.user.toMap());
+    print(currentUser.value.toMap());
+    print(widget.user.toMap());
   }
 }

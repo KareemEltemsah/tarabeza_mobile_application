@@ -3,7 +3,6 @@ import '../../generated/l10n.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 
 import '../models/restaurant.dart';
-import '../models/review.dart';
 import '../controllers/restaurant_controller.dart';
 import '../models/route_argument.dart';
 import '../elements/ReviewsListWidget.dart';
@@ -22,7 +21,6 @@ class ReviewsWidget extends StatefulWidget {
 
 class _ReviewsWidgetState extends StateMVC<ReviewsWidget> {
   RestaurantController _con;
-  final commentController = TextEditingController();
 
   _ReviewsWidgetState() : super(RestaurantController()) {
     _con = controller;

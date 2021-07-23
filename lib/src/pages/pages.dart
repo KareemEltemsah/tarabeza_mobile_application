@@ -100,14 +100,6 @@ class _PagesWidgetState extends State<PagesWidget> {
           },
           // this will be set when a new tab is tapped
           items: [
-            /*BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: '',
-            ),*/
-            /*BottomNavigationBarItem(
-              icon: Icon(Icons.notifications),
-              label: '',
-            ),*/
             BottomNavigationBarItem(
               icon: new Icon(Icons.today_rounded),
               label: '',

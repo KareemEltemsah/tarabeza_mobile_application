@@ -14,8 +14,8 @@ addOrderItem(OrderItem orderItem) {
   if (currentOrder.value.orderItems.contains(orderItem)) {
     int index = currentOrder.value.orderItems
         .indexWhere((element) => element == orderItem);
-    currentOrder.value.orderItems.elementAt(index).quantity +=
-        orderItem.quantity;
+    currentOrder.value.orderItems.elementAt(index).qty +=
+        orderItem.qty;
   } else //add new item
     currentOrder.value.orderItems.add(orderItem);
   // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member

@@ -1,16 +1,22 @@
+import 'dart:convert';
+
 import '../models/user.dart';
 import '../models/order_item.dart';
+import '../models/restaurant.dart';
 
 class Order {
   String id;
+  String customer_id;
   String restaurant_id;
+  String table_id;
+  String table_number;
+  bool is_finished;
+  bool is_approved;
+  bool is_deleted;
+  String created_at;
+  String customer_name;
+
   List<OrderItem> orderItems;
-  String orderStatus;
-  double tax;
-  String hint;
-  bool active;
-  DateTime dateTime;
-  User user;
 
   Order() {
     orderItems = [];
@@ -18,34 +24,18 @@ class Order {
 
   Order.fromJSON(Map<String, dynamic> jsonMap) {
     try {
-      id = jsonMap['id'].toString();
-      tax = jsonMap['tax'] != null ? jsonMap['tax'].toDouble() : 0.0;
-      hint = jsonMap['hint'] != null ? jsonMap['hint'].toString() : '';
-      active = jsonMap['active'] ?? false;
-      orderStatus = jsonMap['order_status'] ?? "";
-      dateTime = DateTime.parse(jsonMap['updated_at']);
-      user = jsonMap['user'] != null
-          ? User.fromJSON(jsonMap['user'])
-          : User.fromJSON({});
     } catch (e) {
-      id = '';
-      tax = 0.0;
-      hint = '';
-      active = false;
-      orderStatus = "";
-      dateTime = DateTime(0);
-      user = User.fromJSON({});
       orderItems = [];
     }
   }
 
   Map toMap() {
     var map = new Map<String, dynamic>();
-    map["id"] = id;
-    map["user_id"] = user?.id;
-    map["tax"] = tax;
-    map['hint'] = hint;
-    map["foods"] = orderItems?.map((element) => element.toMap())?.toList();
+    map["customer_id"] = customer_id;
+    map["restaurant_id"] = restaurant_id;
+    map["table_id"] = table_id;
+    map["table_number"] = table_number;
+    map["items"] = orderItems?.map((element) => element.toMap())?.toList();
     return map;
   }
 
@@ -54,6 +44,8 @@ class Order {
     orderItems.forEach((element) {
       price += element.getTotalPrice();
     });
+    print(toMap());
+    print(json.encode(toMap()));
     return price;
   }
 }

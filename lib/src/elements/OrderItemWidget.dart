@@ -12,7 +12,14 @@ class OrderItemWidget extends StatefulWidget {
   VoidCallback decrement;
   VoidCallback onDismissed;
 
-  OrderItemWidget({Key key, this.orderItem, this.heroTag, this.increment, this.decrement, this.onDismissed}) : super(key: key);
+  OrderItemWidget(
+      {Key key,
+      this.orderItem,
+      this.heroTag,
+      this.increment,
+      this.decrement,
+      this.onDismissed})
+      : super(key: key);
 
   @override
   _OrderItemWidgetState createState() => _OrderItemWidgetState();
@@ -37,7 +44,10 @@ class _OrderItemWidgetState extends State<OrderItemWidget> {
           decoration: BoxDecoration(
             color: Theme.of(context).primaryColor.withOpacity(0.9),
             boxShadow: [
-              BoxShadow(color: Theme.of(context).focusColor.withOpacity(0.1), blurRadius: 5, offset: Offset(0, 2)),
+              BoxShadow(
+                  color: Theme.of(context).focusColor.withOpacity(0.1),
+                  blurRadius: 5,
+                  offset: Offset(0, 2)),
             ],
           ),
           child: Row(
@@ -69,10 +79,19 @@ class _OrderItemWidgetState extends State<OrderItemWidget> {
                             crossAxisAlignment: WrapCrossAlignment.center,
                             spacing: 5,
                             children: <Widget>[
-                              Helper.getPrice(widget.orderItem.item.getPrice(), context, style: Theme.of(context).textTheme.headline4, zeroPlaceholder: 'Free'),
+                              Helper.getPrice(
+                                  widget.orderItem.item.getPrice(), context,
+                                  style: Theme.of(context).textTheme.headline4,
+                                  zeroPlaceholder: 'Free'),
                               widget.orderItem.item.discount > 0
-                                  ? Helper.getPrice(widget.orderItem.item.price, context,
-                                      style: Theme.of(context).textTheme.bodyText1.merge(TextStyle(decoration: TextDecoration.lineThrough)))
+                                  ? Helper.getPrice(
+                                      widget.orderItem.item.price, context,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          .merge(TextStyle(
+                                              decoration:
+                                                  TextDecoration.lineThrough)))
                                   : SizedBox(height: 0),
                             ],
                           ),
@@ -94,7 +113,8 @@ class _OrderItemWidgetState extends State<OrderItemWidget> {
                           icon: Icon(Icons.add_circle_outline),
                           color: Theme.of(context).hintColor,
                         ),
-                        Text(widget.orderItem.quantity.toString(), style: Theme.of(context).textTheme.subtitle1),
+                        Text(widget.orderItem.qty.toString(),
+                            style: Theme.of(context).textTheme.subtitle1),
                         IconButton(
                           onPressed: () {
                             setState(() {

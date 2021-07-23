@@ -3,8 +3,6 @@ import '../models/user.dart';
 
 class Review {
   String id;
-
-  //String customer_id;
   String customer_name;
   String restaurant_id;
   String rate;
@@ -12,8 +10,6 @@ class Review {
   String created_at;
 
   Review();
-
-  Review.init(this.rate);
 
   Review.fromJSON(Map<String, dynamic> jsonMap) {
     try {

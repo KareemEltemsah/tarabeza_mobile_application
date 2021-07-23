@@ -16,22 +16,14 @@ Future<User> login(User user) async {
   final client = new http.Client();
   final loginResponse = await client.post(
     url + 'auth/me',
-    // headers: {HttpHeaders.contentTypeHeader: 'application/json'},
     body: json.encode(user.toMap(login: true)),
   );
-  print(url);
   print(json.encode(user.toMap(login: true)));
   if (loginResponse.statusCode == 200) {
     print(loginResponse.body);
-    //getting token form the response
     String token = json.decode(loginResponse.body)['data']['token'];
-    //get user by token
-    final userResponse = await client.get(
-      url + 'users/me',
-      headers: {HttpHeaders.authorizationHeader: 'Bearer ${token}'},
-    );
-    currentUser.value = User.fromJSON(json.decode(userResponse.body)['data']);
-    currentUser.value.apiToken = token;
+    await getUserData(token);
+    await getUserRoleData();
     setCurrentUser(currentUser.value.toMap());
     print(currentUser.value);
   } else {
@@ -46,22 +38,14 @@ Future<User> register(User user) async {
   final client = new http.Client();
   final signUpResponse = await client.post(
     url + 'auth/register',
-    // headers: {HttpHeaders.contentTypeHeader: 'application/json'},
     body: json.encode(user.toMap(signUp: true)),
   );
-  print(url);
   print(json.encode(user.toMap(signUp: true)));
   if (signUpResponse.statusCode == 201) {
     print(signUpResponse.body);
-    //getting token form the response
     String token = json.decode(signUpResponse.body)['data']['token'];
-    //get user by token
-    final userResponse = await client.get(
-      url + 'users/me',
-      headers: {HttpHeaders.authorizationHeader: 'Bearer ${token}'},
-    );
-    currentUser.value = User.fromJSON(json.decode(userResponse.body)['data']);
-    currentUser.value.apiToken = token;
+    await getUserData(token);
+    await getUserRoleData();
     setCurrentUser(currentUser.value.toMap());
     print(currentUser.value);
   } else {
@@ -69,6 +53,30 @@ Future<User> register(User user) async {
     throw new Exception(signUpResponse.body);
   }
   return currentUser.value;
+}
+
+Future<void> getUserData(String token) async {
+  final String url = '${GlobalConfiguration().getValue('api_base_urlX')}';
+  final client = new http.Client();
+  final userResponse = await client.get(
+    url + 'users/me',
+    headers: {HttpHeaders.authorizationHeader: 'Bearer ${token}'},
+  );
+  currentUser.value = User.fromJSON(json.decode(userResponse.body)['data']);
+  currentUser.value.apiToken = token;
+}
+
+Future<void> getUserRoleData() async {
+  final String url = '${GlobalConfiguration().getValue('api_base_url')}';
+  final client = new http.Client();
+  if (currentUser.value.role == "customer") {
+    final customerResponse = await client.get(
+      url + 'customer/${currentUser.value.id}',
+    );
+    currentUser.value.addCustomerData(
+      (json.decode(customerResponse.body)['data'] as List).elementAt(0),
+    );
+  }
 }
 
 Future<bool> resetPassword(User user) async {

@@ -86,17 +86,6 @@ class _RestaurantWidgetState extends StateMVC<RestaurantWidget> {
                                   return Icon(Icons.error);
                                 },
                               ),
-                              /*CachedNetworkImage(
-                                fit: BoxFit.cover,
-                                imageUrl:
-                                    '${GlobalConfiguration().getValue('logos_base_url')}${_con.restaurant.logo_url}',
-                                placeholder: (context, url) => Image.asset(
-                                  'assets/img/loading.gif',
-                                  fit: BoxFit.cover,
-                                ),
-                                errorWidget: (context, url, error) =>
-                                    Icon(Icons.error),
-                              ),*/
                             ),
                           ),
                         ),
@@ -232,12 +221,6 @@ class _RestaurantWidgetState extends StateMVC<RestaurantWidget> {
                                   SizedBox(width: 20),
                                 ],
                               ),
-                              /*Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 12),
-                                child: Helper.applyHtml(
-                                    context, _con.restaurant.description),
-                              ),*/
                               Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 20),
