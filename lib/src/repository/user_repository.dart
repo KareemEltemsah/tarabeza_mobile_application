@@ -56,26 +56,36 @@ Future<User> register(User user) async {
 }
 
 Future<void> getUserData(String token) async {
-  final String url = '${GlobalConfiguration().getValue('api_base_urlX')}';
-  final client = new http.Client();
-  final userResponse = await client.get(
-    url + 'users/me',
-    headers: {HttpHeaders.authorizationHeader: 'Bearer ${token}'},
-  );
-  currentUser.value = User.fromJSON(json.decode(userResponse.body)['data']);
-  currentUser.value.apiToken = token;
+  try {
+    final String url = '${GlobalConfiguration().getValue('api_base_urlX')}';
+    final client = new http.Client();
+    final userResponse = await client.get(
+      url + 'users/me',
+      headers: {HttpHeaders.authorizationHeader: 'Bearer ${token}'},
+    );
+    print(userResponse.body);
+    currentUser.value = User.fromJSON(json.decode(userResponse.body)['data']);
+    currentUser.value.apiToken = token;
+  } catch (e) {
+    print(e);
+  }
 }
 
 Future<void> getUserRoleData() async {
-  final String url = '${GlobalConfiguration().getValue('api_base_url')}';
-  final client = new http.Client();
-  if (currentUser.value.role == "customer") {
-    final customerResponse = await client.get(
-      url + 'customer/${currentUser.value.id}',
-    );
-    currentUser.value.addCustomerData(
-      (json.decode(customerResponse.body)['data'] as List).elementAt(0),
-    );
+  try {
+    final String url = '${GlobalConfiguration().getValue('api_base_url')}';
+    final client = new http.Client();
+    if (currentUser.value.role == "customer") {
+      final customerResponse = await client.get(
+        url + 'customer/${currentUser.value.id}',
+      );
+      print(customerResponse.body);
+      currentUser.value.addCustomerData(
+        (json.decode(customerResponse.body)['data'] as List).elementAt(0),
+      );
+    }
+  } catch (e) {
+    print(e);
   }
 }
 

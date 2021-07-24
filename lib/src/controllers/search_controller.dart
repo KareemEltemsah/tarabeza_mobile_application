@@ -25,7 +25,6 @@ class SearchController extends ControllerMVC {
         setState(() {
           if (_restaurant.id != null) restaurants.add(_restaurant);
         });
-        print(_restaurant.toMap());
       }, onError: (e) {
         print(e);
       }, onDone: () async {

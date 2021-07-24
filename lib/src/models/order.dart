@@ -1,8 +1,4 @@
-import 'dart:convert';
-
-import '../models/user.dart';
 import '../models/order_item.dart';
-import '../models/restaurant.dart';
 
 class Order {
   String id;
@@ -15,6 +11,7 @@ class Order {
   bool is_deleted;
   String created_at;
   String customer_name;
+  String restaurant_name;
 
   List<OrderItem> orderItems;
 
@@ -44,8 +41,6 @@ class Order {
     orderItems.forEach((element) {
       price += element.getTotalPrice();
     });
-    print(toMap());
-    print(json.encode(toMap()));
     return price;
   }
 }

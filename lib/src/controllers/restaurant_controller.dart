@@ -37,22 +37,34 @@ class RestaurantController extends ControllerMVC {
     setState(() {
       restaurant = Restaurant.fromJSON(
           (json.decode(restaurantResponse.body)['data']['restaurant_data']
-                  as List)
+          as List)
               .elementAt(0));
+    });
+    await calculateRestaurantRate();
+  }
+
+  Future<void> calculateRestaurantRate() async {
+    await getRestaurantReviews();
+    double sum = 0;
+    reviews.forEach((element) {
+      sum += double.parse(element.rate);
+    });
+    setState((){
+      restaurant.rating = (sum / reviews.length).toStringAsFixed(1);
     });
   }
 
   Future<void> getRestaurantMenu() async {
     final String url =
-        '${GlobalConfiguration().getValue('api_base_url')}menu/${restaurant.id}';
+        '${GlobalConfiguration().getValue('api_base_url')}menu/${restaurant
+        .id}';
     final client = new http.Client();
     final menuResponse = await client.get(url);
     setState(() {
-      items =
-          (json.decode(menuResponse.body)['data']['items'] as List)
-              .map((i) => Item.fromJSON(i))
-              .where((element) => element.id != null)
-              .toList();
+      items = (json.decode(menuResponse.body)['data']['items'] as List)
+          .map((i) => Item.fromJSON(i))
+          .where((element) => element.id != null)
+          .toList();
     });
     selectedItems = items;
     await getRestaurantCategories();
@@ -66,7 +78,7 @@ class RestaurantController extends ControllerMVC {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.containsKey('categories')) {
       List prefsCat =
-          (json.decode(await prefs.getString('categories')) as List);
+      (json.decode(await prefs.getString('categories')) as List);
       setState(() {
         categories = prefsCat
             .map((e) => Category.fromJSON(e))
@@ -85,12 +97,13 @@ class RestaurantController extends ControllerMVC {
 
   Future<void> getRestaurantReviews() async {
     final String url =
-        '${GlobalConfiguration().getValue('api_base_url')}reviews/${restaurant.id}';
+        '${GlobalConfiguration().getValue('api_base_url')}reviews/${restaurant
+        .id}';
     final client = new http.Client();
     final reviewsResponse = await client.get(url);
     setState(() {
-      reviews = (json.decode(reviewsResponse.body)['data']
-              ['restaurant_reviews'] as List)
+      reviews = (json.decode(reviewsResponse.body)['data']['restaurant_reviews']
+      as List)
           .map((i) => Review.fromJSON(i))
           .where((element) => element.id != null)
           .toList();
@@ -102,12 +115,10 @@ class RestaurantController extends ControllerMVC {
         '${GlobalConfiguration().getValue('api_base_url')}tables/${id}';
     final client = new http.Client();
     final tablesResponse = await client.get(url);
-    setState(() {
-      tables = (json.decode(tablesResponse.body)['data'] as List)
-          .map((i) => RestaurantTable.fromJSON(i))
-          .where((element) => element.id != null)
-          .toList();
-    });
+    tables = (json.decode(tablesResponse.body)['data'] as List)
+        .map((i) => RestaurantTable.fromJSON(i))
+        .where((element) => element.id != null)
+        .toList();
   }
 
   Future<bool> addReview(String comment, int rate) async {
@@ -140,7 +151,7 @@ class RestaurantController extends ControllerMVC {
   Future<void> selectByName(String searchWord) async {
     selectedItems = selectedItems
         .where((element) =>
-            element.name.toLowerCase().contains(searchWord.toLowerCase()))
+        element.name.toLowerCase().contains(searchWord.toLowerCase()))
         .toList();
   }
 

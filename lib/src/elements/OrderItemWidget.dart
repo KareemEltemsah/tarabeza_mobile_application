@@ -41,6 +41,7 @@ class _OrderItemWidgetState extends State<OrderItemWidget> {
         highlightColor: Theme.of(context).primaryColor,
         onTap: () {},
         child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 20),
           decoration: BoxDecoration(
             color: Theme.of(context).primaryColor.withOpacity(0.9),
             boxShadow: [

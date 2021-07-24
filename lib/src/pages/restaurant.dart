@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
+import '../elements/BlockButtonWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../generated/l10n.dart';
 import '../repository/order_repository.dart' as orderRepo;
+import '../repository/user_repository.dart' as userRepo;
 import '../elements/OrderFloatButtonWidget.dart';
 import '../controllers/restaurant_controller.dart';
 import '../elements/CircularLoadingWidget.dart';
@@ -31,6 +33,8 @@ class RestaurantWidget extends StatefulWidget {
 
 class _RestaurantWidgetState extends StateMVC<RestaurantWidget> {
   RestaurantController _con;
+  TextEditingController commentController = new TextEditingController();
+  int rating = 0;
 
   _RestaurantWidgetState() : super(RestaurantController()) {
     _con = controller;
@@ -64,7 +68,6 @@ class _RestaurantWidgetState extends StateMVC<RestaurantWidget> {
                               Theme.of(context).accentColor.withOpacity(0.9),
                           expandedHeight: 300,
                           elevation: 0,
-//                          iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
                           automaticallyImplyLeading: false,
                           leading: new IconButton(
                             icon: new Icon(Icons.sort,
@@ -244,6 +247,186 @@ class _RestaurantWidgetState extends StateMVC<RestaurantWidget> {
                                     horizontal: 20, vertical: 12),
                                 child: Helper.applyHtml(
                                     context, _con.restaurant.getTimeInfo()),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 12),
+                                child: Row(
+                                  children: [
+                                    FlatButton(
+                                      padding: EdgeInsets.all(5),
+                                      onPressed: userRepo.currentUser.value.apiToken != null ? () {
+                                        showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              // ignore: missing_return
+                                              return SimpleDialog(
+                                                contentPadding:
+                                                    EdgeInsets.symmetric(
+                                                        horizontal: 20),
+                                                titlePadding:
+                                                    EdgeInsets.symmetric(
+                                                        horizontal: 15,
+                                                        vertical: 20),
+                                                title: Row(
+                                                  children: <Widget>[
+                                                    Icon(Icons
+                                                        .rate_review_rounded),
+                                                    SizedBox(width: 10),
+                                                    Text(
+                                                      "Review",
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .bodyText1,
+                                                    )
+                                                  ],
+                                                ),
+                                                children: <Widget>[
+                                                  StatefulBuilder(
+                                                    builder:
+                                                        (BuildContext context,
+                                                            StateSetter
+                                                                setStarState) {
+                                                      return new Row(
+                                                          children:
+                                                              new List.generate(
+                                                                  5, (index) {
+                                                        return IconButton(
+                                                            icon: index < rating
+                                                                ? Icon(
+                                                                    Icons.star,
+                                                                    color: Theme.of(
+                                                                            context)
+                                                                        .accentColor)
+                                                                : Icon(
+                                                                    Icons
+                                                                        .star_border,
+                                                                    color: Theme.of(
+                                                                            context)
+                                                                        .hintColor),
+                                                            onPressed: () {
+                                                              setStarState(() {
+                                                                rating =
+                                                                    index + 1;
+                                                              });
+                                                            });
+                                                      }));
+                                                    },
+                                                  ),
+                                                  SizedBox(height: 20),
+                                                  new TextFormField(
+                                                    controller:
+                                                        commentController,
+                                                    keyboardType:
+                                                        TextInputType.text,
+                                                    decoration: InputDecoration(
+                                                      labelText: "Comment",
+                                                      labelStyle: TextStyle(
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .accentColor),
+                                                      contentPadding:
+                                                          EdgeInsets.all(12),
+                                                      border: OutlineInputBorder(
+                                                          borderSide: BorderSide(
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .focusColor
+                                                                  .withOpacity(
+                                                                      0.2))),
+                                                      focusedBorder: OutlineInputBorder(
+                                                          borderSide: BorderSide(
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .focusColor
+                                                                  .withOpacity(
+                                                                      0.5))),
+                                                      enabledBorder: OutlineInputBorder(
+                                                          borderSide: BorderSide(
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .focusColor
+                                                                  .withOpacity(
+                                                                      0.2))),
+                                                    ),
+                                                  ),
+                                                  SizedBox(height: 20),
+                                                  Row(
+                                                    children: <Widget>[
+                                                      MaterialButton(
+                                                        onPressed: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        child: Text(S
+                                                            .of(context)
+                                                            .cancel),
+                                                      ),
+                                                      MaterialButton(
+                                                        onPressed: () {
+                                                          if (!commentController
+                                                                  .text
+                                                                  .isEmpty &&
+                                                              !commentController
+                                                                  .text
+                                                                  .trim()
+                                                                  .isEmpty &&
+                                                              rating > 0) {
+                                                            _con.addReview(
+                                                                commentController
+                                                                    .text,
+                                                                rating);
+                                                            Navigator.pop(
+                                                                context);
+                                                          }
+                                                        },
+                                                        child: Text(
+                                                          S.of(context).submit,
+                                                          style: TextStyle(
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .accentColor),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.end,
+                                                  ),
+                                                  SizedBox(height: 10),
+                                                ],
+                                              );
+                                            });
+                                      } : null,
+                                      child: Text(
+                                        S.of(context).add_review,
+                                        style: TextStyle(
+                                            color:
+                                                Theme.of(context).primaryColor),
+                                      ),
+                                      color: Theme.of(context).accentColor,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5)),
+                                      disabledColor: Theme.of(context).disabledColor,
+                                    ),
+                                    SizedBox(width: 20),
+                                    FlatButton(
+                                      padding: EdgeInsets.all(5),
+                                      onPressed: userRepo.currentUser.value.apiToken != null ? () {} : null,
+                                      child: Text(
+                                        S.of(context).reserve_table,
+                                        style: TextStyle(
+                                            color:
+                                                Theme.of(context).primaryColor),
+                                      ),
+                                      color: Theme.of(context).accentColor,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5)),
+                                        disabledColor: Theme.of(context).disabledColor
+                                    ),
+                                  ],
+                                ),
                               ),
                               Container(
                                 padding: const EdgeInsets.symmetric(

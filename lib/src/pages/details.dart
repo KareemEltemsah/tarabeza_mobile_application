@@ -63,27 +63,27 @@ class _DetailsWidgetState extends StateMVC<DetailsWidget> {
   void _selectTab(int tabItem) {
     setState(() {
       widget.currentTab = tabItem;
-      switch (tabItem) {
-        case 0:
-          _con.getRestaurant("27" /*widget.routeArgument.param*/).then((value) {
-            print("rest map");
-            print(_con.restaurant.toMap());
+      _con.getRestaurant("27" /*widget.routeArgument.param*/).then((value) {
+        print("rest map");
+        print(_con.restaurant.toMap());
+        switch (tabItem) {
+          case 0:
             widget.currentPage = RestaurantWidget(
                 parentScaffoldKey: widget.scaffoldKey,
                 routeArgument: RouteArgument(param: _con.restaurant));
-          });
-          break;
-        case 1:
-          widget.currentPage = ReviewsWidget(
-              parentScaffoldKey: widget.scaffoldKey,
-              routeArgument: RouteArgument(param: _con.restaurant));
-          break;
-        case 2:
-          widget.currentPage = MenuWidget(
-              parentScaffoldKey: widget.scaffoldKey,
-              routeArgument: RouteArgument(param: _con.restaurant));
-          break;
-      }
+            break;
+          case 1:
+            widget.currentPage = ReviewsWidget(
+                parentScaffoldKey: widget.scaffoldKey,
+                routeArgument: RouteArgument(param: _con.restaurant));
+            break;
+          case 2:
+            widget.currentPage = MenuWidget(
+                parentScaffoldKey: widget.scaffoldKey,
+                routeArgument: RouteArgument(param: _con.restaurant));
+            break;
+        }
+      });
     });
   }
 

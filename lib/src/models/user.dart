@@ -71,7 +71,7 @@ class User {
       map["last_name"] = last_name;
       map["gender"] = gender;
       map["date_of_birth"] = DOB;
-      if (role == "staff" && (signUp || none))
+      if ((role == "staff" || role == "restaurant_manager") && (signUp || none))
         map[restaurant_id] = restaurant_id;
     }
     if (update || none) map["id"] = id;
@@ -97,12 +97,12 @@ class User {
   addCustomerData(Map<String, dynamic> jsonMap) {
     try {
       if (role == "customer") {
-        customer_id = jsonMap['customer_id'].toString();
+        customer_id = jsonMap['id'].toString();
         address = jsonMap['address'].toString();
         longitude = jsonMap['longitude'].toString();
         latitude = jsonMap['latitude'].toString();
-      } else if (role == "staff")
-        restaurant_id = jsonMap[restaurant_id].toString();
+      } else if (role == "staff" || role == "restaurant_manager")
+        restaurant_id = jsonMap['restaurant_id'].toString();
     } catch (e) {
       print(e);
     }

@@ -1,8 +1,6 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:global_configuration/global_configuration.dart';
-import 'package:intl/intl.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -65,7 +63,9 @@ class HomeController extends ControllerMVC {
           saveRecentItems();
         }
       });
-    } catch (e) {print (e);}
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future<void> getFeedsForUser(String id) async {
@@ -74,36 +74,44 @@ class HomeController extends ControllerMVC {
     final client = new http.Client();
     final feedsResponse = await client.get(url);
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      if (prefs.containsKey('recentRestaurants') &&
-          settingsRepo.useCaching.value) {
-        print('recentRestaurants from prefs');
-        recentRestaurants =
-            (json.decode(prefs.getString('recentRestaurants')) as List)
-                .map((e) => Restaurant.fromJSON(e))
-                .toList();
-      } else {
-        recentRestaurants = (json.decode(feedsResponse.body)['data']
-                ['recent_restaurants'] as List)
-            .map((e) => Restaurant.fromJSON(e))
-            .toList();
-        saveRecentRestaurants();
-      }
-    });
-    setState(() {
-      if (prefs.containsKey('recentItems') && settingsRepo.useCaching.value) {
-        print('recentItems from prefs');
-        recentItems = (json.decode(prefs.getString('recentItems')) as List)
-            .map((e) => Item.fromJSON(e))
-            .toList();
-      } else {
-        recentItems =
-            (json.decode(feedsResponse.body)['data']['recent_items'] as List)
-                .map((e) => Item.fromJSON(e))
-                .toList();
-        saveRecentItems();
-      }
-    });
+    try {
+      setState(() {
+        if (prefs.containsKey('recentRestaurants') &&
+            settingsRepo.useCaching.value) {
+          print('recentRestaurants from prefs');
+          recentRestaurants =
+              (json.decode(prefs.getString('recentRestaurants')) as List)
+                  .map((e) => Restaurant.fromJSON(e))
+                  .toList();
+        } else {
+          recentRestaurants = (json.decode(feedsResponse.body)['data']
+                  ['recent_restaurants'] as List)
+              .map((e) => Restaurant.fromJSON(e))
+              .toList();
+          saveRecentRestaurants();
+        }
+      });
+    } catch (e) {
+      print(e);
+    }
+    try {
+      setState(() {
+        if (prefs.containsKey('recentItems') && settingsRepo.useCaching.value) {
+          print('recentItems from prefs');
+          recentItems = (json.decode(prefs.getString('recentItems')) as List)
+              .map((e) => Item.fromJSON(e))
+              .toList();
+        } else {
+          recentItems =
+              (json.decode(feedsResponse.body)['data']['recent_items'] as List)
+                  .map((e) => Item.fromJSON(e))
+                  .toList();
+          saveRecentItems();
+        }
+      });
+    } catch (e) {
+      print(e);
+    }
     if (prefs.containsKey('recommendedRestaurants') &&
         settingsRepo.useCaching.value) {
       print('recommendedRestaurants from prefs');
@@ -114,27 +122,31 @@ class HomeController extends ControllerMVC {
                 .toList();
       });
     } else {
-      List<Map> _temp = new List<Map>();
-      (json.decode(feedsResponse.body)['data']['recommended_restaurants']
-              as List)
-          .forEach((e) => _temp.add(e));
-      _temp.forEach((element) async {
-        final response = await client.get(
-            '${GlobalConfiguration().getValue('api_base_url')}restaurants/${element['id'].toString()}');
-        if ((json.decode(response.body)['data']['restaurant_data'] as List)
-                .length >
-            0) {
-          Restaurant _r = Restaurant.fromJSON(
-              (json.decode(response.body)['data']['restaurant_data'] as List)
-                  .elementAt(0));
-          _r.distance = element['distance'];
-          setState(() {
-            recommendedRestaurants.add(_r);
-            if (recommendedRestaurants.length == _temp.length)
-              saveRecommendedRestaurants();
-          });
-        }
-      });
+      try {
+        List<Map> _temp = new List<Map>();
+        (json.decode(feedsResponse.body)['data']['recommended_restaurants']
+                as List)
+            .forEach((e) => _temp.add(e));
+        _temp.forEach((element) async {
+          final response = await client.get(
+              '${GlobalConfiguration().getValue('api_base_url')}restaurants/${element['id'].toString()}');
+          if ((json.decode(response.body)['data']['restaurant_data'] as List)
+                  .length >
+              0) {
+            Restaurant _r = Restaurant.fromJSON(
+                (json.decode(response.body)['data']['restaurant_data'] as List)
+                    .elementAt(0));
+            _r.distance = element['distance'];
+            setState(() {
+              recommendedRestaurants.add(_r);
+              if (recommendedRestaurants.length == _temp.length)
+                saveRecommendedRestaurants();
+            });
+          }
+        });
+      } catch (e) {
+        print(e);
+      }
     }
   }
 
@@ -174,8 +186,8 @@ class HomeController extends ControllerMVC {
       recentItems = <Item>[];
       recommendedRestaurants = <Restaurant>[];
     });
-    settingsRepo.setCachingOption().whenComplete(() async {
-      await userRepo.currentUser.value.apiToken != null
+    settingsRepo.setCachingOption().whenComplete(() {
+      userRepo.currentUser.value.apiToken != null
           ? getFeedsForUser(userRepo.currentUser.value.id)
           : getFeeds();
     });

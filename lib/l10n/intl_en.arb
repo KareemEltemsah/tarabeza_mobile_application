@@ -271,5 +271,8 @@
   "should_be_at_least_3_letters" : "Should be at least 3 letters",
   "should_be_at_least_8_characters" : "Should be at least 8 characters",
   "verify_quantity_and_click_submit" : "Verify quantity and click submit",
-  "restaurant_code" : "Restaurant code"
+  "restaurant_code" : "Restaurant code",
+  "submit_order" : "Submit Order",
+  "make_reservation" : "Make Reservation",
+  "reserve_table" : "Reserve Table"
 }

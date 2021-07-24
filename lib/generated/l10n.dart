@@ -2764,6 +2764,36 @@ class S {
       args: [],
     );
   }
+
+  /// `Submit Order`
+  String get submit_order {
+    return Intl.message(
+      'Submit Order',
+      name: 'submit_order',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Make Reservation`
+  String get make_reservation {
+    return Intl.message(
+      'Make Reservation',
+      name: 'make_reservation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reserve Table`
+  String get reserve_table {
+    return Intl.message(
+      'Reserve Table',
+      name: 'reserve_table',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

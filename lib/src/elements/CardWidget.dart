@@ -56,20 +56,6 @@ class CardWidget extends StatelessWidget {
                       return Icon(Icons.error);
                     },
                   ),
-                  /*CachedNetworkImage(
-                    height: 150,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                    imageUrl:
-                        '${GlobalConfiguration().getValue('logos_base_url')}${restaurant.logo_url}',
-                    placeholder: (context, url) => Image.asset(
-                      'assets/img/loading.gif',
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      height: 150,
-                    ),
-                    errorWidget: (context, url, error) => new Icon(Icons.error),
-                  ),*/
                 ),
               ),
               Row(

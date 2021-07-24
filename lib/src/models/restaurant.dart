@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'user.dart';
+import 'item.dart';
+import 'category.dart';
+import 'review.dart';
+import 'table.dart';
 
 class Restaurant {
   String id;

@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
+import '../elements/BlockButtonWidget.dart';
+import '../models/table.dart';
+import '../controllers/restaurant_controller.dart';
 
 import '../../generated/l10n.dart';
 import '../controllers/order_controller.dart';
@@ -21,14 +24,26 @@ class OrderWidget extends StatefulWidget {
 
 class _OrderWidgetState extends StateMVC<OrderWidget> {
   OrderController _con;
+  List<RestaurantTable> tables = [];
+  RestaurantTable selectedTable;
 
   _OrderWidgetState() : super(OrderController()) {
     _con = controller;
   }
 
+  getRestaurantTables() async {
+    RestaurantController tempCon = new RestaurantController();
+    await tempCon
+        .getRestaurantTables(orderRepo.currentOrder.value.restaurant_id);
+    setState(() {
+      tables = tempCon.tables;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+    getRestaurantTables();
   }
 
   @override
@@ -38,7 +53,6 @@ class _OrderWidgetState extends StateMVC<OrderWidget> {
         builder: (context, value, child) {
           return Scaffold(
             key: _con.scaffoldKey,
-            // bottomNavigationBar: OrderBottomDetailsWidget(con: _con),
             appBar: AppBar(
               automaticallyImplyLeading: false,
               leading: IconButton(
@@ -61,87 +75,120 @@ class _OrderWidgetState extends StateMVC<OrderWidget> {
             ),
             body: orderRepo.currentOrder.value.orderItems.isEmpty
                 ? EmptyOrderWidget()
-                : Stack(
-                    alignment: AlignmentDirectional.bottomCenter,
-                    children: [
-                      ListView(
-                        primary: true,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(left: 20, right: 10),
-                            child: ListTile(
-                              contentPadding: EdgeInsets.symmetric(vertical: 0),
-                              leading: Icon(
-                                Icons.local_mall_rounded,
-                                color: Theme.of(context).hintColor,
-                              ),
-                              title: Text(
-                                S.of(context).order,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: Theme.of(context).textTheme.headline4,
-                              ),
-                              subtitle: Text(
-                                S
-                                    .of(context)
-                                    .verify_quantity_and_click_submit,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: Theme.of(context).textTheme.caption,
-                              ),
-                            ),
+                : SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Center(
+                          child: Text(
+                            S.of(context).verify_quantity_and_click_submit,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.caption,
                           ),
-                          ListView.separated(
-                            padding: EdgeInsets.only(top: 15, bottom: 120),
-                            scrollDirection: Axis.vertical,
-                            shrinkWrap: true,
-                            primary: false,
-                            itemCount:
-                                orderRepo.currentOrder.value.orderItems.length,
-                            separatorBuilder: (context, index) {
-                              return SizedBox(height: 10);
-                            },
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 20),
-                                child: OrderItemWidget(
-                                  orderItem: orderRepo
-                                      .currentOrder.value.orderItems
-                                      .elementAt(index),
-                                  heroTag: 'orderItem',
-                                  increment: () {
-                                    _con.incrementQuantity(orderRepo
-                                        .currentOrder.value.orderItems
-                                        .elementAt(index));
-                                  },
-                                  decrement: () {
-                                    _con.decrementQuantity(orderRepo
-                                        .currentOrder.value.orderItems
-                                        .elementAt(index));
-                                  },
-                                  onDismissed: () {
-                                    _con.removeFromOrder(orderRepo
-                                        .currentOrder.value.orderItems
-                                        .elementAt(index));
-                                  },
-                                ),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                      Center(
-                        child: Text(
-                          orderRepo.currentOrder.value
-                              .getTotalPrice()
-                              .toStringAsFixed(2),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.headline4,
                         ),
-                      ),
-                    ],
+                        ListView.separated(
+                          padding: EdgeInsets.only(top: 15, bottom: 20),
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          primary: false,
+                          itemCount:
+                              orderRepo.currentOrder.value.orderItems.length,
+                          separatorBuilder: (context, index) {
+                            return SizedBox(height: 10);
+                          },
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
+                              child: OrderItemWidget(
+                                orderItem: orderRepo
+                                    .currentOrder.value.orderItems
+                                    .elementAt(index),
+                                heroTag: 'orderItem',
+                                increment: () {
+                                  _con.incrementQuantity(orderRepo
+                                      .currentOrder.value.orderItems
+                                      .elementAt(index));
+                                },
+                                decrement: () {
+                                  _con.decrementQuantity(orderRepo
+                                      .currentOrder.value.orderItems
+                                      .elementAt(index));
+                                },
+                                onDismissed: () {
+                                  _con.removeFromOrder(orderRepo
+                                      .currentOrder.value.orderItems
+                                      .elementAt(index));
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                        Column(
+                          children: [
+                            Text(
+                              'Total price : ${orderRepo.currentOrder.value.getTotalPrice().toStringAsFixed(2)}',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context).textTheme.headline4,
+                            ),
+                            SizedBox(height: 10),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Table number',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: Theme.of(context).textTheme.headline4,
+                                ),
+                                SizedBox(width: 10),
+                                DropdownButton(
+                                    hint: Text('Choose table'),
+                                    value: selectedTable,
+                                    items: tables.map((t) {
+                                      return DropdownMenuItem(
+                                          value: t,
+                                          child:
+                                              new Text('table #${t.number}'));
+                                    }).toList(),
+                                    onChanged: (t) {
+                                      setState(() {
+                                        selectedTable = t;
+                                        orderRepo.currentOrder.value.table_id =
+                                            selectedTable.id;
+                                        orderRepo.currentOrder.value
+                                                .table_number =
+                                            selectedTable.number;
+                                        print(orderRepo.currentOrder.value
+                                            .toMap());
+                                      });
+                                    })
+                              ],
+                            ),
+                            SizedBox(height: 10),
+                            BlockButtonWidget(
+                              text: Text(
+                                S.of(context).submit_order,
+                                style: TextStyle(
+                                    color: Theme.of(context).primaryColor),
+                              ),
+                              color: Theme.of(context).accentColor,
+                              onPressed: () {
+                                selectedTable == null
+                                    ? _con.scaffoldKey.currentState
+                                        .showSnackBar(SnackBar(
+                                        content: Text("please choose a table first"),
+                                        duration: Duration(seconds: 3),
+                                      ))
+                                    : _con.makeOrder();
+                              },
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
           );
         });
