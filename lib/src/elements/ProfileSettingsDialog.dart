@@ -18,11 +18,10 @@ class ProfileSettingsDialog extends StatefulWidget {
 
 class _ProfileSettingsDialogState extends State<ProfileSettingsDialog> {
   GlobalKey<FormState> _profileSettingsFormKey = new GlobalKey<FormState>();
-  TextEditingController _DOBController = TextEditingController();
+  TextEditingController _DOBController;
 
   @override
   Widget build(BuildContext context) {
-    _DOBController.text = currentUser.value.DOB;
     return FlatButton(
       onPressed: () {
         showDialog(
@@ -203,7 +202,5 @@ class _ProfileSettingsDialogState extends State<ProfileSettingsDialog> {
       widget.onChanged();
       Navigator.pop(context);
     }
-    print(currentUser.value.toMap());
-    print(widget.user.toMap());
   }
 }

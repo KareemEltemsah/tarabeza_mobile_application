@@ -34,7 +34,7 @@ class _OrderWidgetState extends StateMVC<OrderWidget> {
   getRestaurantTables() async {
     RestaurantController tempCon = new RestaurantController();
     await tempCon
-        .getRestaurantTables(orderRepo.currentOrder.value.restaurant_id);
+        .SgetRestaurantTables(orderRepo.currentOrder.value.restaurant_id);
     setState(() {
       tables = tempCon.tables;
     });
@@ -179,10 +179,13 @@ class _OrderWidgetState extends StateMVC<OrderWidget> {
                                 selectedTable == null
                                     ? _con.scaffoldKey.currentState
                                         .showSnackBar(SnackBar(
-                                        content: Text("please choose a table first"),
+                                        content:
+                                            Text("please choose a table first"),
                                         duration: Duration(seconds: 3),
                                       ))
-                                    : _con.makeOrder();
+                                    : _con.makeOrder().then((value) =>
+                                        Navigator.of(context)
+                                            .pushNamed('/Pages', arguments: 2));
                               },
                             )
                           ],

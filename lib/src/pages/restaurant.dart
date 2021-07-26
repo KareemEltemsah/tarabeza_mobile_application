@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:tarabeza_mobile_application/src/models/table.dart';
+import '../models/reservation.dart';
 import '../elements/BlockButtonWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -33,8 +35,12 @@ class RestaurantWidget extends StatefulWidget {
 
 class _RestaurantWidgetState extends StateMVC<RestaurantWidget> {
   RestaurantController _con;
+  Reservation reservation = new Reservation();
+  RestaurantTable selectedTable;
   TextEditingController commentController = new TextEditingController();
   int rating = 0;
+  int h = DateTime.now().hour;
+  int m = DateTime.now().minute;
 
   _RestaurantWidgetState() : super(RestaurantController()) {
     _con = controller;
@@ -45,6 +51,8 @@ class _RestaurantWidgetState extends StateMVC<RestaurantWidget> {
     _con.restaurant = widget.routeArgument.param as Restaurant;
     if (!orderRepo.isSameRestaurant(_con.restaurant.id))
       orderRepo.clearOrderItems();
+    _con.getRestaurantTables(_con.restaurant.id);
+    reservation.restaurant_id = _con.restaurant.id;
     super.initState();
   }
 
@@ -197,7 +205,7 @@ class _RestaurantWidgetState extends StateMVC<RestaurantWidget> {
                                                     .primaryColor)),
                                       )),
                                   Expanded(child: SizedBox(height: 0)),
-                                  Container(
+                                  /*Container(
                                     padding: EdgeInsets.symmetric(
                                         horizontal: 12, vertical: 3),
                                     decoration: BoxDecoration(
@@ -220,7 +228,7 @@ class _RestaurantWidgetState extends StateMVC<RestaurantWidget> {
                                               color: Theme.of(context)
                                                   .primaryColor)),
                                     ),
-                                  ),
+                                  ),*/
                                   SizedBox(width: 20),
                                 ],
                               ),
@@ -255,148 +263,169 @@ class _RestaurantWidgetState extends StateMVC<RestaurantWidget> {
                                   children: [
                                     FlatButton(
                                       padding: EdgeInsets.all(5),
-                                      onPressed: userRepo.currentUser.value.apiToken != null ? () {
-                                        showDialog(
-                                            context: context,
-                                            builder: (context) {
-                                              // ignore: missing_return
-                                              return SimpleDialog(
-                                                contentPadding:
-                                                    EdgeInsets.symmetric(
-                                                        horizontal: 20),
-                                                titlePadding:
-                                                    EdgeInsets.symmetric(
-                                                        horizontal: 15,
-                                                        vertical: 20),
-                                                title: Row(
-                                                  children: <Widget>[
-                                                    Icon(Icons
-                                                        .rate_review_rounded),
-                                                    SizedBox(width: 10),
-                                                    Text(
-                                                      "Review",
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .bodyText1,
-                                                    )
-                                                  ],
-                                                ),
-                                                children: <Widget>[
-                                                  StatefulBuilder(
-                                                    builder:
-                                                        (BuildContext context,
-                                                            StateSetter
-                                                                setStarState) {
-                                                      return new Row(
-                                                          children:
-                                                              new List.generate(
-                                                                  5, (index) {
-                                                        return IconButton(
-                                                            icon: index < rating
-                                                                ? Icon(
-                                                                    Icons.star,
-                                                                    color: Theme.of(
-                                                                            context)
-                                                                        .accentColor)
-                                                                : Icon(
-                                                                    Icons
-                                                                        .star_border,
-                                                                    color: Theme.of(
-                                                                            context)
-                                                                        .hintColor),
-                                                            onPressed: () {
-                                                              setStarState(() {
-                                                                rating =
-                                                                    index + 1;
-                                                              });
-                                                            });
-                                                      }));
-                                                    },
-                                                  ),
-                                                  SizedBox(height: 20),
-                                                  new TextFormField(
-                                                    controller:
-                                                        commentController,
-                                                    keyboardType:
-                                                        TextInputType.text,
-                                                    decoration: InputDecoration(
-                                                      labelText: "Comment",
-                                                      labelStyle: TextStyle(
-                                                          color:
-                                                              Theme.of(context)
-                                                                  .accentColor),
+                                      onPressed: userRepo.currentUser.value
+                                                      .apiToken !=
+                                                  null ||
+                                              userRepo.currentUser?.value
+                                                      ?.role ==
+                                                  "staff" ||
+                                              userRepo.currentUser?.value
+                                                      ?.role ==
+                                                  "restaurant_manager"
+                                          ? () {
+                                              showDialog(
+                                                  context: context,
+                                                  builder: (context) {
+                                                    // ignore: missing_return
+                                                    return SimpleDialog(
                                                       contentPadding:
-                                                          EdgeInsets.all(12),
-                                                      border: OutlineInputBorder(
-                                                          borderSide: BorderSide(
-                                                              color: Theme.of(
-                                                                      context)
-                                                                  .focusColor
-                                                                  .withOpacity(
-                                                                      0.2))),
-                                                      focusedBorder: OutlineInputBorder(
-                                                          borderSide: BorderSide(
-                                                              color: Theme.of(
-                                                                      context)
-                                                                  .focusColor
-                                                                  .withOpacity(
-                                                                      0.5))),
-                                                      enabledBorder: OutlineInputBorder(
-                                                          borderSide: BorderSide(
-                                                              color: Theme.of(
-                                                                      context)
-                                                                  .focusColor
-                                                                  .withOpacity(
-                                                                      0.2))),
-                                                    ),
-                                                  ),
-                                                  SizedBox(height: 20),
-                                                  Row(
-                                                    children: <Widget>[
-                                                      MaterialButton(
-                                                        onPressed: () {
-                                                          Navigator.pop(
-                                                              context);
-                                                        },
-                                                        child: Text(S
-                                                            .of(context)
-                                                            .cancel),
+                                                          EdgeInsets.symmetric(
+                                                              horizontal: 20),
+                                                      titlePadding:
+                                                          EdgeInsets.symmetric(
+                                                              horizontal: 15,
+                                                              vertical: 20),
+                                                      title: Row(
+                                                        children: <Widget>[
+                                                          Icon(Icons
+                                                              .rate_review_rounded),
+                                                          SizedBox(width: 10),
+                                                          Text(
+                                                            "Review",
+                                                            style: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .bodyText1,
+                                                          )
+                                                        ],
                                                       ),
-                                                      MaterialButton(
-                                                        onPressed: () {
-                                                          if (!commentController
-                                                                  .text
-                                                                  .isEmpty &&
-                                                              !commentController
-                                                                  .text
-                                                                  .trim()
-                                                                  .isEmpty &&
-                                                              rating > 0) {
-                                                            _con.addReview(
-                                                                commentController
-                                                                    .text,
-                                                                rating);
-                                                            Navigator.pop(
-                                                                context);
-                                                          }
-                                                        },
-                                                        child: Text(
-                                                          S.of(context).submit,
-                                                          style: TextStyle(
-                                                              color: Theme.of(
-                                                                      context)
-                                                                  .accentColor),
+                                                      children: <Widget>[
+                                                        StatefulBuilder(
+                                                          builder: (BuildContext
+                                                                  context,
+                                                              StateSetter
+                                                                  setStarState) {
+                                                            return new Row(
+                                                                children: new List
+                                                                        .generate(
+                                                                    5, (index) {
+                                                              return IconButton(
+                                                                  icon: index <
+                                                                          rating
+                                                                      ? Icon(
+                                                                          Icons
+                                                                              .star,
+                                                                          color: Theme.of(context)
+                                                                              .accentColor)
+                                                                      : Icon(
+                                                                          Icons
+                                                                              .star_border,
+                                                                          color:
+                                                                              Theme.of(context).hintColor),
+                                                                  onPressed: () {
+                                                                    setStarState(
+                                                                        () {
+                                                                      rating =
+                                                                          index +
+                                                                              1;
+                                                                    });
+                                                                  });
+                                                            }));
+                                                          },
                                                         ),
-                                                      ),
-                                                    ],
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.end,
-                                                  ),
-                                                  SizedBox(height: 10),
-                                                ],
-                                              );
-                                            });
-                                      } : null,
+                                                        SizedBox(height: 20),
+                                                        new TextFormField(
+                                                          controller:
+                                                              commentController,
+                                                          keyboardType:
+                                                              TextInputType
+                                                                  .text,
+                                                          decoration:
+                                                              InputDecoration(
+                                                            labelText:
+                                                                "Comment",
+                                                            labelStyle: TextStyle(
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .accentColor),
+                                                            contentPadding:
+                                                                EdgeInsets.all(
+                                                                    12),
+                                                            border: OutlineInputBorder(
+                                                                borderSide: BorderSide(
+                                                                    color: Theme.of(
+                                                                            context)
+                                                                        .focusColor
+                                                                        .withOpacity(
+                                                                            0.2))),
+                                                            focusedBorder: OutlineInputBorder(
+                                                                borderSide: BorderSide(
+                                                                    color: Theme.of(
+                                                                            context)
+                                                                        .focusColor
+                                                                        .withOpacity(
+                                                                            0.5))),
+                                                            enabledBorder: OutlineInputBorder(
+                                                                borderSide: BorderSide(
+                                                                    color: Theme.of(
+                                                                            context)
+                                                                        .focusColor
+                                                                        .withOpacity(
+                                                                            0.2))),
+                                                          ),
+                                                        ),
+                                                        SizedBox(height: 20),
+                                                        Row(
+                                                          children: <Widget>[
+                                                            MaterialButton(
+                                                              onPressed: () {
+                                                                Navigator.pop(
+                                                                    context);
+                                                              },
+                                                              child: Text(S
+                                                                  .of(context)
+                                                                  .cancel),
+                                                            ),
+                                                            MaterialButton(
+                                                              onPressed: () {
+                                                                if (!commentController
+                                                                        .text
+                                                                        .isEmpty &&
+                                                                    !commentController
+                                                                        .text
+                                                                        .trim()
+                                                                        .isEmpty &&
+                                                                    rating >
+                                                                        0) {
+                                                                  _con.addReview(
+                                                                      commentController
+                                                                          .text,
+                                                                      rating);
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                }
+                                                              },
+                                                              child: Text(
+                                                                S
+                                                                    .of(context)
+                                                                    .submit,
+                                                                style: TextStyle(
+                                                                    color: Theme.of(
+                                                                            context)
+                                                                        .accentColor),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .end,
+                                                        ),
+                                                        SizedBox(height: 10),
+                                                      ],
+                                                    );
+                                                  });
+                                            }
+                                          : null,
                                       child: Text(
                                         S.of(context).add_review,
                                         style: TextStyle(
@@ -407,24 +436,163 @@ class _RestaurantWidgetState extends StateMVC<RestaurantWidget> {
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(5)),
-                                      disabledColor: Theme.of(context).disabledColor,
+                                      disabledColor:
+                                          Theme.of(context).disabledColor,
                                     ),
                                     SizedBox(width: 20),
                                     FlatButton(
-                                      padding: EdgeInsets.all(5),
-                                      onPressed: userRepo.currentUser.value.apiToken != null ? () {} : null,
-                                      child: Text(
-                                        S.of(context).reserve_table,
-                                        style: TextStyle(
-                                            color:
-                                                Theme.of(context).primaryColor),
-                                      ),
-                                      color: Theme.of(context).accentColor,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(5)),
-                                        disabledColor: Theme.of(context).disabledColor
-                                    ),
+                                        padding: EdgeInsets.all(5),
+                                        onPressed: userRepo.currentUser.value
+                                                        .apiToken !=
+                                                    null ||
+                                                userRepo.currentUser?.value
+                                                        ?.role ==
+                                                    "staff" ||
+                                                userRepo.currentUser?.value
+                                                        ?.role ==
+                                                    "restaurant_manager"
+                                            ? () {
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                // ignore: missing_return
+                                                return SimpleDialog(
+                                                  contentPadding:
+                                                  EdgeInsets.symmetric(
+                                                      horizontal: 20),
+                                                  titlePadding:
+                                                  EdgeInsets.symmetric(
+                                                      horizontal: 15,
+                                                      vertical: 20),
+                                                  title: Row(
+                                                    children: <Widget>[
+                                                      Icon(Icons
+                                                          .today_rounded),
+                                                      SizedBox(width: 10),
+                                                      Text(
+                                                        "Reservation",
+                                                        style: Theme.of(
+                                                            context)
+                                                            .textTheme
+                                                            .bodyText1,
+                                                      )
+                                                    ],
+                                                  ),
+                                                  children: <Widget>[
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: [
+                                                        Text(
+                                                          "pick time",
+                                                          style: Theme.of(context).textTheme.headline4,
+                                                        ),
+                                                        SizedBox(width: 5),
+                                                        DropdownButton(
+                                                            hint: Text('hh'),
+                                                            value: h,
+                                                            items: Iterable<int>.generate(25).skip(1).toList().map((t) {
+                                                              return DropdownMenuItem(value: t, child: new Text('$t'));
+                                                            }).toList(),
+                                                            onChanged: (t) {
+                                                              setState(() {
+                                                                h = t;
+                                                              });
+                                                            }),
+                                                        SizedBox(width: 2),
+                                                        DropdownButton(
+                                                            hint: Text('mm'),
+                                                            value: m,
+                                                            items: Iterable<int>.generate(60).toList().map((t) {
+                                                              return DropdownMenuItem(value: t, child: new Text('$t'));
+                                                            }).toList(),
+                                                            onChanged: (t) {
+                                                              setState(() {
+                                                                m = t;
+                                                              });
+                                                            }),
+                                                      ],
+                                                    ),
+                                                    SizedBox(height: 20),
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: [
+                                                        Text(
+                                                          "table",
+                                                          style: Theme.of(context).textTheme.headline4,
+                                                        ),
+                                                        SizedBox(width: 5),
+                                                        DropdownButton(
+                                                            hint: Text('Choose table'),
+                                                            value: selectedTable,
+                                                            items: _con.tables.map((t) {
+                                                              return DropdownMenuItem(
+                                                                  value: t,
+                                                                  child:
+                                                                  new Text('table #${t.number} - ${t.no_of_chairs} chairs'));
+                                                            }).toList(),
+                                                            onChanged: (t) {
+                                                              setState(() {
+                                                                selectedTable = t;
+                                                              });
+                                                            }),
+                                                      ],
+                                                    ),
+                                                    SizedBox(height: 20),
+                                                    Row(
+                                                      children: <Widget>[
+                                                        MaterialButton(
+                                                          onPressed: () {
+                                                            Navigator.pop(
+                                                                context);
+                                                          },
+                                                          child: Text(S
+                                                              .of(context)
+                                                              .cancel),
+                                                        ),
+                                                        MaterialButton(
+                                                          onPressed: () {
+                                                            if (h != null && m != null && selectedTable != null) {
+                                                              reservation.h = h.toString();
+                                                              reservation.m = m.toString();
+                                                              reservation.table_id = selectedTable.id;
+                                                              _con.addReservation(reservation);
+                                                              Navigator.pop(
+                                                                  context);
+                                                            }
+                                                          },
+                                                          child: Text(
+                                                            S
+                                                                .of(context)
+                                                                .submit,
+                                                            style: TextStyle(
+                                                                color: Theme.of(
+                                                                    context)
+                                                                    .accentColor),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                      mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .end,
+                                                    ),
+                                                    SizedBox(height: 10),
+                                                  ],
+                                                );
+                                              });
+                                              }
+                                            : null,
+                                        child: Text(
+                                          S.of(context).reserve_table,
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .primaryColor),
+                                        ),
+                                        color: Theme.of(context).accentColor,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(5)),
+                                        disabledColor:
+                                            Theme.of(context).disabledColor),
                                   ],
                                 ),
                               ),

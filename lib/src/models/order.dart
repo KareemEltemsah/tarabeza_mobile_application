@@ -13,13 +13,25 @@ class Order {
   String customer_name;
   String restaurant_name;
 
-  List<OrderItem> orderItems;
+  List<OrderItem> orderItems =<OrderItem>[];
 
   Order() {
     orderItems = [];
   }
 
   Order.fromJSON(Map<String, dynamic> jsonMap) {
+    id = jsonMap["id"].toString();
+    customer_id = jsonMap["customer_id"].toString();
+    restaurant_id = jsonMap["restaurant_id"].toString();
+    table_id = jsonMap["table_id"].toString();
+    table_number = jsonMap["table_number"].toString();
+    is_finished = jsonMap["is_finished"].toString() == "1" ? true: false;
+    is_approved = jsonMap["is_approved"].toString() == "1" ? true: false;
+    is_deleted = jsonMap["is_deleted"].toString() == "1" ? true: false;
+    created_at = jsonMap["created_at"];
+    customer_name = jsonMap["first_name"] + " " + jsonMap["last_name"];
+    restaurant_name = jsonMap["restaurant_name"];
+    orderItems.add(new OrderItem.fromJSON(jsonMap));
     try {
     } catch (e) {
       orderItems = [];
@@ -33,6 +45,12 @@ class Order {
     map["table_id"] = table_id;
     map["table_number"] = table_number;
     map["items"] = orderItems?.map((element) => element.toMap())?.toList();
+    return map;
+  }
+
+  Map idToMap() {
+    var map = new Map<String, dynamic>();
+    map["order_id"] = id;
     return map;
   }
 

@@ -89,7 +89,6 @@ class _ProfileWidgetState extends StateMVC<ProfileWidget> {
                                   user: _con.user,
                                   onChanged: () {
                                     _con.update();
-                                    setState(() {});
                                   },
                                 ),
                               ),

@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tarabeza_mobile_application/src/models/reservation.dart';
 
 import '../models/category.dart';
 import '../models/item.dart';
@@ -37,7 +39,7 @@ class RestaurantController extends ControllerMVC {
     setState(() {
       restaurant = Restaurant.fromJSON(
           (json.decode(restaurantResponse.body)['data']['restaurant_data']
-          as List)
+                  as List)
               .elementAt(0));
     });
     await calculateRestaurantRate();
@@ -49,15 +51,15 @@ class RestaurantController extends ControllerMVC {
     reviews.forEach((element) {
       sum += double.parse(element.rate);
     });
-    setState((){
-      restaurant.rating = (sum / reviews.length).toStringAsFixed(1);
+    setState(() {
+      restaurant.rating =
+          !reviews.isEmpty ? (sum / reviews.length)?.toStringAsFixed(1) : "0";
     });
   }
 
   Future<void> getRestaurantMenu() async {
     final String url =
-        '${GlobalConfiguration().getValue('api_base_url')}menu/${restaurant
-        .id}';
+        '${GlobalConfiguration().getValue('api_base_url')}menu/${restaurant.id}';
     final client = new http.Client();
     final menuResponse = await client.get(url);
     setState(() {
@@ -78,7 +80,7 @@ class RestaurantController extends ControllerMVC {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.containsKey('categories')) {
       List prefsCat =
-      (json.decode(await prefs.getString('categories')) as List);
+          (json.decode(await prefs.getString('categories')) as List);
       setState(() {
         categories = prefsCat
             .map((e) => Category.fromJSON(e))
@@ -97,13 +99,12 @@ class RestaurantController extends ControllerMVC {
 
   Future<void> getRestaurantReviews() async {
     final String url =
-        '${GlobalConfiguration().getValue('api_base_url')}reviews/${restaurant
-        .id}';
+        '${GlobalConfiguration().getValue('api_base_url')}reviews/${restaurant.id}';
     final client = new http.Client();
     final reviewsResponse = await client.get(url);
     setState(() {
       reviews = (json.decode(reviewsResponse.body)['data']['restaurant_reviews']
-      as List)
+              as List)
           .map((i) => Review.fromJSON(i))
           .where((element) => element.id != null)
           .toList();
@@ -115,6 +116,36 @@ class RestaurantController extends ControllerMVC {
         '${GlobalConfiguration().getValue('api_base_url')}tables/${id}';
     final client = new http.Client();
     final tablesResponse = await client.get(url);
+    // print(tablesResponse.body);
+    setState(() {
+      tables = (json.decode(tablesResponse.body)['data'] as List)
+          .map((i) => RestaurantTable.fromJSON(i))
+          .where((element) => element.id != null)
+          .toList();
+    });
+  }
+
+  Future<void> getAvailableTables(Reservation reservation) async {
+    final String url =
+        '${GlobalConfiguration().getValue('api_base_url')}tables/available';
+    final client = new http.Client();
+    final tablesResponse =
+        await client.post(url, body: reservation.toTimeMap());
+    print(tablesResponse.body);
+    setState(() {
+      tables = (json.decode(tablesResponse.body)['data'] as List)
+          .map((i) => RestaurantTable.fromJSON(i))
+          .where((element) => element.id != null)
+          .toList();
+    });
+  }
+
+  Future<void> SgetRestaurantTables(String id) async {
+    final String url =
+        '${GlobalConfiguration().getValue('api_base_url')}tables/${id}';
+    final client = new http.Client();
+    final tablesResponse = await client.get(url);
+    // print(tablesResponse.body);
     tables = (json.decode(tablesResponse.body)['data'] as List)
         .map((i) => RestaurantTable.fromJSON(i))
         .where((element) => element.id != null)
@@ -151,7 +182,7 @@ class RestaurantController extends ControllerMVC {
   Future<void> selectByName(String searchWord) async {
     selectedItems = selectedItems
         .where((element) =>
-        element.name.toLowerCase().contains(searchWord.toLowerCase()))
+            element.name.toLowerCase().contains(searchWord.toLowerCase()))
         .toList();
   }
 
@@ -159,5 +190,22 @@ class RestaurantController extends ControllerMVC {
     var _id = restaurant.id;
     restaurant = new Restaurant();
     getRestaurant(_id);
+  }
+
+  Future<bool> addReservation(Reservation reservation) async {
+    final String url =
+        '${GlobalConfiguration().getValue('api_base_url')}customer/reservations';
+    final client = new http.Client();
+    final response = await client.post(
+      url,
+      body: json.encode(reservation.toMap()),
+      headers: {
+        HttpHeaders.authorizationHeader:
+            'Bearer ${userRepo.currentUser.value.apiToken}'
+      },
+    );
+    print(reservation.toMap());
+    print(response.body);
+    return (response.statusCode == 201) ? true : false;
   }
 }

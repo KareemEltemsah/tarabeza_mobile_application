@@ -26,7 +26,7 @@ class _CardsCarouselWidgetState extends State<CardsCarouselWidget> {
   @override
   Widget build(BuildContext context) {
     return widget.restaurantsList.isEmpty
-        ? CardsCarouselLoaderWidget()
+        ? SizedBox(height: 0)
         : Container(
             height: 270,
             child: ListView.builder(

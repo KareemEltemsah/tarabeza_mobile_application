@@ -59,12 +59,17 @@ class User {
     }
   }
 
-  Map toMap({bool login: false, bool signUp: false, bool update: false}) {
-    bool none = !login && !signUp && !update;
+  Map toMap({
+    bool login: false,
+    bool signUp: false,
+    bool update: false,
+    bool updateCheck: false,
+  }) {
+    bool none = !login && !signUp && !update && !updateCheck;
     var map = new Map<String, dynamic>();
     map["email"] = email;
     if (signUp || login || update) map["password"] = password;
-    if (signUp || update || none) {
+    if (signUp || update || updateCheck || none) {
       map["phone_number"] = phone;
       map["role"] = role;
       map["first_name"] = first_name;
@@ -72,9 +77,9 @@ class User {
       map["gender"] = gender;
       map["date_of_birth"] = DOB;
       if ((role == "staff" || role == "restaurant_manager") && (signUp || none))
-        map[restaurant_id] = restaurant_id;
+        map["restaurant_id"] = restaurant_id;
     }
-    if (update || none) map["id"] = id;
+    if (update || updateCheck || none) map["id"] = id;
     if (none) {
       map["is_active"] = is_active;
       map["is_banned"] = is_banned;
@@ -94,7 +99,7 @@ class User {
     return map;
   }
 
-  addCustomerData(Map<String, dynamic> jsonMap) {
+  addRoleData(Map<String, dynamic> jsonMap) {
     try {
       if (role == "customer") {
         customer_id = jsonMap['id'].toString();

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 
 import '../../generated/l10n.dart';
@@ -15,17 +13,9 @@ class EmptyOrderWidget extends StatefulWidget {
 }
 
 class _EmptyOrderWidgetState extends State<EmptyOrderWidget> {
-  // bool loading = true;
 
   @override
   void initState() {
-    /*Timer(Duration(seconds: 5), () {
-      if (mounted) {
-        setState(() {
-          loading = false;
-        });
-      }
-    });*/
     super.initState();
   }
 
@@ -33,14 +23,6 @@ class _EmptyOrderWidgetState extends State<EmptyOrderWidget> {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        /*loading
-            ? SizedBox(
-                height: 3,
-                child: LinearProgressIndicator(
-                  backgroundColor: Theme.of(context).accentColor.withOpacity(0.2),
-                ),
-              )
-            : SizedBox(),*/
         Container(
           alignment: AlignmentDirectional.center,
           padding: EdgeInsets.symmetric(horizontal: 30),

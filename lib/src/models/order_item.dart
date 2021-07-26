@@ -4,6 +4,7 @@ class OrderItem {
   String id;
   String item_name;
   int qty;
+  double total;
 
   Item item;
 
@@ -15,12 +16,11 @@ class OrderItem {
 
   OrderItem.fromJSON(Map<String, dynamic> jsonMap) {
     try {
-      /*price = jsonMap['price'] != null ? jsonMap['price'].toDouble() : 0.0;
-      quantity = jsonMap['quantity'] != null ? jsonMap['quantity'].toDouble() : 0.0;*/
+      item_name = jsonMap["item_name"];
+      qty = int.parse(jsonMap["qty"]);
+      total = double.parse(jsonMap["total"]);
     } catch (e) {
-      /*price = 0.0;
-      quantity = 0.0;
-      item = item.fromJSON({});*/
+      print(e);
     }
   }
 
