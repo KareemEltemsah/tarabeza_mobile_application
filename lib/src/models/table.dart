@@ -21,11 +21,9 @@ class RestaurantTable {
 
   Map toMap() {
     var map = new Map<String, dynamic>();
-    map["id"] = id;
     map["number"] = number;
     map["restaurant_id"] = restaurant_id;
     map["no_of_chairs"] = no_of_chairs;
-    map["is_reserved"] = is_reserved;
     return map;
   }
 }
