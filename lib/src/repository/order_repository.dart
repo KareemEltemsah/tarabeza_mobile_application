@@ -13,7 +13,7 @@ addOrderItem(OrderItem orderItem) {
     userRepo.currentUser.value.role == 'customer'
         ?
     currentOrder.value.customer_id = userRepo.currentUser.value.customer_id
-        : currentOrder.value.customer_id = '104';
+        : currentOrder.value.customer_id = '242';
     currentOrder.value.restaurant_id = orderItem.item.restaurant_id;
   }
   //update quantity if the item already exist

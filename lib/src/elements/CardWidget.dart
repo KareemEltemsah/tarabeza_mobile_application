@@ -1,12 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:global_configuration/global_configuration.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../generated/l10n.dart';
 import '../helpers/helper.dart';
 import '../models/restaurant.dart';
-import '../models/route_argument.dart';
-import '../repository/settings_repository.dart';
 
 // ignore: must_be_immutable
 class CardWidget extends StatelessWidget {
@@ -132,9 +130,8 @@ class CardWidget extends StatelessWidget {
                       FlatButton(
                         padding: EdgeInsets.all(0),
                         onPressed: () {
-                          // Navigator.of(context).pushNamed('/Pages',
-                          //     arguments: new RouteArgument(
-                          //         id: '1', param: restaurant));
+                          launch(
+                              "geo:${restaurant.latitude},${restaurant.longitude}");
                         },
                         child: Icon(Icons.directions,
                             color: Theme.of(context).primaryColor),

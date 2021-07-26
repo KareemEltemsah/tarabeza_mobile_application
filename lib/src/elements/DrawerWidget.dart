@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:tarabeza_mobile_application/src/models/route_argument.dart';
 
 import '../../generated/l10n.dart';
 import '../helpers/app_config.dart' as config;
@@ -27,7 +28,7 @@ class _DrawerWidgetState extends StateMVC<DrawerWidget> {
             },
             child: currentUser.value.apiToken != null
                 ? Container(
-              padding: EdgeInsets.symmetric(vertical: 30, horizontal: 15),
+                    padding: EdgeInsets.symmetric(vertical: 30, horizontal: 15),
                     height: config.App(context).appHeight(15),
                     decoration: BoxDecoration(
                       color: Theme.of(context).hintColor.withOpacity(0.1),
@@ -59,7 +60,7 @@ class _DrawerWidgetState extends StateMVC<DrawerWidget> {
                   )
                 : Container(
                     padding: EdgeInsets.symmetric(vertical: 30, horizontal: 15),
-              height: config.App(context).appHeight(15),
+                    height: config.App(context).appHeight(15),
                     decoration: BoxDecoration(
                       color: Theme.of(context).hintColor.withOpacity(0.1),
                     ),
@@ -79,32 +80,38 @@ class _DrawerWidgetState extends StateMVC<DrawerWidget> {
                     ),
                   ),
           ),
-          ListTile(
-            onTap: () {
-              Navigator.of(context).pushNamed('/Pages', arguments: 1);
-            },
-            leading: Icon(
-              Icons.home,
-              color: Theme.of(context).focusColor.withOpacity(1),
-            ),
-            title: Text(
-              S.of(context).home,
-              style: Theme.of(context).textTheme.subtitle1,
-            ),
-          ),
-          /*ListTile(
-            onTap: () {
-              Navigator.of(context).pushNamed('/Pages', arguments: 1);
-            },
-            leading: Icon(
-              Icons.notifications,
-              color: Theme.of(context).focusColor.withOpacity(1),
-            ),
-            title: Text(
-              S.of(context).notifications,
-              style: Theme.of(context).textTheme.subtitle1,
-            ),
-          ),*/
+          currentUser?.value?.role == "staff" ||
+                  currentUser?.value?.role == "restaurant_manager"
+              ? ListTile(
+                  onTap: () {
+                    Navigator.of(context).pushNamed('/Details',
+                        arguments: RouteArgument(
+                          id: '0',
+                          param: currentUser.value.restaurant_id,
+                        ));
+                  },
+                  leading: Icon(
+                    Icons.restaurant,
+                    color: Theme.of(context).focusColor.withOpacity(1),
+                  ),
+                  title: Text(
+                    "Restaurant",
+                    style: Theme.of(context).textTheme.subtitle1,
+                  ),
+                )
+              : ListTile(
+                  onTap: () {
+                    Navigator.of(context).pushNamed('/Pages', arguments: 1);
+                  },
+                  leading: Icon(
+                    Icons.home,
+                    color: Theme.of(context).focusColor.withOpacity(1),
+                  ),
+                  title: Text(
+                    S.of(context).home,
+                    style: Theme.of(context).textTheme.subtitle1,
+                  ),
+                ),
           ListTile(
             onTap: () {
               Navigator.of(context).pushNamed('/Pages', arguments: 0);
@@ -114,20 +121,27 @@ class _DrawerWidgetState extends StateMVC<DrawerWidget> {
               color: Theme.of(context).focusColor.withOpacity(1),
             ),
             title: Text(
-              S.of(context).my_reservations,
+              currentUser?.value?.role == "staff" ||
+                      currentUser?.value?.role == "restaurant_manager"
+                  ? "Reservations"
+                  : S.of(context).my_reservations,
               style: Theme.of(context).textTheme.subtitle1,
             ),
           ),
           ListTile(
             onTap: () {
-              Navigator.of(context).pushNamed('/Pages', arguments: 2);
+              Navigator.of(context).pushNamed('/Pages',
+                  arguments: currentUser?.value?.role == "staff" ? 1 : 2);
             },
             leading: Icon(
               Icons.local_mall_rounded,
               color: Theme.of(context).focusColor.withOpacity(1),
             ),
             title: Text(
-              S.of(context).my_orders,
+              currentUser?.value?.role == "staff" ||
+                      currentUser?.value?.role == "restaurant_manager"
+                  ? "Orders"
+                  : S.of(context).my_orders,
               style: Theme.of(context).textTheme.subtitle1,
             ),
           ),

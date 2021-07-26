@@ -12,7 +12,7 @@ import 'order_repository.dart' as orderRepo;
 ValueNotifier<User> currentUser = new ValueNotifier(User());
 
 Future<User> login(User user) async {
-  final String url = '${GlobalConfiguration().getValue('api_base_urlX')}';
+  final String url = '${GlobalConfiguration().getValue('api_base_url')}';
   final client = new http.Client();
   final loginResponse = await client.post(
     url + 'auth/me',
@@ -57,7 +57,7 @@ Future<User> register(User user) async {
 
 Future<void> getUserData(String token) async {
   try {
-    final String url = '${GlobalConfiguration().getValue('api_base_urlX')}';
+    final String url = '${GlobalConfiguration().getValue('api_base_url')}';
     final client = new http.Client();
     final userResponse = await client.get(
       url + 'users/me',
@@ -80,8 +80,26 @@ Future<void> getUserRoleData() async {
         url + 'customer/${currentUser.value.id}',
       );
       print(customerResponse.body);
-      currentUser.value.addCustomerData(
+      currentUser.value.addRoleData(
         (json.decode(customerResponse.body)['data'] as List).elementAt(0),
+      );
+    }
+    else if (currentUser.value.role == "staff"){
+      final staffResponse = await client.get(
+        url + 'staff/${currentUser.value.id}',
+      );
+      print(staffResponse.body);
+      currentUser.value.addRoleData(
+        (json.decode(staffResponse.body)['data'] as List).elementAt(0),
+      );
+    }
+    else if (currentUser.value.role == "restaurant_manager"){
+      final managerResponse = await client.get(
+        url + 'managers/${currentUser.value.id}',
+      );
+      print(managerResponse.body);
+      currentUser.value.addRoleData(
+        (json.decode(managerResponse.body)['data'] as List).elementAt(0),
       );
     }
   } catch (e) {

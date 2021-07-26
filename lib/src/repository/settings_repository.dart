@@ -27,7 +27,7 @@ Future<void> setCachingOption() async {
   if (prefs.containsKey('cachingDate')) {
     DateTime cachingDate = DateTime.parse(prefs.getString('cachingDate'));
     useCaching.value =
-    DateTime.now().difference(cachingDate).inHours < 6 ? true : false;
+    DateTime.now().difference(cachingDate).inHours < 6 ? false : false;
   } else
     useCaching.value = false;
   // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member

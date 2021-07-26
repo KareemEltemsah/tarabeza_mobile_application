@@ -129,7 +129,7 @@ class HomeController extends ControllerMVC {
             .forEach((e) => _temp.add(e));
         _temp.forEach((element) async {
           final response = await client.get(
-              '${GlobalConfiguration().getValue('api_base_url')}restaurants/${element['id'].toString()}');
+              '${GlobalConfiguration().getValue('api_base_url')}restaurants/${element['restaurant_id'].toString()}');
           if ((json.decode(response.body)['data']['restaurant_data'] as List)
                   .length >
               0) {

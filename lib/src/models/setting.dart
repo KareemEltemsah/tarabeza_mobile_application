@@ -40,7 +40,7 @@ class Setting {
     mobileLanguage.value = Locale('en', '');
     appVersion = 'Demo';
     distanceUnit = 'km';
-    enableVersion = true;
+    enableVersion = false;
     defaultCurrency = "E£";
     currencyDecimalDigits = 2;
     currencyRight = false;
