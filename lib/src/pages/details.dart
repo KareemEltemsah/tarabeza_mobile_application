@@ -63,7 +63,7 @@ class _DetailsWidgetState extends StateMVC<DetailsWidget> {
   void _selectTab(int tabItem) {
     setState(() {
       widget.currentTab = tabItem;
-      _con.getRestaurant("27" /*widget.routeArgument.param*/).then((value) {
+      _con.getRestaurant(widget.routeArgument.param).then((value) {
         print("rest map");
         print(_con.restaurant.toMap());
         switch (tabItem) {

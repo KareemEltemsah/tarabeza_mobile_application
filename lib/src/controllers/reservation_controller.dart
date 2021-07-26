@@ -31,3 +31,32 @@ class ReservationController extends ControllerMVC {
     return (response.statusCode == 201) ? true : false;
   }
 
+  Future<void> getUserReservations() async {
+    final String url = '${GlobalConfiguration().getValue('api_base_url')}'
+        'customer/reservations/${userRepo.currentUser.value.customer_id}';
+    final client = new http.Client();
+    final reservationsResponse = await client.get(url);
+    // print(reservationsResponse.body);
+    setState(() {
+      reservations = (jsonDecode(reservationsResponse.body)["data"] as List)
+          .map((e) => Reservation.fromJSON(e))
+          .where((element) => element.id != null)
+          .toList();
+    });
+  }
+
+  Future<void> getRestaurantReservations() async {
+    final String url =
+        '${GlobalConfiguration().getValue('api_base_url')}'
+        'restaurant/reservations/${userRepo.currentUser.value.restaurant_id}';
+    final client = new http.Client();
+    final reservationsResponse = await client.get(url);
+    // print(reservationsResponse.body);
+    setState(() {
+      reservations = (jsonDecode(reservationsResponse.body)["data"] as List)
+          .map((e) => Reservation.fromJSON(e))
+          .where((element) => element.id != null)
+          .toList();
+    });
+  }
+}
