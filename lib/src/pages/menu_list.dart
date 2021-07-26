@@ -80,6 +80,38 @@ class _MenuWidgetState extends StateMVC<MenuWidget> {
             mainAxisAlignment: MainAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
+              selectedCategories != ['0'] && _con.recommendedItems.isNotEmpty
+                  ? Column(
+                children: [
+                  Center(
+                    child: Text(
+                      "Recommended items in selected category",
+                      style: Theme.of(context).textTheme.subtitle1,
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  ListView.separated(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    primary: false,
+                    itemCount: _con.recommendedItems.length,
+                    separatorBuilder: (context, index) {
+                      return SizedBox(height: 10);
+                    },
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: ItemWidget(
+                          heroTag: 'menu_list',
+                          item: _con.recommendedItems.elementAt(index),
+                          clickable: true,
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              )
+                  : SizedBox(height: 0),
               ListTile(
                 dense: true,
                 contentPadding:

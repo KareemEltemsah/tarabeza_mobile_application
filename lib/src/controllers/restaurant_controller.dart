@@ -25,10 +25,25 @@ class RestaurantController extends ControllerMVC {
   List<RestaurantTable> tables = <RestaurantTable>[];
 
   List<Item> selectedItems = <Item>[];
+  List<RestaurantTable> availableTables = <RestaurantTable>[];
+  List<Item> recommendedItems = <Item>[];
   GlobalKey<ScaffoldState> scaffoldKey;
 
   RestaurantController() {
     this.scaffoldKey = new GlobalKey<ScaffoldState>();
+  }
+
+  Future<void> getRecommendationsByCategory(String category_id) async {
+    final String url =
+        '${GlobalConfiguration().getValue('api_base_url')}menu/recommend/${restaurant.id}/${category_id}';
+    final client = new http.Client();
+    final menuResponse = await client.get(url);
+    print(menuResponse);
+    List<String> _IDs = new List<String>();
+    _IDs = (json.decode(menuResponse.body)['data'] as List).map((i) => i["id"].toString()).toList();
+    setState(() {
+      recommendedItems = items.where((element) => _IDs.contains(element.id)).toList();
+    });
   }
 
   Future<void> getRestaurant(String id) async {
@@ -152,6 +167,47 @@ class RestaurantController extends ControllerMVC {
         .toList();
   }
 
+  Future<void> addTable(RestaurantTable table) async {
+    final String url =
+        '${GlobalConfiguration().getValue('api_base_url')}tables';
+    final client = new http.Client();
+    final addResponse = await client.post(
+      url,
+      body: json.encode(table.toMap()),
+    );
+    // print(addResponse.body);
+  }
+
+  Future<void> holdTable(RestaurantTable table) async {
+    final String url = '${GlobalConfiguration().getValue('api_base_url')}'
+        'tables/hold/${table.restaurant_id}/${table.id}';
+    final client = new http.Client();
+    final holdResponse = await client.get(url);
+    // print(holdResponse.body);
+    getRestaurantTables(table.restaurant_id);
+  }
+
+  Future<void> releaseTable(RestaurantTable table) async {
+    final String url = '${GlobalConfiguration().getValue('api_base_url')}'
+        'tables/release/${table.restaurant_id}/${table.id}';
+    final client = new http.Client();
+    final releaseResponse = await client.get(url);
+    // print(releaseResponse.body);
+    getRestaurantTables(table.restaurant_id);
+  }
+
+  Future<String> getTableNumberByID(String rest_id, String table_id) async {
+    await SgetRestaurantTables(rest_id);
+    try {
+      return tables
+          .elementAt(tables.indexWhere((element) => element.id == table_id))
+          .number;
+    } catch (e) {
+      print(e);
+      return "#";
+    }
+  }
+
   Future<bool> addReview(String comment, int rate) async {
     final String url =
         '${GlobalConfiguration().getValue('api_base_url')}reviews/add';
@@ -177,6 +233,15 @@ class RestaurantController extends ControllerMVC {
             .where((element) => categoriesId.contains(element.category_id))
             .toList();
     }
+    categoriesId != ['0']
+        ? getRecommendationsByCategory(categoriesId.elementAt(0))
+        : clearRecommendations();
+  }
+
+  Future<void> clearRecommendations(){
+    setState((){
+      recommendedItems.clear();
+    });
   }
 
   Future<void> selectByName(String searchWord) async {
