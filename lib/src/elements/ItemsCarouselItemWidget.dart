@@ -1,6 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-
 import '../helpers/helper.dart';
 import '../models/item.dart';
 import '../models/route_argument.dart';
@@ -10,7 +8,8 @@ class ItemsCarouselItemWidget extends StatelessWidget {
   final Item item;
   final String heroTag;
 
-  ItemsCarouselItemWidget({Key key, this.heroTag, this.marginLeft, this.item}) : super(key: key);
+  ItemsCarouselItemWidget({Key key, this.heroTag, this.marginLeft, this.item})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +32,8 @@ class ItemsCarouselItemWidget extends StatelessWidget {
               Hero(
                 tag: heroTag + item.id,
                 child: Container(
-                  margin: EdgeInsetsDirectional.only(start: this.marginLeft, end: 20),
+                  margin: EdgeInsetsDirectional.only(
+                      start: this.marginLeft, end: 20),
                   width: 100,
                   height: 130,
                   child: ClipRRect(
@@ -41,8 +41,8 @@ class ItemsCarouselItemWidget extends StatelessWidget {
                     child: Image.network(
                       '',
                       fit: BoxFit.cover,
-                      errorBuilder: (BuildContext context,
-                          Object exception, StackTrace stackTrace) {
+                      errorBuilder: (BuildContext context, Object exception,
+                          StackTrace stackTrace) {
                         return Icon(Icons.fastfood);
                       },
                     ),
@@ -63,13 +63,18 @@ class ItemsCarouselItemWidget extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(100)),
-                  color: item.discount > 0 ? Colors.red : Theme.of(context).accentColor,
+                  color: item.discount > 0
+                      ? Colors.red
+                      : Theme.of(context).accentColor,
                 ),
                 alignment: AlignmentDirectional.topEnd,
                 child: Helper.getPrice(
                   item.getPrice(),
                   context,
-                  style: Theme.of(context).textTheme.bodyText1.merge(TextStyle(color: Theme.of(context).primaryColor)),
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText1
+                      .merge(TextStyle(color: Theme.of(context).primaryColor)),
                 ),
               ),
             ],
@@ -77,7 +82,8 @@ class ItemsCarouselItemWidget extends StatelessWidget {
           SizedBox(height: 5),
           Container(
               width: 100,
-              margin: EdgeInsetsDirectional.only(start: this.marginLeft, end: 20),
+              margin:
+                  EdgeInsetsDirectional.only(start: this.marginLeft, end: 20),
               child: Column(
                 children: <Widget>[
                   Text(

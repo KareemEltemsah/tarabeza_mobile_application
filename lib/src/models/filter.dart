@@ -1,4 +1,3 @@
-// import '../helpers/custom_trace.dart';
 import '../models/category.dart';
 
 class Filter {

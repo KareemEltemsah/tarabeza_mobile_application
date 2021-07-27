@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:intl/intl.dart';
 import '../repository/user_repository.dart';
-
 import '../../generated/l10n.dart';
 import '../models/user.dart';
 
@@ -136,7 +135,8 @@ class _ProfileSettingsDialogState extends State<ProfileSettingsDialog> {
                           style: TextStyle(color: Theme.of(context).hintColor),
                           keyboardType: TextInputType.text,
                           decoration: getInputDecoration(
-                              labelText: "${S.of(context).password} to Confirm"),
+                              labelText:
+                                  "${S.of(context).password} to Confirm"),
                           validator: (input) => input.length < 8
                               ? S.of(context).should_be_at_least_8_characters
                               : null,

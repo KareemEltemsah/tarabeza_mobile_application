@@ -1,6 +1,3 @@
-import '../models/restaurant.dart';
-import '../models/user.dart';
-
 class Review {
   String id;
   String customer_name;

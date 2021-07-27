@@ -1,11 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../models/user.dart';
 import 'order_repository.dart' as orderRepo;
 
@@ -83,8 +81,7 @@ Future<void> getUserRoleData() async {
       currentUser.value.addRoleData(
         (json.decode(customerResponse.body)['data'] as List).elementAt(0),
       );
-    }
-    else if (currentUser.value.role == "staff"){
+    } else if (currentUser.value.role == "staff") {
       final staffResponse = await client.get(
         url + 'staff/${currentUser.value.id}',
       );
@@ -92,8 +89,7 @@ Future<void> getUserRoleData() async {
       currentUser.value.addRoleData(
         (json.decode(staffResponse.body)['data'] as List).elementAt(0),
       );
-    }
-    else if (currentUser.value.role == "restaurant_manager"){
+    } else if (currentUser.value.role == "restaurant_manager") {
       final managerResponse = await client.get(
         url + 'managers/${currentUser.value.id}',
       );

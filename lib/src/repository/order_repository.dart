@@ -11,8 +11,8 @@ addOrderItem(OrderItem orderItem) {
   //set restaurant id
   if (currentOrder.value.orderItems.length == 0) {
     userRepo.currentUser.value.role == 'customer'
-        ?
-    currentOrder.value.customer_id = userRepo.currentUser.value.customer_id
+        ? currentOrder.value.customer_id =
+            userRepo.currentUser.value.customer_id
         : currentOrder.value.customer_id = '242';
     currentOrder.value.restaurant_id = orderItem.item.restaurant_id;
   }
@@ -20,10 +20,7 @@ addOrderItem(OrderItem orderItem) {
   if (currentOrder.value.orderItems.contains(orderItem)) {
     int index = currentOrder.value.orderItems
         .indexWhere((element) => element == orderItem);
-    currentOrder.value.orderItems
-        .elementAt(index)
-        .qty +=
-        orderItem.qty;
+    currentOrder.value.orderItems.elementAt(index).qty += orderItem.qty;
   } else //add new item
     currentOrder.value.orderItems.add(orderItem);
   // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member

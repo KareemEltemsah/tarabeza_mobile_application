@@ -1,21 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
-
 import '../../generated/l10n.dart';
 import '../controllers/restaurant_controller.dart';
 import '../elements/CircularLoadingWidget.dart';
 import '../elements/DrawerWidget.dart';
-
-import '../elements/PermissionDeniedWidget.dart';
 import 'restaurant.dart';
 import '../models/route_argument.dart';
-import '../repository/user_repository.dart';
-
-// import 'map.dart';
 import 'menu_list.dart';
 import 'reviews.dart';
-import '../models/restaurant.dart';
 
+// ignore: must_be_immutable
 class DetailsWidget extends StatefulWidget {
   RouteArgument routeArgument;
   dynamic currentTab;

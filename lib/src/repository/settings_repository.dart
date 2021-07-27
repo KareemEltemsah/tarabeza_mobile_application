@@ -1,10 +1,8 @@
 import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../models/setting.dart';
 
 ValueNotifier<Setting> setting = new ValueNotifier(new Setting());
@@ -27,7 +25,7 @@ Future<void> setCachingOption() async {
   if (prefs.containsKey('cachingDate')) {
     DateTime cachingDate = DateTime.parse(prefs.getString('cachingDate'));
     useCaching.value =
-    DateTime.now().difference(cachingDate).inHours < 6 ? true : false;
+        DateTime.now().difference(cachingDate).inHours < 6 ? true : false;
   } else
     useCaching.value = false;
   // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
-
 import '../../generated/l10n.dart';
 import '../controllers/filter_controller.dart';
 import '../elements/CircularLoadingWidget.dart';
@@ -56,7 +55,8 @@ class _FilterWidgetState extends StateMVC<FilterWidget> {
                       ? CircularLoadingWidget(height: 100)
                       : ExpansionTile(
                           title: Text(S.of(context).categories),
-                          children: List.generate(_con.categories.length, (index) {
+                          children:
+                              List.generate(_con.categories.length, (index) {
                             return CheckboxListTile(
                               controlAffinity: ListTileControlAffinity.trailing,
                               value: _con.categories.elementAt(index).selected,

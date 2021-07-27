@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
-
 import '../../generated/l10n.dart';
 import '../controllers/user_controller.dart';
 import '../elements/DrawerWidget.dart';
@@ -8,7 +7,6 @@ import '../elements/PermissionDeniedWidget.dart';
 import '../elements/ProfileAvatarWidget.dart';
 import '../repository/user_repository.dart' as userRepo;
 import '../elements/ProfileSettingsDialog.dart';
-import '../helpers/app_config.dart' as config;
 
 class ProfileWidget extends StatefulWidget {
   final GlobalKey<ScaffoldState> parentScaffoldKey;

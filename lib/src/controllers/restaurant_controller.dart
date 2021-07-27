@@ -1,13 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tarabeza_mobile_application/src/models/reservation.dart';
-
+import '../models/reservation.dart';
 import '../models/category.dart';
 import '../models/item.dart';
 import '../models/table.dart';
@@ -191,7 +189,7 @@ class RestaurantController extends ControllerMVC {
     final client = new http.Client();
     final holdResponse = await client.get(url);
     // print(holdResponse.body);
-      getRestaurantTables(table.restaurant_id);
+    getRestaurantTables(table.restaurant_id);
   }
 
   Future<void> releaseTable(RestaurantTable table) async {
@@ -200,7 +198,7 @@ class RestaurantController extends ControllerMVC {
     final client = new http.Client();
     final releaseResponse = await client.get(url);
     // print(releaseResponse.body);
-      getRestaurantTables(table.restaurant_id);
+    getRestaurantTables(table.restaurant_id);
   }
 
   Future<String> getTableNumberByID(String rest_id, String table_id) async {

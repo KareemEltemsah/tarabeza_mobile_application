@@ -4,10 +4,8 @@ import 'package:mvc_pattern/mvc_pattern.dart';
 import '../elements/BlockButtonWidget.dart';
 import '../models/table.dart';
 import '../controllers/restaurant_controller.dart';
-
 import '../../generated/l10n.dart';
 import '../controllers/order_controller.dart';
-
 import '../elements/OrderItemWidget.dart';
 import '../elements/EmptyOrderWidget.dart';
 import '../repository/order_repository.dart' as orderRepo;

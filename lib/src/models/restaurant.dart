@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'item.dart';
-import 'category.dart';
-import 'review.dart';
-import 'table.dart';
-
 class Restaurant {
   String id;
   String name;
@@ -34,7 +29,8 @@ class Restaurant {
       latitude = jsonMap['latitude'].toString() ?? '';
       rating = jsonMap['rating'].toString();
       number_of_ratings = jsonMap['number_of_ratings'].toString();
-      reservation_active = jsonMap['reservation_active'].toString() == '1' ? true : false;
+      reservation_active =
+          jsonMap['reservation_active'].toString() == '1' ? true : false;
       opening_time = jsonMap['opening_time'];
       closing_time = jsonMap['closing_time'];
       review_count = jsonMap['review_count'].toString();

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
-
 import '../../generated/l10n.dart';
 import '../controllers/order_controller.dart';
 import '../elements/EmptyOrdersWidget.dart';
 import '../elements/WholeOrderItemWidget.dart';
-import '../repository/user_repository.dart' as userRepo;
 import '../elements/PermissionDeniedWidget.dart';
 import '../repository/user_repository.dart';
 
@@ -29,9 +27,9 @@ class _OrdersWidgetState extends StateMVC<OrdersWidget> {
   void initState() {
     currentUser.value.apiToken != null
         ? currentUser.value.role == "staff" ||
-        currentUser.value.role == "restaurant_manager"
-        ? _con.getRestaurantOrders()
-        : _con.getUserOrders()
+                currentUser.value.role == "restaurant_manager"
+            ? _con.getRestaurantOrders()
+            : _con.getUserOrders()
         : null;
     super.initState();
   }
@@ -73,7 +71,8 @@ class _OrdersWidgetState extends StateMVC<OrdersWidget> {
                           ? _con.getRestaurantOrders
                           : _con.getUserOrders,
                       child: SingleChildScrollView(
-                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,

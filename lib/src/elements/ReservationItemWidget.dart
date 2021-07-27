@@ -22,11 +22,11 @@ class _ReservationItemWidgetState extends State<ReservationItemWidget> {
     RestaurantController tempCon = new RestaurantController();
     String n = await tempCon.getTableNumberByID(
         widget.reservation.restaurant_id, widget.reservation.table_id);
-    try{
-    setState(() {
-      tableNumber = n;
-    });}
-    catch(e){
+    try {
+      setState(() {
+        tableNumber = n;
+      });
+    } catch (e) {
       print(e);
     }
   }
@@ -87,7 +87,7 @@ class _ReservationItemWidgetState extends State<ReservationItemWidget> {
                           style: Theme.of(context).textTheme.headline4,
                         ),
                         Text(
-                          widget.reservation.requested_at.substring(5,16),
+                          widget.reservation.requested_at.substring(5, 16),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                           style: Theme.of(context).textTheme.subtitle2,

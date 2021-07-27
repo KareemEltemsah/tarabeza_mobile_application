@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
-import 'dart:async';
 import '../controllers/splash_screen_controller.dart';
 
 class SplashScreen extends StatefulWidget {

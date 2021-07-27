@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../generated/l10n.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
-
 import '../models/restaurant.dart';
 import '../controllers/restaurant_controller.dart';
 import '../models/route_argument.dart';
@@ -11,7 +10,8 @@ class ReviewsWidget extends StatefulWidget {
   final RouteArgument routeArgument;
   final GlobalKey<ScaffoldState> parentScaffoldKey;
 
-  ReviewsWidget({Key key, this.parentScaffoldKey, this.routeArgument}) : super(key: key);
+  ReviewsWidget({Key key, this.parentScaffoldKey, this.routeArgument})
+      : super(key: key);
 
   @override
   _ReviewsWidgetState createState() {
@@ -67,7 +67,7 @@ class _ReviewsWidgetState extends StateMVC<ReviewsWidget> {
                 ListTile(
                   dense: true,
                   contentPadding:
-                  EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   leading: Icon(
                     Icons.rate_review,
                     color: Theme.of(context).hintColor,

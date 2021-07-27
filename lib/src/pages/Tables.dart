@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
-import 'package:tarabeza_mobile_application/src/models/table.dart';
+import '../models/table.dart';
 import '../elements/TableItemWidget.dart';
-
 import '../../generated/l10n.dart';
 import '../controllers/restaurant_controller.dart';
-import '../elements/ReservationItemWidget.dart';
 import '../repository/user_repository.dart' as userRepo;
-import '../elements/PermissionDeniedWidget.dart';
 import '../repository/user_repository.dart';
 
 class TablesWidget extends StatefulWidget {
@@ -176,7 +173,7 @@ class _TablesWidgetState extends StateMVC<TablesWidget> {
               ),
             )
           : SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,

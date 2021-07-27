@@ -1,11 +1,8 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../generated/l10n.dart';
-
 import '../models/category.dart';
 import '../models/filter.dart';
 import '../repository/category_repository.dart';
@@ -41,7 +38,9 @@ class FilterController extends ControllerMVC {
 
   void listenForCategories({String message}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.containsKey('categories') && prefs.containsKey('allCategories') && settingsRepo.useCaching.value) {
+    if (prefs.containsKey('categories') &&
+        prefs.containsKey('allCategories') &&
+        settingsRepo.useCaching.value) {
       print('category from prefs');
       List _categories = json.decode(await prefs.getString('categories'));
       _categories.forEach((element) {
@@ -115,7 +114,9 @@ class FilterController extends ControllerMVC {
             !categories.elementAt(index).selected;
         categories.elementAt(0).selected = false;
         bool empty = true;
-        categories.forEach((element) {if (element.selected) empty = false;});
+        categories.forEach((element) {
+          if (element.selected) empty = false;
+        });
         empty ? categories.elementAt(0).selected = true : null;
       });
     }

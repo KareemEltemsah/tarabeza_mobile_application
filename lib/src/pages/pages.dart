@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tarabeza_mobile_application/src/pages/Tables.dart';
-
+import 'Tables.dart';
 import '../elements/DrawerWidget.dart';
 import '../helpers/helper.dart';
 import '../models/route_argument.dart';

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
-
 import '../../generated/l10n.dart';
 import '../controllers/reservation_controller.dart';
 import '../elements/EmptyReservationsWidget.dart';
 import '../elements/ReservationItemWidget.dart';
-import '../repository/user_repository.dart' as userRepo;
 import '../elements/PermissionDeniedWidget.dart';
 import '../repository/user_repository.dart';
 
@@ -29,9 +27,9 @@ class _ReservationsWidgetState extends StateMVC<ReservationsWidget> {
   void initState() {
     currentUser.value.apiToken != null
         ? currentUser.value.role == "staff" ||
-        currentUser.value.role == "restaurant_manager"
-        ? _con.getRestaurantReservations()
-        : _con.getUserReservations()
+                currentUser.value.role == "restaurant_manager"
+            ? _con.getRestaurantReservations()
+            : _con.getUserReservations()
         : null;
     super.initState();
   }

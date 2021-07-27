@@ -1,8 +1,6 @@
 import 'dart:convert';
-
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../models/restaurant.dart';
 import '../repository/restaurant_repository.dart';
 import '../repository/search_repository.dart';

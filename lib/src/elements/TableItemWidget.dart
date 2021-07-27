@@ -9,14 +9,14 @@ class TableItemWidget extends StatefulWidget {
   VoidCallback hold;
   VoidCallback release;
 
-  TableItemWidget({Key key, this.table, this.heroTag, this.hold, this.release}) : super(key: key);
+  TableItemWidget({Key key, this.table, this.heroTag, this.hold, this.release})
+      : super(key: key);
 
   @override
   _TableItemWidgetState createState() => _TableItemWidgetState();
 }
 
 class _TableItemWidgetState extends State<TableItemWidget> {
-
   @override
   Widget build(BuildContext context) {
     return InkWell(

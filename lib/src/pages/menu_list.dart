@@ -1,14 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
-
 import '../../generated/l10n.dart';
 import '../controllers/restaurant_controller.dart';
 import '../elements/OrderButtonWidget.dart';
-import '../elements/DrawerWidget.dart';
 import '../elements/ItemWidget.dart';
 import '../repository/user_repository.dart' as userRepo;
-// import '../elements/SearchBarWidget.dart';
 import '../models/restaurant.dart';
 import '../models/route_argument.dart';
 
@@ -65,10 +62,11 @@ class _MenuWidgetState extends StateMVC<MenuWidget> {
               .merge(TextStyle(letterSpacing: 0)),
         ),
         actions: <Widget>[
-          userRepo.currentUser?.value?.role != "restaurant_manager" ?
-          new OrderButtonWidget(
-              iconColor: Theme.of(context).hintColor,
-              labelColor: Theme.of(context).accentColor) : SizedBox(width: 0),
+          userRepo.currentUser?.value?.role != "restaurant_manager"
+              ? new OrderButtonWidget(
+                  iconColor: Theme.of(context).hintColor,
+                  labelColor: Theme.of(context).accentColor)
+              : SizedBox(width: 0),
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
@@ -83,35 +81,37 @@ class _MenuWidgetState extends StateMVC<MenuWidget> {
             children: <Widget>[
               selectedCategories != ['0'] && _con.recommendedItems.isNotEmpty
                   ? Column(
-                children: [
-                  Center(
-                    child: Text(
-                      "Recommended items in selected category",
-                      style: Theme.of(context).textTheme.subtitle1,
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  ListView.separated(
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    primary: false,
-                    itemCount: _con.recommendedItems.length,
-                    separatorBuilder: (context, index) {
-                      return SizedBox(height: 10);
-                    },
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: ItemWidget(
-                          heroTag: 'menu_list',
-                          item: _con.recommendedItems.elementAt(index),
-                          clickable: userRepo.currentUser?.value?.role != "restaurant_manager",
+                      children: [
+                        Center(
+                          child: Text(
+                            "Recommended items in selected category",
+                            style: Theme.of(context).textTheme.subtitle1,
+                          ),
                         ),
-                      );
-                    },
-                  ),
-                ],
-              )
+                        SizedBox(height: 20),
+                        ListView.separated(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          primary: false,
+                          itemCount: _con.recommendedItems.length,
+                          separatorBuilder: (context, index) {
+                            return SizedBox(height: 10);
+                          },
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
+                              child: ItemWidget(
+                                heroTag: 'menu_list',
+                                item: _con.recommendedItems.elementAt(index),
+                                clickable: userRepo.currentUser?.value?.role !=
+                                    "restaurant_manager",
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    )
                   : SizedBox(height: 0),
               ListTile(
                 dense: true,
@@ -247,7 +247,8 @@ class _MenuWidgetState extends StateMVC<MenuWidget> {
                           child: ItemWidget(
                             heroTag: 'menu_list',
                             item: _con.selectedItems.elementAt(index),
-                            clickable: userRepo.currentUser?.value?.role != "restaurant_manager",
+                            clickable: userRepo.currentUser?.value?.role !=
+                                "restaurant_manager",
                           ),
                         );
                       },

@@ -8,7 +8,6 @@ class OrderItem {
 
   Item item;
 
-
   OrderItem(Item i, int q, this.id) {
     item = i;
     qty = q;
@@ -40,6 +39,4 @@ class OrderItem {
     map["total"] = getTotalPrice();
     return map;
   }
-
-
 }

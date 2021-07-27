@@ -13,7 +13,7 @@ class Order {
   String customer_name;
   String restaurant_name;
 
-  List<OrderItem> orderItems =<OrderItem>[];
+  List<OrderItem> orderItems = <OrderItem>[];
 
   Order() {
     orderItems = [];
@@ -25,15 +25,14 @@ class Order {
     restaurant_id = jsonMap["restaurant_id"].toString();
     table_id = jsonMap["table_id"].toString();
     table_number = jsonMap["table_number"].toString();
-    is_finished = jsonMap["is_finished"].toString() == "1" ? true: false;
-    is_approved = jsonMap["is_approved"].toString() == "1" ? true: false;
-    is_deleted = jsonMap["is_deleted"].toString() == "1" ? true: false;
+    is_finished = jsonMap["is_finished"].toString() == "1" ? true : false;
+    is_approved = jsonMap["is_approved"].toString() == "1" ? true : false;
+    is_deleted = jsonMap["is_deleted"].toString() == "1" ? true : false;
     created_at = jsonMap["created_at"];
     customer_name = jsonMap["first_name"] + " " + jsonMap["last_name"];
     restaurant_name = jsonMap["restaurant_name"];
     orderItems.add(new OrderItem.fromJSON(jsonMap));
-    try {
-    } catch (e) {
+    try {} catch (e) {
       orderItems = [];
     }
   }

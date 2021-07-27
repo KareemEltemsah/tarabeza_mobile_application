@@ -21,9 +21,12 @@ class Item {
       category_id = jsonMap['category_id'].toString();
       name = jsonMap['name'];
       description = jsonMap['description'].toString() ?? '';
-      price = jsonMap['price'] != null ? double.parse(jsonMap['price'].toString()) : 0.0;
-      discount =
-          jsonMap['discount'] != null ? double.parse(jsonMap['discount'].toString()) : 0.0;
+      price = jsonMap['price'] != null
+          ? double.parse(jsonMap['price'].toString())
+          : 0.0;
+      discount = jsonMap['discount'] != null
+          ? double.parse(jsonMap['discount'].toString())
+          : 0.0;
       image = jsonMap['image'].toString() ?? '';
       is_available = jsonMap['is_available'].toString() == '1' ? true : false;
       category_name = jsonMap['category_name'] ?? '';
@@ -64,11 +67,7 @@ class Item {
   }
 
   Map toMapAsTopItem() {
-    return {
-      "id": id,
-      "name": name,
-      "count": count_orders
-    };
+    return {"id": id, "name": name, "count": count_orders};
   }
 
   double getPrice() {

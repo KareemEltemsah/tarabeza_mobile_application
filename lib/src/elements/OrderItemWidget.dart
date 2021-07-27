@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-
 import '../helpers/helper.dart';
 import '../models/order_item.dart';
-import '../models/route_argument.dart';
 
 // ignore: must_be_immutable
 class OrderItemWidget extends StatefulWidget {

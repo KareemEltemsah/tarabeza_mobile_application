@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../elements/CircularLoadingWidget.dart';
 import '../elements/ReviewItemWidget.dart';
 import '../models/review.dart';

@@ -1,11 +1,8 @@
 import 'dart:convert';
-
 import 'package:global_configuration/global_configuration.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tarabeza_mobile_application/src/models/topHour.dart';
-
-import '../helpers/helper.dart';
+import '../models/topHour.dart';
 import 'package:http/http.dart' as http;
 import '../models/item.dart';
 import '../models/restaurant.dart';
@@ -21,7 +18,6 @@ class HomeController extends ControllerMVC {
   String count_orders;
   List<Item> topItems = new List<Item>();
   List<TopHour> topHours = new List<TopHour>();
-
 
   HomeController() {
     userRepo.currentUser?.value?.role != "restaurant_manager"
@@ -166,15 +162,20 @@ class HomeController extends ControllerMVC {
     final client = new http.Client();
     try {
       final dashboard = await client.get(url);
-      setState((){
+      setState(() {
         revenue = json.decode(dashboard.body)['data']['revenue'].toString();
-        count_orders = json.decode(dashboard.body)['data']['count_orders'].toString();
-        topItems = (json.decode(dashboard.body)['data']['top_items'] as List).map((e) => new Item.AsTopItemFromJSON(e)).toList();
-        topHours = (json.decode(dashboard.body)['data']['top_hours'] as List).map((e) => new TopHour.fromJSON(e)).toList();
+        count_orders =
+            json.decode(dashboard.body)['data']['count_orders'].toString();
+        topItems = (json.decode(dashboard.body)['data']['top_items'] as List)
+            .map((e) => new Item.AsTopItemFromJSON(e))
+            .toList();
+        topHours = (json.decode(dashboard.body)['data']['top_hours'] as List)
+            .map((e) => new TopHour.fromJSON(e))
+            .toList();
         revenue = double.parse(revenue).toStringAsFixed(2);
       });
-      print (revenue);
-      print (count_orders);
+      print(revenue);
+      print(count_orders);
       print(topItems.map((e) => e.toMapAsTopItem()));
       print(topHours.map((e) => e.toMap()));
     } catch (e) {

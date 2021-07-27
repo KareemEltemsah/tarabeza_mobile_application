@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../../generated/l10n.dart';
 import '../helpers/helper.dart';
 import '../models/restaurant.dart';

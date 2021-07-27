@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
-import 'package:tarabeza_mobile_application/src/models/route_argument.dart';
-
+import '../models/route_argument.dart';
 import '../../generated/l10n.dart';
 import '../helpers/app_config.dart' as config;
 import '../repository/settings_repository.dart';

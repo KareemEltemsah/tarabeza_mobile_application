@@ -1,12 +1,7 @@
 import 'dart:convert';
-
-import 'package:global_configuration/global_configuration.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
-
 import '../helpers/helper.dart';
 import '../models/category.dart';
-import '../models/filter.dart';
 
 Future<Stream<Category>> getCategories() async {
   Uri uri = Helper.getUri('restaurants/categories');

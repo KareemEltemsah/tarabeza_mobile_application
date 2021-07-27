@@ -4,7 +4,6 @@ import 'package:global_configuration/global_configuration.dart';
 import '../../generated/l10n.dart';
 import '../controllers/home_controller.dart';
 import '../elements/CardsCarouselWidget.dart';
-
 import '../elements/ItemsCarouselWidget.dart';
 import '../repository/settings_repository.dart' as settingsRepo;
 import '../elements/SearchWidget.dart';

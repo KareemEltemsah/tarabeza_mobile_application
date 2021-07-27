@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../elements/ItemsCarouselItemWidget.dart';
 import '../elements/ItemsCarouselLoaderWidget.dart';
 import '../models/item.dart';
@@ -9,7 +8,8 @@ class ItemsCarouselWidget extends StatelessWidget {
   List<Item> itemsList = <Item>[];
   final String heroTag;
 
-  ItemsCarouselWidget({Key key, this.itemsList, this.heroTag}) : super(key: key);
+  ItemsCarouselWidget({Key key, this.itemsList, this.heroTag})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

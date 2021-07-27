@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../generated/l10n.dart';
 import '../helpers/app_config.dart' as config;
 
@@ -13,7 +12,6 @@ class EmptyOrderWidget extends StatefulWidget {
 }
 
 class _EmptyOrderWidgetState extends State<EmptyOrderWidget> {
-
   @override
   void initState() {
     super.initState();

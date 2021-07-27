@@ -1,11 +1,9 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:http/http.dart' as http;
 import '../models/order_item.dart';
-
 import '../models/order.dart';
 import '../repository/order_repository.dart' as orderRepo;
 import '../repository/user_repository.dart' as userRepo;

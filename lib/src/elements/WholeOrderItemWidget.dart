@@ -157,7 +157,8 @@ class _WholeOrderItemWidgetState extends State<WholeOrderItemWidget> {
                                         .item_name,
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 2,
-                                    style: Theme.of(context).textTheme.subtitle2,
+                                    style:
+                                        Theme.of(context).textTheme.subtitle2,
                                   ),
                                   flex: 3,
                                 ),
@@ -170,7 +171,8 @@ class _WholeOrderItemWidgetState extends State<WholeOrderItemWidget> {
                                         .toString(),
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 2,
-                                    style: Theme.of(context).textTheme.subtitle2,
+                                    style:
+                                        Theme.of(context).textTheme.subtitle2,
                                   ),
                                   flex: 1,
                                 ),
@@ -183,7 +185,8 @@ class _WholeOrderItemWidgetState extends State<WholeOrderItemWidget> {
                                         .toString(),
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 2,
-                                    style: Theme.of(context).textTheme.subtitle2,
+                                    style:
+                                        Theme.of(context).textTheme.subtitle2,
                                   ),
                                   flex: 1,
                                 ),
