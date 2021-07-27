@@ -7,7 +7,7 @@ import '../controllers/restaurant_controller.dart';
 import '../elements/OrderButtonWidget.dart';
 import '../elements/DrawerWidget.dart';
 import '../elements/ItemWidget.dart';
-
+import '../repository/user_repository.dart' as userRepo;
 // import '../elements/SearchBarWidget.dart';
 import '../models/restaurant.dart';
 import '../models/route_argument.dart';
@@ -65,9 +65,10 @@ class _MenuWidgetState extends StateMVC<MenuWidget> {
               .merge(TextStyle(letterSpacing: 0)),
         ),
         actions: <Widget>[
+          userRepo.currentUser?.value?.role != "restaurant_manager" ?
           new OrderButtonWidget(
               iconColor: Theme.of(context).hintColor,
-              labelColor: Theme.of(context).accentColor),
+              labelColor: Theme.of(context).accentColor) : SizedBox(width: 0),
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
@@ -104,7 +105,7 @@ class _MenuWidgetState extends StateMVC<MenuWidget> {
                         child: ItemWidget(
                           heroTag: 'menu_list',
                           item: _con.recommendedItems.elementAt(index),
-                          clickable: true,
+                          clickable: userRepo.currentUser?.value?.role != "restaurant_manager",
                         ),
                       );
                     },
@@ -246,7 +247,7 @@ class _MenuWidgetState extends StateMVC<MenuWidget> {
                           child: ItemWidget(
                             heroTag: 'menu_list',
                             item: _con.selectedItems.elementAt(index),
-                            clickable: true,
+                            clickable: userRepo.currentUser?.value?.role != "restaurant_manager",
                           ),
                         );
                       },

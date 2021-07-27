@@ -11,6 +11,7 @@ import '../controllers/order_controller.dart';
 import '../elements/OrderItemWidget.dart';
 import '../elements/EmptyOrderWidget.dart';
 import '../repository/order_repository.dart' as orderRepo;
+import '../repository/user_repository.dart' as userRepo;
 import '../models/route_argument.dart';
 
 class OrderWidget extends StatefulWidget {
@@ -34,7 +35,7 @@ class _OrderWidgetState extends StateMVC<OrderWidget> {
   getRestaurantTables() async {
     RestaurantController tempCon = new RestaurantController();
     await tempCon
-        .SgetRestaurantTables(orderRepo.currentOrder.value.restaurant_id);
+        .getRestaurantTablesNoState(orderRepo.currentOrder.value.restaurant_id);
     setState(() {
       tables = tempCon.tables;
     });
@@ -42,8 +43,8 @@ class _OrderWidgetState extends StateMVC<OrderWidget> {
 
   @override
   void initState() {
-    super.initState();
     getRestaurantTables();
+    super.initState();
   }
 
   @override
@@ -184,8 +185,13 @@ class _OrderWidgetState extends StateMVC<OrderWidget> {
                                         duration: Duration(seconds: 3),
                                       ))
                                     : _con.makeOrder().then((value) =>
-                                        Navigator.of(context)
-                                            .pushNamed('/Pages', arguments: 2));
+                                        Navigator.of(context).pushNamed(
+                                            '/Pages',
+                                            arguments: userRepo.currentUser
+                                                        .value.role ==
+                                                    "customer"
+                                                ? 2
+                                                : 1));
                               },
                             )
                           ],

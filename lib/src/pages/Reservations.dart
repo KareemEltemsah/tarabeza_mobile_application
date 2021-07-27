@@ -23,11 +23,17 @@ class _ReservationsWidgetState extends StateMVC<ReservationsWidget> {
 
   _ReservationsWidgetState() : super(ReservationController()) {
     _con = controller;
+  }
+
+  @override
+  void initState() {
     currentUser.value.apiToken != null
-        ? currentUser.value.role == "staff"
+        ? currentUser.value.role == "staff" ||
+        currentUser.value.role == "restaurant_manager"
         ? _con.getRestaurantReservations()
         : _con.getUserReservations()
-        : null;;
+        : null;
+    super.initState();
   }
 
   @override
@@ -45,7 +51,7 @@ class _ReservationsWidgetState extends StateMVC<ReservationsWidget> {
         centerTitle: true,
         title: Text(
           currentUser?.value?.role == "staff" ||
-              currentUser?.value?.role == "restaurant_manager"
+                  currentUser?.value?.role == "restaurant_manager"
               ? "Reservations"
               : S.of(context).my_reservations,
           style: Theme.of(context)
@@ -63,7 +69,7 @@ class _ReservationsWidgetState extends StateMVC<ReservationsWidget> {
                       ? _con.getRestaurantReservations
                       : _con.getUserReservations,
                   child: SingleChildScrollView(
-                    padding: EdgeInsets.symmetric(vertical: 10),
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,

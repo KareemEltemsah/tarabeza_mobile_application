@@ -47,7 +47,9 @@ class ProfileAvatarWidget extends StatelessWidget {
                 .merge(TextStyle(color: Theme.of(context).primaryColor)),
           ),
           Text(
-            user.role,
+            user.role == "restaurant_manager"
+                ? "restaurant manager"
+                : user.role,
             style: Theme.of(context)
                 .textTheme
                 .caption

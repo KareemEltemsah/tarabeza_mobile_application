@@ -194,9 +194,9 @@ class _ItemWidgetState extends State<ItemWidget> {
       splashColor: Theme.of(context).accentColor,
       focusColor: Theme.of(context).accentColor,
       highlightColor: Theme.of(context).primaryColor,
-      onTap: () {
-        widget.clickable ? _itemBottomSheet() : null;
-      },
+      onTap: widget.clickable ? () {
+         _itemBottomSheet();
+      }: null,
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
         decoration: BoxDecoration(

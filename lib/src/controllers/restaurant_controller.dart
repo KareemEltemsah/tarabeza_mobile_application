@@ -25,7 +25,8 @@ class RestaurantController extends ControllerMVC {
   List<RestaurantTable> tables = <RestaurantTable>[];
 
   List<Item> selectedItems = <Item>[];
-  List<RestaurantTable> availableTables = <RestaurantTable>[];
+  ValueNotifier<List<RestaurantTable>> availableTables =
+      new ValueNotifier(<RestaurantTable>[]);
   List<Item> recommendedItems = <Item>[];
   GlobalKey<ScaffoldState> scaffoldKey;
 
@@ -40,9 +41,12 @@ class RestaurantController extends ControllerMVC {
     final menuResponse = await client.get(url);
     print(menuResponse);
     List<String> _IDs = new List<String>();
-    _IDs = (json.decode(menuResponse.body)['data'] as List).map((i) => i["id"].toString()).toList();
+    _IDs = (json.decode(menuResponse.body)['data'] as List)
+        .map((i) => i["id"].toString())
+        .toList();
     setState(() {
-      recommendedItems = items.where((element) => _IDs.contains(element.id)).toList();
+      recommendedItems =
+          items.where((element) => _IDs.contains(element.id)).toList();
     });
   }
 
@@ -145,17 +149,19 @@ class RestaurantController extends ControllerMVC {
         '${GlobalConfiguration().getValue('api_base_url')}tables/available';
     final client = new http.Client();
     final tablesResponse =
-        await client.post(url, body: reservation.toTimeMap());
-    print(tablesResponse.body);
-    setState(() {
-      tables = (json.decode(tablesResponse.body)['data'] as List)
-          .map((i) => RestaurantTable.fromJSON(i))
-          .where((element) => element.id != null)
-          .toList();
-    });
+        await client.post(url, body: json.encode(reservation.toTimeMap()));
+    tablesResponse.statusCode == 200
+        ? setState(() {
+            availableTables.value =
+                (json.decode(tablesResponse.body)['data'] as List)
+                    .map((i) => RestaurantTable.fromJSON(i))
+                    .where((element) => element.id != null)
+                    .toList();
+          })
+        : null;
   }
 
-  Future<void> SgetRestaurantTables(String id) async {
+  Future<void> getRestaurantTablesNoState(String id) async {
     final String url =
         '${GlobalConfiguration().getValue('api_base_url')}tables/${id}';
     final client = new http.Client();
@@ -176,6 +182,7 @@ class RestaurantController extends ControllerMVC {
       body: json.encode(table.toMap()),
     );
     // print(addResponse.body);
+    getRestaurantTables(table.restaurant_id);
   }
 
   Future<void> holdTable(RestaurantTable table) async {
@@ -184,7 +191,7 @@ class RestaurantController extends ControllerMVC {
     final client = new http.Client();
     final holdResponse = await client.get(url);
     // print(holdResponse.body);
-    getRestaurantTables(table.restaurant_id);
+      getRestaurantTables(table.restaurant_id);
   }
 
   Future<void> releaseTable(RestaurantTable table) async {
@@ -193,11 +200,11 @@ class RestaurantController extends ControllerMVC {
     final client = new http.Client();
     final releaseResponse = await client.get(url);
     // print(releaseResponse.body);
-    getRestaurantTables(table.restaurant_id);
+      getRestaurantTables(table.restaurant_id);
   }
 
   Future<String> getTableNumberByID(String rest_id, String table_id) async {
-    await SgetRestaurantTables(rest_id);
+    await getRestaurantTablesNoState(rest_id);
     try {
       return tables
           .elementAt(tables.indexWhere((element) => element.id == table_id))
@@ -208,7 +215,8 @@ class RestaurantController extends ControllerMVC {
     }
   }
 
-  Future<bool> addReview(String comment, int rate) async {
+  Future<void> addReview(String comment, int rate) async {
+    print("$comment $rate");
     final String url =
         '${GlobalConfiguration().getValue('api_base_url')}reviews/add';
     final client = new http.Client();
@@ -221,6 +229,7 @@ class RestaurantController extends ControllerMVC {
         "rate": "${rate}"
       }),
     );
+    print(response.body);
     return (response.statusCode == 201) ? true : false;
   }
 
@@ -238,8 +247,8 @@ class RestaurantController extends ControllerMVC {
         : clearRecommendations();
   }
 
-  Future<void> clearRecommendations(){
-    setState((){
+  void clearRecommendations() {
+    setState(() {
       recommendedItems.clear();
     });
   }

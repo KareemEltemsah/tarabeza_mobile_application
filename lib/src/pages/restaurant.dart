@@ -1,13 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
-import 'package:tarabeza_mobile_application/src/models/table.dart';
+import '../models/table.dart';
 import '../models/reservation.dart';
-import '../elements/BlockButtonWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../../generated/l10n.dart';
 import '../repository/order_repository.dart' as orderRepo;
 import '../repository/user_repository.dart' as userRepo;
@@ -17,8 +14,6 @@ import '../elements/CircularLoadingWidget.dart';
 import '../helpers/helper.dart';
 import '../models/restaurant.dart';
 import '../models/route_argument.dart';
-import '../repository/settings_repository.dart';
-import '../repository/user_repository.dart';
 
 class RestaurantWidget extends StatefulWidget {
   final RouteArgument routeArgument;
@@ -46,13 +41,21 @@ class _RestaurantWidgetState extends StateMVC<RestaurantWidget> {
     _con = controller;
   }
 
+  getAvailableTables() {
+    setState(() {
+      reservation.restaurant_id = _con.restaurant.id;
+      reservation.h = h.toString();
+      reservation.m = m.toString();
+      _con.getAvailableTables(reservation);
+    });
+  }
+
   @override
   void initState() {
     _con.restaurant = widget.routeArgument.param as Restaurant;
     if (!orderRepo.isSameRestaurant(_con.restaurant.id))
       orderRepo.clearOrderItems();
-    _con.getRestaurantTables(_con.restaurant.id);
-    reservation.restaurant_id = _con.restaurant.id;
+    getAvailableTables();
     super.initState();
   }
 
@@ -265,12 +268,12 @@ class _RestaurantWidgetState extends StateMVC<RestaurantWidget> {
                                       padding: EdgeInsets.all(5),
                                       onPressed: userRepo.currentUser.value
                                                       .apiToken !=
-                                                  null ||
+                                                  null &&
                                               userRepo.currentUser?.value
-                                                      ?.role ==
-                                                  "staff" ||
+                                                      ?.role !=
+                                                  "staff" &&
                                               userRepo.currentUser?.value
-                                                      ?.role ==
+                                                      ?.role !=
                                                   "restaurant_manager"
                                           ? () {
                                               showDialog(
@@ -442,145 +445,191 @@ class _RestaurantWidgetState extends StateMVC<RestaurantWidget> {
                                     SizedBox(width: 20),
                                     FlatButton(
                                         padding: EdgeInsets.all(5),
-                                        onPressed: userRepo.currentUser.value
-                                                        .apiToken !=
-                                                    null ||
-                                                userRepo.currentUser?.value
-                                                        ?.role ==
-                                                    "staff" ||
-                                                userRepo.currentUser?.value
-                                                        ?.role ==
-                                                    "restaurant_manager"
-                                            ? () {
-                                          showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                // ignore: missing_return
-                                                return SimpleDialog(
-                                                  contentPadding:
-                                                  EdgeInsets.symmetric(
-                                                      horizontal: 20),
-                                                  titlePadding:
-                                                  EdgeInsets.symmetric(
-                                                      horizontal: 15,
-                                                      vertical: 20),
-                                                  title: Row(
-                                                    children: <Widget>[
-                                                      Icon(Icons
-                                                          .today_rounded),
-                                                      SizedBox(width: 10),
-                                                      Text(
-                                                        "Reservation",
-                                                        style: Theme.of(
-                                                            context)
-                                                            .textTheme
-                                                            .bodyText1,
-                                                      )
-                                                    ],
-                                                  ),
-                                                  children: <Widget>[
-                                                    Row(
-                                                      mainAxisAlignment: MainAxisAlignment.center,
-                                                      children: [
-                                                        Text(
-                                                          "pick time",
-                                                          style: Theme.of(context).textTheme.headline4,
-                                                        ),
-                                                        SizedBox(width: 5),
-                                                        DropdownButton(
-                                                            hint: Text('hh'),
-                                                            value: h,
-                                                            items: Iterable<int>.generate(25).skip(1).toList().map((t) {
-                                                              return DropdownMenuItem(value: t, child: new Text('$t'));
-                                                            }).toList(),
-                                                            onChanged: (t) {
-                                                              setState(() {
-                                                                h = t;
-                                                              });
-                                                            }),
-                                                        SizedBox(width: 2),
-                                                        DropdownButton(
-                                                            hint: Text('mm'),
-                                                            value: m,
-                                                            items: Iterable<int>.generate(60).toList().map((t) {
-                                                              return DropdownMenuItem(value: t, child: new Text('$t'));
-                                                            }).toList(),
-                                                            onChanged: (t) {
-                                                              setState(() {
-                                                                m = t;
-                                                              });
-                                                            }),
-                                                      ],
-                                                    ),
-                                                    SizedBox(height: 20),
-                                                    Row(
-                                                      mainAxisAlignment: MainAxisAlignment.center,
-                                                      children: [
-                                                        Text(
-                                                          "table",
-                                                          style: Theme.of(context).textTheme.headline4,
-                                                        ),
-                                                        SizedBox(width: 5),
-                                                        DropdownButton(
-                                                            hint: Text('Choose table'),
-                                                            value: selectedTable,
-                                                            items: _con.tables.map((t) {
-                                                              return DropdownMenuItem(
-                                                                  value: t,
-                                                                  child:
-                                                                  new Text('table #${t.number} - ${t.no_of_chairs} chairs'));
-                                                            }).toList(),
-                                                            onChanged: (t) {
-                                                              setState(() {
-                                                                selectedTable = t;
-                                                              });
-                                                            }),
-                                                      ],
-                                                    ),
-                                                    SizedBox(height: 20),
-                                                    Row(
-                                                      children: <Widget>[
-                                                        MaterialButton(
-                                                          onPressed: () {
-                                                            Navigator.pop(
-                                                                context);
-                                                          },
-                                                          child: Text(S
-                                                              .of(context)
-                                                              .cancel),
-                                                        ),
-                                                        MaterialButton(
-                                                          onPressed: () {
-                                                            if (h != null && m != null && selectedTable != null) {
-                                                              reservation.h = h.toString();
-                                                              reservation.m = m.toString();
-                                                              reservation.table_id = selectedTable.id;
-                                                              _con.addReservation(reservation);
-                                                              Navigator.pop(
-                                                                  context);
-                                                            }
-                                                          },
-                                                          child: Text(
-                                                            S
-                                                                .of(context)
-                                                                .submit,
-                                                            style: TextStyle(
-                                                                color: Theme.of(
-                                                                    context)
-                                                                    .accentColor),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                      mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .end,
-                                                    ),
-                                                    SizedBox(height: 10),
-                                                  ],
-                                                );
-                                              });
-                                              }
-                                            : null,
+                                        onPressed:
+                                            userRepo.currentUser.value
+                                                            .apiToken !=
+                                                        null &&
+                                                    userRepo.currentUser?.value
+                                                            ?.role !=
+                                                        "staff" &&
+                                                    userRepo.currentUser?.value
+                                                            ?.role !=
+                                                        "restaurant_manager"
+                                                ? () {
+                                                    showDialog(
+                                                        context: context,
+                                                        builder: (context) {
+                                                          // ignore: missing_return
+                                                          return SimpleDialog(
+                                                            contentPadding:
+                                                                EdgeInsets
+                                                                    .symmetric(
+                                                                        horizontal:
+                                                                            20),
+                                                            titlePadding: EdgeInsets
+                                                                .symmetric(
+                                                                    horizontal:
+                                                                        15,
+                                                                    vertical:
+                                                                        20),
+                                                            title: Row(
+                                                              children: <
+                                                                  Widget>[
+                                                                Icon(Icons
+                                                                    .today_rounded),
+                                                                SizedBox(
+                                                                    width: 10),
+                                                                Text(
+                                                                  "Reservation",
+                                                                  style: Theme.of(
+                                                                          context)
+                                                                      .textTheme
+                                                                      .bodyText1,
+                                                                )
+                                                              ],
+                                                            ),
+                                                            children: <Widget>[
+                                                              StatefulBuilder(
+                                                                builder: (BuildContext
+                                                                        context,
+                                                                    StateSetter
+                                                                        setReservingState) {
+                                                                  return Column(
+                                                                    children: [
+                                                                      Row(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.center,
+                                                                        children: [
+                                                                          Text(
+                                                                            "pick time",
+                                                                            style:
+                                                                                Theme.of(context).textTheme.headline4,
+                                                                          ),
+                                                                          SizedBox(
+                                                                              width: 5),
+                                                                          DropdownButton(
+                                                                              hint: Text('hh'),
+                                                                              value: h,
+                                                                              items: Iterable<int>.generate(25).skip(1).toList().map((t) {
+                                                                                return DropdownMenuItem(value: t, child: new Text('$t'));
+                                                                              }).toList(),
+                                                                              onChanged: (t) {
+                                                                                setReservingState(() {
+                                                                                  h = t;
+                                                                                  getAvailableTables();
+                                                                                });
+                                                                              }),
+                                                                          SizedBox(
+                                                                              width: 2),
+                                                                          DropdownButton(
+                                                                              hint: Text('mm'),
+                                                                              value: m,
+                                                                              items: Iterable<int>.generate(60).toList().map((t) {
+                                                                                return DropdownMenuItem(value: t, child: new Text('$t'));
+                                                                              }).toList(),
+                                                                              onChanged: (t) {
+                                                                                setReservingState(() {
+                                                                                  m = t;
+                                                                                  getAvailableTables();
+                                                                                });
+                                                                              }),
+                                                                        ],
+                                                                      ),
+                                                                      SizedBox(
+                                                                          height:
+                                                                              20),
+                                                                      Row(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.center,
+                                                                        children: [
+                                                                          Text(
+                                                                            "table",
+                                                                            style:
+                                                                                Theme.of(context).textTheme.headline4,
+                                                                          ),
+                                                                          SizedBox(
+                                                                              width: 5),
+                                                                          ValueListenableBuilder(
+                                                                            valueListenable:
+                                                                                _con.availableTables,
+                                                                            builder: (BuildContext context,
+                                                                                value,
+                                                                                Widget child) {
+                                                                              return DropdownButton(
+                                                                                  hint: Text('Choose table'),
+                                                                                  value: selectedTable,
+                                                                                  items: _con.availableTables.value.map((t) {
+                                                                                    return DropdownMenuItem(value: t, child: new Text('table #${t.number} - ${t.no_of_chairs} chairs'));
+                                                                                  }).toList(),
+                                                                                  onChanged: (t) {
+                                                                                    setReservingState(() {
+                                                                                      selectedTable = t;
+                                                                                    });
+                                                                                  });
+                                                                            },
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ],
+                                                                  );
+                                                                },
+                                                              ),
+                                                              SizedBox(
+                                                                  height: 20),
+                                                              Row(
+                                                                children: <
+                                                                    Widget>[
+                                                                  MaterialButton(
+                                                                    onPressed:
+                                                                        () {
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                    },
+                                                                    child: Text(S
+                                                                        .of(context)
+                                                                        .cancel),
+                                                                  ),
+                                                                  MaterialButton(
+                                                                    onPressed:
+                                                                        () {
+                                                                      if (h != null &&
+                                                                          m !=
+                                                                              null &&
+                                                                          selectedTable !=
+                                                                              null) {
+                                                                        reservation.h =
+                                                                            h.toString();
+                                                                        reservation.m =
+                                                                            m.toString();
+                                                                        reservation.table_id =
+                                                                            selectedTable.id;
+                                                                        _con.addReservation(reservation).then((value) => Navigator.of(context).pushNamed(
+                                                                            '/Pages',
+                                                                            arguments:
+                                                                                0));
+                                                                      }
+                                                                    },
+                                                                    child: Text(
+                                                                      S
+                                                                          .of(context)
+                                                                          .submit,
+                                                                      style: TextStyle(
+                                                                          color:
+                                                                              Theme.of(context).accentColor),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .end,
+                                                              ),
+                                                              SizedBox(
+                                                                  height: 10),
+                                                            ],
+                                                          );
+                                                        });
+                                                  }
+                                                : null,
                                         child: Text(
                                           S.of(context).reserve_table,
                                           style: TextStyle(
@@ -684,13 +733,15 @@ class _RestaurantWidgetState extends StateMVC<RestaurantWidget> {
                         ),
                       ],
                     ),
-                    Positioned(
-                      top: 32,
-                      right: 20,
-                      child: OrderFloatButtonWidget(
-                          iconColor: Theme.of(context).primaryColor,
-                          labelColor: Theme.of(context).hintColor),
-                    ),
+                    userRepo.currentUser?.value?.role != "restaurant_manager"
+                        ? Positioned(
+                            top: 32,
+                            right: 20,
+                            child: OrderFloatButtonWidget(
+                                iconColor: Theme.of(context).primaryColor,
+                                labelColor: Theme.of(context).hintColor),
+                          )
+                        : SizedBox(height: 0),
                   ],
                 ),
         ));

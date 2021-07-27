@@ -18,7 +18,11 @@ class ItemsCarouselItemWidget extends StatelessWidget {
       splashColor: Theme.of(context).accentColor.withOpacity(0.08),
       highlightColor: Colors.transparent,
       onTap: () {
-        // Navigator.of(context).pushNamed('/Item', arguments: RouteArgument(id: item.id, heroTag: heroTag));
+        Navigator.of(context).pushNamed('/Details',
+            arguments: RouteArgument(
+              id: '2',
+              param: item.restaurant_id,
+            ));
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,

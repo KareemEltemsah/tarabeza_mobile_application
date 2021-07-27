@@ -23,12 +23,19 @@ class _OrdersWidgetState extends StateMVC<OrdersWidget> {
 
   _OrdersWidgetState() : super(OrderController()) {
     _con = controller;
+  }
+
+  @override
+  void initState() {
     currentUser.value.apiToken != null
-        ? currentUser.value.role == "staff"
+        ? currentUser.value.role == "staff" ||
+        currentUser.value.role == "restaurant_manager"
         ? _con.getRestaurantOrders()
         : _con.getUserOrders()
         : null;
+    super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
@@ -39,7 +46,8 @@ class _OrdersWidgetState extends StateMVC<OrdersWidget> {
           appBar: AppBar(
             leading: new IconButton(
               icon: new Icon(Icons.sort, color: Theme.of(context).hintColor),
-              onPressed: () => widget.parentScaffoldKey.currentState.openDrawer(),
+              onPressed: () =>
+                  widget.parentScaffoldKey.currentState.openDrawer(),
             ),
             automaticallyImplyLeading: false,
             backgroundColor: Colors.transparent,
@@ -47,7 +55,7 @@ class _OrdersWidgetState extends StateMVC<OrdersWidget> {
             centerTitle: true,
             title: Text(
               currentUser?.value?.role == "staff" ||
-                  currentUser?.value?.role == "restaurant_manager"
+                      currentUser?.value?.role == "restaurant_manager"
                   ? "Orders"
                   : S.of(context).my_orders,
               style: Theme.of(context)
@@ -59,46 +67,46 @@ class _OrdersWidgetState extends StateMVC<OrdersWidget> {
           body: currentUser.value.apiToken == null
               ? PermissionDeniedWidget()
               : _con.orders.value.isEmpty
-              ? EmptyOrdersWidget()
-              : RefreshIndicator(
-            onRefresh: currentUser.value.role == "staff"
-                ? _con.getRestaurantOrders
-                : _con.getUserOrders,
-            child: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(vertical: 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  ListView.separated(
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    primary: false,
-                    itemCount: _con.orders.value.length,
-                    itemBuilder: (context, index) {
-                      var _order = _con.orders.value.elementAt(index);
-                      return WholeOrderItemWidget(
-                        order: _order,
-                        cancel: () {
-                          _con.cancelOrder(_order);
-                        },
-                        approve: () {
-                          _con.approveOrder(_order);
-                        },
-                        finish: () {
-                          _con.finishOrder(_order);
-                        },
-                      );
-                    },
-                    separatorBuilder: (context, index) {
-                      return SizedBox(height: 20);
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ),
+                  ? EmptyOrdersWidget()
+                  : RefreshIndicator(
+                      onRefresh: currentUser.value.role == "staff"
+                          ? _con.getRestaurantOrders
+                          : _con.getUserOrders,
+                      child: SingleChildScrollView(
+                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.max,
+                          children: <Widget>[
+                            ListView.separated(
+                              scrollDirection: Axis.vertical,
+                              shrinkWrap: true,
+                              primary: false,
+                              itemCount: _con.orders.value.length,
+                              itemBuilder: (context, index) {
+                                var _order = _con.orders.value.elementAt(index);
+                                return WholeOrderItemWidget(
+                                  order: _order,
+                                  cancel: () {
+                                    _con.cancelOrder(_order);
+                                  },
+                                  approve: () {
+                                    _con.approveOrder(_order);
+                                  },
+                                  finish: () {
+                                    _con.finishOrder(_order);
+                                  },
+                                );
+                              },
+                              separatorBuilder: (context, index) {
+                                return SizedBox(height: 20);
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
         );
       },
     );

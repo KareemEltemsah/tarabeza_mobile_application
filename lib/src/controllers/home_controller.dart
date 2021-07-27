@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tarabeza_mobile_application/src/models/topHour.dart';
 
 import '../helpers/helper.dart';
 import 'package:http/http.dart' as http;
@@ -16,15 +17,23 @@ class HomeController extends ControllerMVC {
   List<Item> recentItems = <Item>[];
   List<Restaurant> recommendedRestaurants = <Restaurant>[];
 
+  String revenue;
+  String count_orders;
+  List<Item> topItems = new List<Item>();
+  List<TopHour> topHours = new List<TopHour>();
+
+
   HomeController() {
-    settingsRepo.setCachingOption().whenComplete(() {
-      print(settingsRepo.useCaching.value
-          ? 'caching enabled'
-          : 'caching disabled');
-      userRepo.currentUser.value.apiToken != null
-          ? getFeedsForUser(userRepo.currentUser.value.id)
-          : getFeeds();
-    });
+    userRepo.currentUser?.value?.role != "restaurant_manager"
+        ? settingsRepo.setCachingOption().whenComplete(() {
+            print(settingsRepo.useCaching.value
+                ? 'caching enabled'
+                : 'caching disabled');
+            userRepo.currentUser.value.apiToken != null
+                ? getFeedsForUser(userRepo.currentUser.value.id)
+                : getFeeds();
+          })
+        : getDashBoard();
   }
 
   Future<void> getFeeds() async {
@@ -112,6 +121,7 @@ class HomeController extends ControllerMVC {
     } catch (e) {
       print(e);
     }
+    recommendedRestaurants = <Restaurant>[];
     if (prefs.containsKey('recommendedRestaurants') &&
         settingsRepo.useCaching.value) {
       print('recommendedRestaurants from prefs');
@@ -150,6 +160,28 @@ class HomeController extends ControllerMVC {
     }
   }
 
+  Future<void> getDashBoard() async {
+    final String url = '${GlobalConfiguration().getValue('api_base_url')}'
+        'restaurants/dash/${userRepo.currentUser.value.restaurant_id}';
+    final client = new http.Client();
+    try {
+      final dashboard = await client.get(url);
+      setState((){
+        revenue = json.decode(dashboard.body)['data']['revenue'].toString();
+        count_orders = json.decode(dashboard.body)['data']['count_orders'].toString();
+        topItems = (json.decode(dashboard.body)['data']['top_items'] as List).map((e) => new Item.AsTopItemFromJSON(e)).toList();
+        topHours = (json.decode(dashboard.body)['data']['top_hours'] as List).map((e) => new TopHour.fromJSON(e)).toList();
+        revenue = double.parse(revenue).toStringAsFixed(2);
+      });
+      print (revenue);
+      print (count_orders);
+      print(topItems.map((e) => e.toMapAsTopItem()));
+      print(topHours.map((e) => e.toMap()));
+    } catch (e) {
+      print(e);
+    }
+  }
+
   saveRecentRestaurants() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (recentRestaurants.length > 0) {
@@ -181,15 +213,12 @@ class HomeController extends ControllerMVC {
   }
 
   Future<void> refreshHome() async {
-    setState(() {
-      recentRestaurants = <Restaurant>[];
-      recentItems = <Item>[];
-      recommendedRestaurants = <Restaurant>[];
-    });
-    settingsRepo.setCachingOption().whenComplete(() {
-      userRepo.currentUser.value.apiToken != null
-          ? getFeedsForUser(userRepo.currentUser.value.id)
-          : getFeeds();
-    });
+    userRepo.currentUser?.value?.role != "restaurant_manager"
+        ? settingsRepo.setCachingOption().whenComplete(() {
+            userRepo.currentUser.value.apiToken != null
+                ? getFeedsForUser(userRepo.currentUser.value.id)
+                : getFeeds();
+          })
+        : getDashBoard();
   }
 }

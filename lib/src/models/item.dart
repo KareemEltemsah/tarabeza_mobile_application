@@ -10,6 +10,8 @@ class Item {
   bool is_available;
   String category_name;
 
+  String count_orders;
+
   Item();
 
   Item.fromJSON(Map<String, dynamic> jsonMap) {
@@ -40,6 +42,12 @@ class Item {
     }
   }
 
+  Item.AsTopItemFromJSON(Map<String, dynamic> jsonMap) {
+    id = jsonMap['item_id'].toString();
+    name = jsonMap['item_name'];
+    count_orders = jsonMap['count_orders'].toString();
+  }
+
   Map toMap() {
     return {
       "id": id,
@@ -52,6 +60,14 @@ class Item {
       "image": image,
       "is_available": is_available ? '1' : '0',
       "category_name": category_name
+    };
+  }
+
+  Map toMapAsTopItem() {
+    return {
+      "id": id,
+      "name": name,
+      "count": count_orders
     };
   }
 
