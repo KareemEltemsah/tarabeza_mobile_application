@@ -1,10 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mvc_pattern/mvc_pattern.dart';
-import '../controllers/restaurant_controller.dart';
-
 import '../models/table.dart';
-import '../repository/user_repository.dart' as userRepo;
 
 // ignore: must_be_immutable
 class TableItemWidget extends StatefulWidget {
@@ -19,13 +15,7 @@ class TableItemWidget extends StatefulWidget {
   _TableItemWidgetState createState() => _TableItemWidgetState();
 }
 
-class _TableItemWidgetState extends StateMVC<TableItemWidget> {
-  RestaurantController _con;
-
-  _TableItemWidgetState() : super(RestaurantController()) {
-    _con = controller;
-    _con.getRestaurantTables(userRepo.currentUser.value.restaurant_id);
-  }
+class _TableItemWidgetState extends State<TableItemWidget> {
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +56,7 @@ class _TableItemWidgetState extends StateMVC<TableItemWidget> {
                           "No of chairs: ${widget.table.no_of_chairs}",
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
-                          style: Theme.of(context).textTheme.caption,
+                          style: Theme.of(context).textTheme.subtitle2,
                         ),
                       ],
                     ),

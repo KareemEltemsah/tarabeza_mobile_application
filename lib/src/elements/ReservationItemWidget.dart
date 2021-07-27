@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../controllers/restaurant_controller.dart';
-
 import '../models/reservation.dart';
-import '../repository/user_repository.dart' as userRepo;
 
 // ignore: must_be_immutable
 class ReservationItemWidget extends StatefulWidget {
@@ -64,16 +62,16 @@ class _ReservationItemWidgetState extends State<ReservationItemWidget> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Customer: ${widget.reservation.customer_name}",
+                          "${widget.reservation.customer_name}",
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                           style: Theme.of(context).textTheme.headline4,
                         ),
                         Text(
-                          "Restaurant: ${widget.reservation.restaurant_name}",
+                          "${widget.reservation.restaurant_name}",
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
-                          style: Theme.of(context).textTheme.caption,
+                          style: Theme.of(context).textTheme.subtitle2,
                         ),
                       ],
                     ),
@@ -83,7 +81,7 @@ class _ReservationItemWidgetState extends State<ReservationItemWidget> {
                     child: Column(
                       children: [
                         Text(
-                          "table: ${tableNumber != null ? tableNumber : "#"}",
+                          "Table: ${tableNumber != null ? tableNumber : "#"}",
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                           style: Theme.of(context).textTheme.headline4,
@@ -92,11 +90,11 @@ class _ReservationItemWidgetState extends State<ReservationItemWidget> {
                           widget.reservation.requested_at.substring(5,16),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
-                          style: Theme.of(context).textTheme.caption,
+                          style: Theme.of(context).textTheme.subtitle2,
                         ),
                       ],
                     ),
-                    flex: 1,
+                    flex: 2,
                   ),
                 ],
               ),

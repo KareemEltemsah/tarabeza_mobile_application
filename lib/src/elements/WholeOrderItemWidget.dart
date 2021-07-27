@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import '../models/order.dart';
 import '../repository/user_repository.dart' as userRepo;
 
@@ -56,16 +55,16 @@ class _WholeOrderItemWidgetState extends State<WholeOrderItemWidget> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Customer: ${widget.order.customer_name}",
+                          "${widget.order.customer_name}",
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                           style: Theme.of(context).textTheme.headline4,
                         ),
                         Text(
-                          "Restaurant: ${widget.order.restaurant_name}",
+                          "${widget.order.restaurant_name}",
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
-                          style: Theme.of(context).textTheme.caption,
+                          style: Theme.of(context).textTheme.subtitle2,
                         ),
                       ],
                     ),
@@ -75,32 +74,31 @@ class _WholeOrderItemWidgetState extends State<WholeOrderItemWidget> {
                     child: Column(
                       children: [
                         Text(
-                          "table: ${widget.order.table_number}",
+                          "Table: ${widget.order.table_number}",
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                           style: Theme.of(context).textTheme.headline4,
                         ),
                         Text(
                           widget.order.is_finished
-                              ? "finished"
+                              ? "Finished"
                               : widget.order.is_approved
-                                  ? "approved"
-                                  : "submitted",
+                                  ? "Approved"
+                                  : "Submitted",
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
-                          style: Theme.of(context).textTheme.caption,
+                          style: Theme.of(context).textTheme.subtitle2,
                         ),
                       ],
                     ),
-                    flex: 1,
+                    flex: 2,
                   ),
                 ],
               ),
               SizedBox(height: 15),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  SizedBox(width: 15),
                   Flexible(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -139,14 +137,14 @@ class _WholeOrderItemWidgetState extends State<WholeOrderItemWidget> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 8),
+                        SizedBox(height: 10),
                         ListView.separated(
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,
                           primary: false,
                           itemCount: widget.order.orderItems.length,
                           separatorBuilder: (context, index) {
-                            return SizedBox(height: 10);
+                            return SizedBox(height: 8);
                           },
                           itemBuilder: (context, index) {
                             return Row(
@@ -159,6 +157,7 @@ class _WholeOrderItemWidgetState extends State<WholeOrderItemWidget> {
                                         .item_name,
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 2,
+                                    style: Theme.of(context).textTheme.subtitle2,
                                   ),
                                   flex: 3,
                                 ),
@@ -171,6 +170,7 @@ class _WholeOrderItemWidgetState extends State<WholeOrderItemWidget> {
                                         .toString(),
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 2,
+                                    style: Theme.of(context).textTheme.subtitle2,
                                   ),
                                   flex: 1,
                                 ),
@@ -183,6 +183,7 @@ class _WholeOrderItemWidgetState extends State<WholeOrderItemWidget> {
                                         .toString(),
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 2,
+                                    style: Theme.of(context).textTheme.subtitle2,
                                   ),
                                   flex: 1,
                                 ),
@@ -191,73 +192,72 @@ class _WholeOrderItemWidgetState extends State<WholeOrderItemWidget> {
                           },
                         ),
                         SizedBox(height: 8),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            FlatButton(
-                                onPressed: !widget.order.is_finished
-                                    ? () {
-                                        setState(() {
-                                          widget.cancel();
-                                        });
-                                      }
-                                    : null,
-                                padding: EdgeInsets.symmetric(horizontal: 5),
-                                color: Theme.of(context).accentColor,
-                                child: Text("Cancel"),
-                                disabledColor: Theme.of(context).disabledColor),
-                            SizedBox(
-                              width: userRepo.currentUser.value.role == "staff"
-                                  ? 15
-                                  : 0,
-                            ),
-                            userRepo.currentUser.value.role == "staff"
-                                ? FlatButton(
-                                    onPressed: !widget.order.is_approved &&
-                                        !widget.order.is_finished
-                                        ? () {
-                                            setState(() {
-                                              widget.approve();
-                                            });
-                                          }
-                                        : null,
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 5),
-                                    color: Theme.of(context).accentColor,
-                                    child: Text("Approve"),
-                                    disabledColor:
-                                        Theme.of(context).disabledColor)
-                                : SizedBox(
-                                    height: 0,
-                                    width: 0,
-                                  ),
-                            SizedBox(
-                              width: userRepo.currentUser.value.role == "staff"
-                                  ? 15
-                                  : 0,
-                            ),
-                            userRepo.currentUser.value.role == "staff"
-                                ? FlatButton(
-                                    onPressed: !widget.order.is_finished
-                                        ? () {
-                                            setState(() {
-                                              widget.finish();
-                                            });
-                                          }
-                                        : null,
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 5),
-                                    color: Theme.of(context).accentColor,
-                                    child: Text("Finish"),
-                                    disabledColor:
-                                        Theme.of(context).disabledColor)
-                                : SizedBox(
-                                    height: 0,
-                                    width: 0,
-                                  ),
-                          ],
-                        ),
+                        widget.order.is_finished ||
+                                userRepo.currentUser.value.role ==
+                                    "restaurant_manager"
+                            ? SizedBox(height: 0)
+                            : Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  FlatButton(
+                                      onPressed: !widget.order.is_finished
+                                          ? () {
+                                              setState(() {
+                                                widget.cancel();
+                                              });
+                                            }
+                                          : null,
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 5),
+                                      color: Theme.of(context).accentColor,
+                                      child: Text("Cancel"),
+                                      disabledColor:
+                                          Theme.of(context).disabledColor),
+                                  userRepo.currentUser.value.role == "staff"
+                                      ? Row(
+                                          children: [
+                                            SizedBox(width: 15),
+                                            FlatButton(
+                                                onPressed:
+                                                    !widget.order.is_approved &&
+                                                            !widget.order
+                                                                .is_finished
+                                                        ? () {
+                                                            setState(() {
+                                                              widget.approve();
+                                                            });
+                                                          }
+                                                        : null,
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 5),
+                                                color: Theme.of(context)
+                                                    .accentColor,
+                                                child: Text("Approve"),
+                                                disabledColor: Theme.of(context)
+                                                    .disabledColor),
+                                            SizedBox(width: 15),
+                                            FlatButton(
+                                                onPressed:
+                                                    !widget.order.is_finished
+                                                        ? () {
+                                                            setState(() {
+                                                              widget.finish();
+                                                            });
+                                                          }
+                                                        : null,
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 5),
+                                                color: Theme.of(context)
+                                                    .accentColor,
+                                                child: Text("Finish"),
+                                                disabledColor: Theme.of(context)
+                                                    .disabledColor),
+                                          ],
+                                        )
+                                      : SizedBox(width: 0, height: 0),
+                                ],
+                              ),
                       ],
                     ),
                   )
